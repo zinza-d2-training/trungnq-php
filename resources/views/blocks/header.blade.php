@@ -24,18 +24,45 @@
                   </ul>
             </div>
         </div>
-        <div class="flex flex-row mr-6">
-            <div class="">
-                <a href="{{route("custom-logout")}}" class=" mx-3 text-white">Logout</a>
-                <a href="{{route("account")}}" class="mx-3 text-white">Setting</a>
-            </div>
-            <input type="text" class="rounded-md" style="width: 252px; height:40px" placeholder="Search...">
-            <button class="ml-6 " >
-                <img src="/images/image6.svg"  alt="" width="27px">
-            </button>
-        </div>
-      </section>
-      <div class="pl-6 py-2 bg-slate-100" >
-        <p><a href="{{route('home')}}">Dashboard</a><a href="{{route('account')}}">/users</a>/setting</p>
+        <div class="hidden sm:flex sm:items-center sm:ml-6 ">
+          <form action="">
+            <x-input placeholder="Search..." class="mr-6 py-2 pl-3"></x-input>
+          </form>
+          <x-dropdown align="right" width="48">
+              <x-slot name="trigger">
+                  <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 mr-6 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                      <div class="bg-white rounded-full px-3"><img src="/storage/images/avatars/{{ Auth::user()->avatar }}"  alt="" width="27px" class="rounded-full"></div>
+                  </button>
+              </x-slot>
+              <x-slot name="content">
+                      <x-dropdown-link :href="route('account')">
+                          {{ __('Setting') }}
+                      </x-dropdown-link>
+                      <x-dropdown-link :href="route('custom-logout')">
+                        {{ __('Log Out') }}
+                    </x-dropdown-link>
+              </x-slot>
+          </x-dropdown>
       </div>
+      </section>
+      
+      <nav class="flex pl-6 py-2 bg-slate-100 " aria-label="Breadcrum b">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+          <li class="inline-flex items-center">
+            <a href="#" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+              Home /
+            </a>
+          </li>
+          <li>
+            <div class="flex items-center">
+              <a href="#" class="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ml-2 dark:text-gray-400 dark:hover:text-white">Projects /</a>
+            </div>
+          </li>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Flowbite</span>
+            </div>
+          </li>
+        </ol>
+      </nav>
 </div>

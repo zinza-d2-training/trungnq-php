@@ -35,8 +35,9 @@ Route::middleware('verifyLogin')->group(function () {
 
 Route::controller(AuthenController::class)->group(function(){
     Route::get('/custom-login','login')->name('custom-login');
-    Route::post('/custom-login','post_login')->name('custom-post-login');
+    Route::post('/custom-login','postLogin');
     Route::get('custom-logout','logout')->name('custom-logout');
-    Route::get('reset-password','reset_pass')->name('custom-reset-password');
-    Route::post('reset-password','send_pass')->name('make-password');
+    Route::get('reset-password','resetPass')->name('custom-reset-password');
+    Route::post('reset-password','sendPass')->name('make-password');
+    Route::get('usermanager/create','create');
 });

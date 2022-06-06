@@ -17,7 +17,12 @@ class VerifyLogin
     public function handle(Request $request, Closure $next)
     {
         if(Auth::check())
-        return $next($request);
-        else return redirect()->route('custom-login');
+        {
+            return $next($request);
+        }
+        else 
+        { 
+            return redirect()->route('custom-login');
+        }
     }
 }

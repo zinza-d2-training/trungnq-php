@@ -1,42 +1,71 @@
-@extends('layouts.client');
+@extends('layouts.client')
 
 @section('content')
     <div class="mx-6">
-        <h1 class="text-lg font-bold">{{$user->name}}</h1>
-        <img src="{{"images/".$user->avatar}}" class="rounded-full" width="92px" alt="">
-        <form action="{{route('account-update')}}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('account-update') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <input type="file" style="background-image: /images/image8.">
-            <div class="grid grid-cols-8 gap-1 mt-8">
-                <div class="col-span-2">
-                    <p >Name</p>
-                    <input name="name"  class="border-slate-300 rounded-lg w-80 " type="text" value="{{$user->name}}" >
+            <div class="flex items-end gap-2.5">
+                <div class="">
+                    <h1 class="text-lg font-bold">{{$user->name}}</h1>
+                    <img src="{{"storage/images/avatars/".$user->avatar}}" class="rounded-full" width="92px" alt="">
+                </div>
+                <div class="file-upload w-9 h-9 rounded-sm  relative d-flex justify-center items-center overflow-hidden mt-auto mx-2"  >
+                    <input type="file" class="image-upload h-9 w-9 absolute  opacity-0 pt-2 cursor-pointer" data-default-file="{{$user->avatar}}" name="avatar">
+                    <img src="images/camera.png" alt="" class="cursor-pointer" >
+                </div>    
+            </div>  
+            <div class="grid grid-cols-8 gap-4 mt-8">
+                <div class="col-span-2 ">
+                    <x-label>Name</x-label>
+                    <x-input  class="block mt-1 w-full" type="text" name="name" id="name" :value="$user->name" required autofocus />
+                    <x-span-error name='name'></x-span-error>
                 </div>
                 <div class="col-span-2">
-                    <p>Email</p>
-                    <input  class=" border-slate-300 rounded-lg w-80 bg-slate-200 " type="text" value="{{$user->email}}" readonly>
+                    <x-label>Email</x-label>
+                    <x-input class="block mt-1 w-full bg-slate-300" type="email"  :value="$user->email" required autofocus readonly/>
+                    <x-span-error name='email'></x-span-error>
+
                 </div>
                 <div class="col-span-4"></div>
                 <div class="col-span-2">
-                    <p > Old password</p>
-                    <input  class="border-slate-300 rounded-lg w-80 " type="text" name="password">
+                    <x-label>Old - Password</x-label>
+                    <x-input class="block mt-1 w-full" type="password" name="old-password" id="old-password" :value="old('old-password')"  autofocus />
+                    <x-span-error name='old-password'></x-span-error>
                 </div>
                 <div class="col-span-2">
-                    <p  >Password</p>
-                    <input class="border-slate-300 rounded-lg w-80 " type="text" name="new_password">
+                    <x-label>Password</x-label>
+                    <x-input class="block mt-1 w-full" type="password" name="password" id="password"  autofocus />
+                    <x-span-error name='password'></x-span-error>
                 </div>
                 <div class="col-span-2">
-                    <p >Confirm Password</p>
-                    <input class="border-slate-300 rounded-lg w-80 " type="text" name="new_password_rp">
+                    <x-label>Confirm Password</x-label>
+                    <x-input class="block mt-1 w-full" type="password" name="password_confirmation" id="password_confirmation"  autofocus />
                 </div>
                 <div class="col-span-2"></div>
                 <div class="col-span-2">
                     <p >Date of birth</p>
-                    <input class="border-slate-300 rounded-lg w-80 " type="Date" class="flatpickr" name="password">
+                    <input class="border-slate-300 rounded-lg w-80 " type="text" name="dob" id="dob" :value="$user->dob">
+                    <x-span-error name='dob'></x-span-error>
                 </div>
             </div>
-            <button class="bg-blue-400 text-white font-bold w-80 text-center py-2 mt-5 rounded-lg" type="submit">Save</button>
+            <button id="btnUpdateUser" class="bg-blue-400 text-white font-bold w-80 text-center py-2 mt-5 rounded-lg" type="button">Save</button>
         </form>
     </div> 
-    
+    <x-toast  class="right-64 top-24 absolute toast"></x-toast>
+    <div id="toast">
+
+    </div>
+@endsection
+@section('script')
+<script>
+    $(document).ready(function () {
+        var dob =  `{{$user->dob}}`.toString();
+        $('#dob').val(dob);
+
+    }); 
+    flatpickr("#dob", {
+        enableTime:false,
+        dateFomat: "Y-m-d",
+    });
+</script>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Authen;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\UserRequest;
 use App\Mail\SendMail;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -32,13 +33,13 @@ class AuthenController extends Controller
     }
 
     /* hander login*/
-    public function post_login(LoginRequest $request )
+    public function postLogin(LoginRequest $request )
     {
         $data = $request->only([
             'email',
             'password'
         ]);
-        if($this->userService->haderLogin($data)){
+        if($this->userService->login($data)){
             return redirect()->route('home');
         }
         else {
@@ -53,14 +54,15 @@ class AuthenController extends Controller
         return redirect()->route('custom-login');
     }
 
-    public function reset_pass()
+    public function resetPass()
     {
         return view('authen.resetpassword',[
-        "title" => "Quên mật khẩu"
-    ]);
+            "title" => "Quên mật khẩu"
+        ]);
     }
 
-    public function send_pass(Request $request){
+    public function sendPass(Request $request)
+    {
         $request->validate([
             'email' => 'required|email',
         ]);
@@ -68,12 +70,31 @@ class AuthenController extends Controller
         return back()->with( $data);
     }
 
-    public function edit(){
-        $data = $this->userService->getUser(Auth::id());
+    public function edit()
+    {
+        $data = $this->userService->getById(Auth::id());
         return view('pages.account',['title' =>'Accoutn','user' =>$data]);
     }
 
-    public function update(Request $request){
-        dd($request->input());
+    public function update(UserRequest $request)
+    {
+        
+        $input = $request->all();
+        $response= $this->userService->update($input);
+        return response()->json($response);
+    }
+
+    public function create()
+    {
+        $data = [
+            'name' =>'test',
+            'email' =>'trungnq@gmail.com',
+            'dob' =>'2000/7/21',
+            'avatar' =>'test',
+            'password' =>'test',
+            'role' => '1'
+        ];
+        $this->userService->create($data);
+        dd($data);
     }
 }

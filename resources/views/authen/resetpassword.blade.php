@@ -30,7 +30,7 @@
                             <h5 class="text-bold">{{Session::get('msg')}} </h5>
                         </div>
                     @endif
-                    <form action="{{route("make-password")}}" class="px-6" method="POST">
+                    <form action="{{ route("make-password") }}" class="px-6" method="POST">
                         @csrf
                         <label for="email">Email:</label>
                         <input type="text" class="w-full border-neutral-300 rounded-lg " placeholder="Email" name="email">
@@ -43,7 +43,7 @@
                     </form>
                 </div>
                 <div class="text-center">
-                    <a href="{{route('custom-login')}}" class="decoration-slate-400">Login here</a>
+                    <a href="{{ route('custom-login') }}" class="decoration-slate-400">Login here</a>
                 </div>
             </div>
         </div>

@@ -25,22 +25,15 @@
                     <div class="text-red-500">{{Session::get('error')}}</div>
                 @endif
                 <div class="flex flex-col mt-8 w-full">
-                    <form action="{{route("custom-post-login")}}" class="px-6" method="POST">
+                    <form action="{{ route("custom-login") }}" class="px-6" method="POST">
                         @csrf
-                        <input type="text" class="w-full border-neutral-300 rounded-lg mt-4" placeholder="Email" name="email">
-                        @error('email')
-                            <span class="text-red-600"> {{$message}}</span>
-                        @enderror
-                        <input type="password" class="w-full border-neutral-300 rounded-lg mt-4"  placeholder="Password" name="password">
-                        @error('password')
-                            <span class="text-red-600"> {{$message}}</span>
-                        @enderror
+                        <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                        <x-input id="password" class="block mt-5 w-full" type="password" name="password" :value="old('password')" required autofocus />
+
                         <div class="mr-6 mt-4 text-right">
-                            <a href="{{route('custom-reset-password')}}">Forgot password?</a>
+                            <a href="{{ route('custom-reset-password') }}">Forgot password?</a>
                         </div>
-                        <div class=" mb-10 mt-4">
-                            <button class="w-full bg-blue-400 py-3 rounded-lg text-white" type="submit">Login</button>
-                        </div>
+                        <x-button>Login</x-button>
                     </form>
                 </div>
                 <hr>

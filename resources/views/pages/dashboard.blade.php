@@ -4,7 +4,10 @@
 @endsection
 @section('content')
     {{-- @include('') --}}
-    
+    <x-toast class="bg-red-100 right-64 top-24 absolute"></x-toast>
+ {{--    <x-toast class="bg-green-100"></x-toast>
+    <x-toast class="bg-blue-100"></x-toast>
+    <x-toast class="bg-orange-100"></x-toast> --}}
     <div class="grid grid-cols-5 gap-x-2.5     p-2 bg-slate-50">
         <div class="col-span-4 pl-6">
             <div class="table-data  mb-2.5 ">

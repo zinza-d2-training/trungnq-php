@@ -1,0 +1,24 @@
+
+.wrapper{
+    max-width: 1440px;
+}
+
+.toast{
+    animation: sideInLeft ease-in 1s, fadeOut linear 1s 3s forwards;
+}
+
+@keyframes sideInLeft {
+    from {
+        opacity: 0;
+        transform: translateY(-150px);
+    }
+    to {
+        opacity: 100;
+        transform: translateY(0);
+    }
+}
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
+}
