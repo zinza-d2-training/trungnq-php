@@ -18,6 +18,8 @@ Route::get('/', function () {
 });
 
 Route::get('/c-forgot-password',[AuthenController::class,'login']);
+Route::get('c-reset-password/{token}', [AuthenController::class, 'showResetPasswordForm'])->name('custom.reset.password.get');
+Route::post('c-reset-password', [AuthenController::class, 'submitResetPasswordForm'])->name('custom.reset.password.post');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
@@ -27,7 +29,7 @@ require __DIR__.'/auth.php';
 
 Route::middleware('verifyLogin')->group(function () {
     Route::get('/home', function () {
-        return view('pages.dashboard',['title' => "Dashboard"]);
+        return view('pages.dashboard');
     })->name('home');
     Route::get('/account',[AuthenController::class,'edit'])->name('account');
     Route::post('/account',[AuthenController::class,'update'])->name("account-update");

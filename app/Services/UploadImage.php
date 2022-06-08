@@ -11,9 +11,9 @@ class UploadImage{
               $res= $file->storeAs($path,$file_name);
               return $file_name;
        }
-       public function deletefile($path,$filename){
-              if(file_exists($path.$filename)){
-                     unlink($path.$filename);
+       public function deletefile($path){
+              if(file_exists($path)){
+                     unlink($path);
                      return true;
               }
               return false;

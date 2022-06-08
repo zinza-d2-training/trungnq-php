@@ -6,15 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\UserRequest;
-use App\Mail\SendMail;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use Illuminate\Mail\Mailer;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail as FacadesMail;
-use Nette\Utils\Random;
-use Illuminate\Support\Facades\Mail;
 use App\Services\UserService;
+use Illuminate\Support\Facades\Hash;
 
 class AuthenController extends Controller
 {
@@ -25,24 +19,17 @@ class AuthenController extends Controller
     {
         $this->userService = $userService;
     }
-    /*view login */
-    public function login(){
-        return view("authen.login",[
-            "title" => "Login"
-        ]);
+
+    public function login()
+    {
+        return view("authen.login");
     }
 
-    /* hander login*/
-    public function postLogin(LoginRequest $request )
+    public function postLogin(LoginRequest $request)
     {
-        $data = $request->only([
-            'email',
-            'password'
-        ]);
-        if($this->userService->login($data)){
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect()->route('home');
-        }
-        else {
+        } else {
             session()->flash('error', 'Email hoặc mật khẩu không chính xác');
             return redirect()->back();
         }
@@ -56,7 +43,7 @@ class AuthenController extends Controller
 
     public function resetPass()
     {
-        return view('authen.resetpassword',[
+        return view('authen.resetpassword', [
             "title" => "Quên mật khẩu"
         ]);
     }
@@ -64,37 +51,52 @@ class AuthenController extends Controller
     public function sendPass(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|email|exists:users',
         ]);
         $data = $this->userService->forgotPassword($request->email);
-        return back()->with( $data);
+        if ($data) {
+            return back()->with('message', 'We have e-mailed your password reset link!');
+        }
+        return back()->with('error', "Error");
     }
 
     public function edit()
     {
         $data = $this->userService->getById(Auth::id());
-        return view('pages.account',['title' =>'Accoutn','user' =>$data]);
+        return view('pages.account', ['title' => 'Accoutn', 'user' => $data]);
     }
 
     public function update(UserRequest $request)
     {
-        
         $input = $request->all();
-        $response= $this->userService->update($input);
-        return response()->json($response);
+        $response = $this->userService->update($input);
+        if (!$response) {
+            return response()->json([
+                'status' => 'false',
+                'message' => "Thay đôỉ thông tin tài khoản không thành công!!! Mật khẩu không chính xác!!!",
+                'type' => 'danger'
+            ]);
+        }
+        return response()->json([
+            'status' => 'true',
+            'type' => 'success',
+            'message' => "Thay đôỉ thông tin tài khoản thành công!!!"
+        ]);
     }
 
-    public function create()
+    public function showResetPasswordForm($token)
     {
-        $data = [
-            'name' =>'test',
-            'email' =>'trungnq@gmail.com',
-            'dob' =>'2000/7/21',
-            'avatar' =>'test',
-            'password' =>'test',
-            'role' => '1'
-        ];
-        $this->userService->create($data);
-        dd($data);
+        return view('authen.new-password', ['token' => $token]);
+    }
+
+    public function submitResetPasswordForm(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users',
+            'password' => 'required|string|min:6|confirmed',
+            'password_confirmation' => 'required'
+        ]);
+        $result = $this->userService->createNewPassword($request);
+        return back()->withInput()->with('error', 'Invalid token!');
     }
 }

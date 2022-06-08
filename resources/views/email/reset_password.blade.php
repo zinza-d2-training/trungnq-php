@@ -7,8 +7,9 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Xin chào {{$mailData['email']}}</h1>
-    <p>Mật khẩu của bạn đã được thay đổỉ thành : {{$mailData['password']}}</p>
-    <p>Vui lòng kiểm tra và thay đổi mật khẩu mới</p>
+    <h1>Forget Password Email </h1>
+    You can reset password from bellow link:
+    <a href="{{ route('custom.reset.password.get', ['token' => $mailData]) }}">Reset Password</a>
+    
 </body>
 </html>

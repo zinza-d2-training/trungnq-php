@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{$title}}</title>
+    <title>Resset Password</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 </head>
@@ -14,7 +14,7 @@
             <div class="container w-4/12 flex flex-col mx-auto bg-white my-auto rounded-lg " style="height: 768px;">
                 <div class="flex item-center  items-center w-full  px-6 " style="height: 72px; border-bottom: 2px solid #f5f5f5" >
                     <div class="text-base font-bold ">
-                        Forgot password
+                        Create new password
                     </div>
                     
                 </div>
@@ -30,15 +30,26 @@
                             <h5 class="text-bold">{{Session::get('message')}} </h5>
                         </div>
                     @endif
-                    <form action="{{ route("make-password") }}" class="px-6" method="POST">
+                    <form action="{{ route("custom.reset.password.post") }}" class="px-6" method="POST">
                         @csrf
-                        <label for="email">Email:</label>
-                        <input type="text" class="w-full border-neutral-300 rounded-lg " placeholder="Email" name="email">
-                        @error('email')
-                            <span class="text-red-600"> {{$message}}</span>
-                        @enderror
+                        <input type="hidden" name="token" value="{{ $token }}">
+                        <div class="col-span-2">
+                            <x-label>Email</x-label>
+                            <x-input class="block mt-1 w-full bg-slate-300" type="email" name="email"   autofocus/>
+                            <x-span-error name='email'></x-span-error>
+                        </div>
+                        <div class="col-span-2">
+                            <x-label>Password</x-label>
+                            <x-input class="block mt-1 w-full" type="password" name="password" id="password" autofocus />
+                            <x-span-error name='password'></x-span-error>
+                        </div>
+                        <div class="col-span-2">
+                            <x-label>Confirm Password</x-label>
+                            <x-input class="block mt-1 w-full" type="password" name="password_confirmation"
+                                id="password_confirmation" autofocus />
+                        </div>
                         <div class=" mb-10 mt-4">
-                            <button class="w-full bg-blue-400 py-3 rounded-lg text-white mt-8" type="submit">Send new password</button>
+                            <button class="w-full bg-blue-400 py-3 rounded-lg text-white mt-8" type="submit">Change password</button>
                         </div>
                     </form>
                 </div>

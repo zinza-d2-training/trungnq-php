@@ -1,81 +1,93 @@
-<?php 
-namespace App\Services;
-use App\Repositories\UserRepository;
+<?php
 
-use Illuminate\Support\Facades\Hash;
+namespace App\Services;
+
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMail;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use App\Services\UploadImage;
 use Illuminate\Support\Facades\Auth;
-class UserService{
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
+use App\Observers\AccountObserver;
 
-    public function create($data){
-        $user = new User();
-        $user->name = $data['name'];
-        $user->dob  = $data['dob'];
-        $user->email  = $data['email'];
-        $user->avatar = $data['avatar'];
-        $user->password = Hash::make($data['password']);
-        $user->role = $data['role']; 
-        $user->save(); 
-        return $user->fresh();
-    }
-    public function getById($id){
-        return User::where('id',$id)->first();
+class UserService
+{
+    public $uploadImage;
+    public function __construct(UploadImage $uploadImage)
+    {
+        $this->uploadImage = $uploadImage;
     }
 
-    public function forgotPassword($email){
-        $user = User::where('email',$email)->first();
-        if($user){
-            $new_pass = rand(100000,999999);
-            $mailData = [
-                "email" =>$user->email,
-                "password" => $new_pass
-            ];
-            Mail::to($user->email)->send(new SendMail($mailData));
-            $user->password = Hash::make($new_pass);
-            $user->save();
-            return $res = ['msg' => 'Mật khẩu mới đã được gửi tới email của bạn, vui lòng kiểm tra và đăng nhập lại.'];
-        }
-        else  return $res = ['error' => 'Email bạn nhập không chính xác'];
+    public function create($data)
+    {
+        $data['password'] = Hash::make($data['password']);
+        return User::create($data);
     }
+
+    public function getById($id)
+    {
+        return User::findOrFail(Auth::id());
+    }
+
+    public function forgotPassword($email)
+    {
+        $token = Str::random(64);
+        DB::table('password_resets')->insert([
+            'email' => $email,
+            'token' => $token,
+            'created_at' => Carbon::now()
+        ]);
+        Mail::send('email.forget-password', ['token' => $token], function ($message) use ($email) {
+            $message->to($email);
+            $message->subject('Reset Password');
+        });
+        return true;
+    }
+
     public function login($data)
     {
-        if(Auth::attempt([
-            'email' =>$data['email'],
-            'password' =>$data['password'],
-            ])
-        ) return true;
+        if (Auth::attempt([
+            'email' => $data['email'],
+            'password' => $data['password'],
+        ])) return true;
         else return false;
     }
-    public function update($data){
-        $user = User::where("id",Auth::id())->first();
-        if(!empty($data['old-password']) && !empty($data['password']))
-        {
-            if (password_verify($data['old-password'], $user->password)) {
+
+    public function update($data)
+    {
+        $user = User::findOrFail(Auth::id());
+        if (!empty($data['old_password']) && !empty($data['password'])) {
+            if (password_verify($data['old_password'], $user->password)) {
                 $user->password = Hash::make($data['password']);
+                $user->password = $data['password'];
             } else {
-                return [
-                    'status' =>'false',
-                    'message' => "Thay đôỉ thông tin tài khoản không thành công!!! Mật khẩu không chính xác!!!"
-                ];
+                return false;
             }
         }
-        if(!empty($data['avatar'])){
+        if (!empty($data['avatar'])) {
             $path = 'public/images/avatars';
             $file = $data['avatar'];
-            $res = new UploadImage();
-            $data['avatar'] = $res->savefile($path,$file);
+            $res = $this->uploadImage->savefile($path,$file);
+            $data['avatar'] = $res;
             $user->avatar = $data['avatar'];
-        }   
+        }
         $user->name = $data['name'];
         $user->dob = $data['dob'];
         $user->save();
-        return [
-            'status' =>'true',
-            'message' => "Thay đôỉ thông tin tài khoản thành công!!!"
-        ];
+        return true;
+    }
 
+    public function createNewPassword($request)
+    {
+        $updatePassword = DB::table('password_resets')->where(['email' => $request->email, 'token' => $request->token])->first();
+        if (!$updatePassword) {
+            return false;
+        }
+        $user = User::where('email', $request->email)->update(['password' => Hash::make($request->password)]);
+        DB::table('password_resets')->where(['email' => $request->email])->delete();
+        return true;
     }
 }
