@@ -52,7 +52,7 @@
                 <div class="col-span-2"></div>
                 <div class="col-span-2">
                     <p>Date of birth</p>
-                    <input class="border-slate-300 rounded-lg w-80 " type="text" name="dob" id="dob" :value="$user - > dob">
+                    <input class="border-slate-300 rounded-lg w-80 " type="text" name="dob" id="dob" :value="$user->dob">
                     <x-span-error name='dob'></x-span-error>
                 </div>
             </div>

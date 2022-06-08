@@ -29,17 +29,18 @@ class UserService
 
     public function getById($id)
     {
-        return User::findOrFail(Auth::id());
+        return User::findOrFail($id);
     }
 
     public function forgotPassword($email)
     {
         $token = Str::random(64);
-        DB::table('password_resets')->insert([
+        $rs = [
             'email' => $email,
             'token' => $token,
             'created_at' => Carbon::now()
-        ]);
+        ];
+        DB::table('password_resets')->insert($rs);
         Mail::send('email.forget-password', ['token' => $token], function ($message) use ($email) {
             $message->to($email);
             $message->subject('Reset Password');
@@ -49,34 +50,31 @@ class UserService
 
     public function login($data)
     {
-        if (Auth::attempt([
-            'email' => $data['email'],
-            'password' => $data['password'],
-        ])) return true;
-        else return false;
+        if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function update($data)
     {
         $user = User::findOrFail(Auth::id());
         if (!empty($data['old_password']) && !empty($data['password'])) {
-            if (password_verify($data['old_password'], $user->password)) {
-                $user->password = Hash::make($data['password']);
-                $user->password = $data['password'];
-            } else {
+            if (!password_verify($data['old_password'], $user->password)) {
                 return false;
             }
+        } else {
+            unset($data['old_password']);
+            unset($data['password']);
+            unset($data['password_confirmation']);
         }
         if (!empty($data['avatar'])) {
             $path = 'public/images/avatars';
-            $file = $data['avatar'];
-            $res = $this->uploadImage->savefile($path,$file);
-            $data['avatar'] = $res;
+            $data['avatar'] = $this->uploadImage->savefile($path, $data['avatar']);
             $user->avatar = $data['avatar'];
         }
-        $user->name = $data['name'];
-        $user->dob = $data['dob'];
-        $user->save();
+        $user->update($data);
         return true;
     }
 

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Authen;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EmailRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\PasswordRequest;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Services\UserService;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 
 class AuthenController extends Controller
@@ -48,11 +51,8 @@ class AuthenController extends Controller
         ]);
     }
 
-    public function sendPass(Request $request)
+    public function sendPass(EmailRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email|exists:users',
-        ]);
         $data = $this->userService->forgotPassword($request->email);
         if ($data) {
             return back()->with('message', 'We have e-mailed your password reset link!');
@@ -63,7 +63,7 @@ class AuthenController extends Controller
     public function edit()
     {
         $data = $this->userService->getById(Auth::id());
-        return view('pages.account', ['title' => 'Accoutn', 'user' => $data]);
+        return view('pages.account', ['user' => $data]);
     }
 
     public function update(UserRequest $request)
@@ -89,14 +89,9 @@ class AuthenController extends Controller
         return view('authen.new-password', ['token' => $token]);
     }
 
-    public function submitResetPasswordForm(Request $request)
+    public function submitResetPasswordForm(PasswordRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email|exists:users',
-            'password' => 'required|string|min:6|confirmed',
-            'password_confirmation' => 'required'
-        ]);
         $result = $this->userService->createNewPassword($request);
-        return back()->withInput()->with('error', 'Invalid token!');
+        return back()->withInput()->with('message', 'Update password!!!');
     }
 }

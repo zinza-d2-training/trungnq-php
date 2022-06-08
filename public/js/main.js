@@ -11,7 +11,6 @@ $(document).ready(function ()
         e.preventDefault();
         var fd = new FormData();
         var files = $("#avatar")[0].files;
-        console.log(fd.get("avatar"));
         if (files.length > 0) {
             fd.append("avatar", files[0]);
         }
@@ -20,7 +19,6 @@ $(document).ready(function ()
         fd.append("old_password", $("#old_password").val());
         fd.append("password", $("#password").val());
         fd.append("password_confirmation", $("#password_confirmation").val());
-
         $.ajax({
             type: "POST",
             url: "/account",
@@ -38,10 +36,11 @@ $(document).ready(function ()
         });
     });
 });
-function toast(type, message) 
+
+function toast(type ='info', message = "") 
 {
     const main = document.getElementById("toast");
-    var color = "green";
+    var color = "blue";
     icon = "fa-circle-info";
     switch (type) {
         case "success":
@@ -57,6 +56,8 @@ function toast(type, message)
         case "info":
             color = "blue";
             break;
+        default :
+            icon = "fa-question"
     }
     var x = "bg-" + color + "-300";
     if (main) {
