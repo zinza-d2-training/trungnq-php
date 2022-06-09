@@ -1,0 +1,57 @@
+.wrapper {
+    max-width: 1440px;
+}
+
+.toast {
+    animation: sideInLeft ease-in 0.5s, fadeOut linear 1s 3s forwards;
+}
+.toast-green{
+    background-color: #dcfce7;
+}
+.toast-red{
+    background-color: #fee2e2;
+}
+.toast-blue{
+    background-color: #dbeafe;
+}
+.toast-orange{
+    background-color: #ffedd5;
+
+}
+
+@keyframes sideInLeft {
+    from {
+        opacity: 0;
+        transform: translateY(-150px);
+    }
+    to {
+        opacity: 100;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
+}
+
+.fz-24 {
+    font-size: 24px;
+}
+
+.icon-green {
+    color: green;
+}
+
+.icon-red {
+    color: red;
+}
+
+.icon-blue {
+    color: blue;
+}
+
+.icon-orange {
+    color: orange;
+}
