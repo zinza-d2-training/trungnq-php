@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UserRequest extends FormRequest
+class CompanyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -16,7 +15,6 @@ class UserRequest extends FormRequest
     {
         return true;
     }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,12 +22,13 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route()->id;
         return [
-            'name' => 'required|min:5',
-            'email' => 'required|unique:users,email,' . $id,
-            'old_password' => 'sometimes|nullable|min:6',
-            'password' => 'nullable|confirmed|min:6'
+            'name' => 'required',
+            'address' => 'required|string',
+            'max_users' => 'required|integer',
+            'expired_at' => 'required',
+            'active' => 'required',
+            'avatar' => 'file|max:2048|mimes:png,jpg'
         ];
     }
 }

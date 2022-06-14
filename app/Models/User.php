@@ -22,8 +22,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
+        'role_id',
         'dob',
+        'avatar',
+        'active',
     ];
 
     /**
@@ -48,5 +50,13 @@ class User extends Authenticatable
     public function setPasswordAttribute($pass)
     {
         $this->attributes['password'] = Hash::make($pass);
+    }
+    public function role()
+    {
+        return $this->hasOne(Role::class, 'id', 'role_id');
+    }
+    public function companyAccount()
+    {
+        return $this->hasMany(CompanyAccount::class, 'user_id', 'id');
     }
 }

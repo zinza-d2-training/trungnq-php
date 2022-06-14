@@ -7,12 +7,19 @@
                     <li class="mr-6">
                         <a class="text-white font-bold hover:text-black" href="#">Dashboard</a>
                     </li>
+                    @php
+                        $role = Auth::user()->role->id;
+                    @endphp
+                    @if ($role <=2)
                     <li class="mr-6">
-                        <a class="text-white font-bold hover:text-black" href="#">User</a>
+                        <a class="text-white font-bold hover:text-black" href="{{route('user.index')}}">User</a>
                     </li>
+                    @endif
+                   @if ($role == 1)
                     <li class="mr-6">
-                        <a class="text-white font-bold hover:text-black" href="#">Cpmpany</a>
+                        <a class="text-white font-bold hover:text-black" href="{{route('company.index')}}">Company</a>
                     </li>
+                   @endif
                     <li class="mr-6">
                         <a class="text-white font-bold hover:text-black " href="#">Topic</a>
                     </li>
@@ -29,11 +36,11 @@
             <form action="">
                 <x-input placeholder="Search..." class="mr-6 py-2 pl-3"></x-input>
             </form>
-            <x-dropdown align="left" class="w-32">
+            <x-dropdown align="left" class="min-w-full">
                 <x-slot name="trigger">
                     <button
                         class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 mr-6 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                        <div class="bg-white rounded-full px-3"><img
+                        <div class=" rounded-full px-3"><img
                                 src="/storage/images/avatars/{{ Auth::user()->avatar }}" alt="" width="27px"
                                 class="rounded-full"></div>
                     </button>

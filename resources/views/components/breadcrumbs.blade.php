@@ -1,1 +1,2 @@
-{{ Breadcrumbs::render($name) }}
+@props(['param'=>'', 'name'=>""])
+{{ Breadcrumbs::render($name, $param) }}

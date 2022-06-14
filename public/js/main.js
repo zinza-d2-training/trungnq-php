@@ -1,13 +1,11 @@
-$(document).ready(function ()
-{
+$(document).ready(function () {
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
     });
 
-    $("#form-user").submit(function (e)
-    {
+    $("#form-user").submit(function (e) {
         e.preventDefault();
         var fd = new FormData();
         var files = $("#avatar")[0].files;
@@ -15,13 +13,15 @@ $(document).ready(function ()
             fd.append("avatar", files[0]);
         }
         fd.append("name", $("#name").val());
+        fd.append("email", $("#email").val());
         fd.append("dob", $("#dob").val());
         fd.append("old_password", $("#old_password").val());
         fd.append("password", $("#password").val());
         fd.append("password_confirmation", $("#password_confirmation").val());
+        id = $("#id_user").val();
         $.ajax({
             type: "POST",
-            url: "/account",
+            url: "/account/" + id,
             data: fd,
             dataType: "JSON",
             contentType: false,
@@ -35,10 +35,160 @@ $(document).ready(function ()
             },
         });
     });
+
+    $("#form-update-user").submit(function (e) {
+        e.preventDefault();
+        let formdata = new FormData();
+        formdata.append("name", $("#name").val());
+        formdata.append("email", $("#email").val());
+        formdata.append("role", $("#role").val());
+        formdata.append("company", $("#company").val());
+        formdata.append("dob", $("#dob").val());
+        formdata.append("active", $("#active").val());
+        formdata.append("id", $("#id").val());
+        $.ajax({
+            type: "POST",
+            url: "/user/edit/" + $("#id").val(),
+            data: formdata,
+            dataType: "JSON",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (response) {
+                console.log(response);
+                toast(response.type, response.message);
+            },
+        });
+    });
+
+    $("#form-create-user").submit(function (e) {
+        e.preventDefault();
+        let formdata = new FormData();
+        formdata.append("name", $("#name").val());
+        formdata.append("email", $("#email").val());
+        formdata.append("role", $("#role").val());
+        formdata.append("company", $("#company").val());
+        formdata.append("dob", $("#dob").val());
+        formdata.append("active", $("#active").val());
+        $.ajax({
+            type: "POST",
+            url: "/user/create",
+            data: formdata,
+            dataType: "JSON",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (response) {
+                toast(response.type, response.message);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3500);
+            },
+        });
+    });
+
+    $(".deleteUser").click(function (e) {
+        e.preventDefault();
+        if (confirm("xoas user")) {
+            let id = $(this).attr("user_id");
+            $.ajax({
+                type: "POST",
+                url: "user/destroy/" + id,
+                data: "id=" + id,
+                dataType: "JSON",
+                success: function (response) {
+                    toast(response.type, response.message);
+                },
+            });
+            $(this).closest(".user-row").remove();
+        }
+    });
+
+    /* delete mutiple rows   */
+    $("#checkfull").on("click", function (e) {
+        if ($(this).is(":checked", true)) {
+            $(".checkitem").prop("checked", true);
+        } else {
+            $(".checkitem").prop("checked", false);
+        }
+    });
+
+    $("#btn-delete-mutiple-user").on("click", function (e) {
+        var allVals = [];
+        $(".checkitem:checked").each(function () {
+            allVals.push($(this).attr("data-id"));
+        });
+        console.log(allVals);
+        if (allVals.length <= 0) {
+            toast("warning", "Vui lòng chọn trường muốn xóa!!!");
+        } else {
+            dataid = "ids=" + allVals.join(",");
+            $.ajax({
+                type: "POST",
+                url: "user/destroy-mutiple",
+                data: dataid,
+                dataType: "JSON",
+                success: function (response) {
+                    toast(response.type, response.message);
+                },
+            });
+            $.each(allVals, function (index, value) {
+                $(".user-row")
+                    .filter("[data-user-id='" + value + "']")
+                    .remove();
+            });
+        }
+    });
+    $("#formUpdateCompany").submit(function (e) {
+        e.preventDefault();
+        var fd = new FormData();
+        var files = $("#avatar")[0].files;
+        if (files.length > 0) {
+            fd.append("avatar", files[0]);
+        }
+        fd.append("name", $("#name").val());
+        fd.append("address", $("#address").val());
+        fd.append("max_users", $("#max_users").val());
+        fd.append("expired_at", $("#expired_at").val());
+        fd.append("active", $("#active").val());
+        fd.append("company", $("#id_company").val());
+        fd.append("_method", "PUT");
+        id = $("#id_company").val();
+        $.ajax({
+            type: "POST",
+            url: "/company/" + id,
+            data: fd,
+            dataType: "JSON",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (response) {
+                toast(response.type, response.message);
+            },
+        });
+    });
+    $(".deletecompany").click(function (e) {
+        e.preventDefault();
+        let idc = $(this).attr("company_id");
+        if (confirm("bạn có chắc muốn xóa company")) {
+            $.ajax({
+                type: "POST",
+                url: "company/" + idc,
+                data: {
+                    company: idc,
+                    _method: "DELETE",
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    toast(response.type, response.message);
+                },
+            });
+            $(this).closest(".company-row").remove();
+        }
+    });
 });
 
-function toast(type ='info', message = "") 
-{
+function toast(type = "info", message = "") {
     const main = document.getElementById("toast");
     var color = "blue";
     icon = "fa-circle-info";
@@ -56,10 +206,9 @@ function toast(type ='info', message = "")
         case "info":
             color = "blue";
             break;
-        default :
-            icon = "fa-question"
+        default:
+            icon = "fa-question";
     }
-    var x = "bg-" + color + "-300";
     if (main) {
         const toast = document.createElement("div");
         toast.innerHTML = `<div class="flex items-center toast-${color} max-w-sm  p-4 mb-4 text-gray-700 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 absolute right-64 top-24  toast" role="alert">
