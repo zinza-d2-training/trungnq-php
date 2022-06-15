@@ -14,7 +14,7 @@
         </div>
         <x-table class="w-full">
             <x-slot name="tablehead" class="w-full">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-slate-300 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th class="px-6 py-3 w-3"> 
                             <input type="checkbox" class="mx-auto" name="" id="checkfull">
@@ -50,6 +50,6 @@
             id="btn-delete-mutiple-user">Delete</button>
     </div>
     <div class="mt-auto px-6">
-     {{--    {{ $users->links() }} --}}
+        {{ $users->links() }}
     </div>
 @endsection

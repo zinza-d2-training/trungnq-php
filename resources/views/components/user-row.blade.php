@@ -18,7 +18,7 @@ if ($user->role->id == 1) {
 }
 @endphp
 <tr
-    class="border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700">
+    class="user-row border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700" data-id="{{$user->id}}">
     <td scope="row" class="px-6 py-4 ">
         <input type="checkbox" class="mx-auto checkitem" name="" id="" data-id="{{ $user->id }}">
     </td>

@@ -5,7 +5,6 @@ namespace App\Services;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMail;
 use App\Models\Company;
-use App\Models\CompanyAccount;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Services\UploadImage;
@@ -14,6 +13,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use App\Observers\AccountObserver;
+use Illuminate\Support\Facades\Config;
 
 class UserService
 {
@@ -25,9 +25,9 @@ class UserService
 
     public function create($data)
     {
-        if(!isset($data['password'])) {
+        if (!isset($data['password'])) {
             $data['password'] = Str::random(6);
-        } 
+        }
         return User::create($data);
     }
 
@@ -92,38 +92,25 @@ class UserService
         DB::table('password_resets')->where(['email' => $request->email])->delete();
         return true;
     }
-    public function getAll($sortData){
-        if(!empty($sortData)){
-            return User::with('role')->orderBy($sortData['sort'], $sortData['direction'])->paginate(10);
+
+    public function getAll($sortData)
+    {
+        $query = User::with('role');
+        if (!empty($sortData)) {
+            $query = $query->orderBy($sortData['sort'], $sortData['direction']);
         }
-        return User::with('role')->paginate(10);
+        return $query->paginate(Config::get('constants.PAGINATE'));
     }
 
-    public function updateUser($id,$data){
+    public function updateUser($id, $data)
+    {
         $user = User::findOrFail($id);
-        $companyAccount = $user->companyAccount;
-        if($data['company'] != 0){
-            $checkCompany = false;
-            if(count($companyAccount)){
-                foreach($companyAccount as $item){
-                    if($data['company'] == $item->company_id){
-                        $checkCompany = true;
-                    }
-                }
-                if(!$checkCompany){
-                    CompanyAccount::create(['user_id' => $user->id, 'company_id' =>$data['company']]);
-                }
-            }
-            else {
-                CompanyAccount::create(['user_id' => $user->id, 'company_id' =>$data['company']]);
-            }
+        $company = $user->company;
+        if (!empty($company && $data['company'] != 0)) {
+            DB::table('company_accounts')->insert(['user_id' => $user->id, 'company_id' => $data['company']]);
         }
         unset($data['email']);
-        if($user) {
-            $user->update($data); 
-            return true;  
-        } else {
-            return false;
-        }
+        $user->update($data);
+        return true;
     }
 }

@@ -1,13 +1,13 @@
 <tr class="company-row">
     <td class="px-6 py-4">
-        @if (count($account))
+        @if (count($company->user))
             <div class="inline-block ">
-                <img src="/storage/images/avatars/{{ $account[0]->getAccount->avatar }}" alt=""
+                <img src="/storage/images/avatars/{{ $company->user[0]->avatar }}" alt=""
                     class="w-10 rounded-full">
             </div>
             <div class="px-3 inline-block w-3">
-                <p class="text-bold text-slate-900">{{ $account[0]->getAccount->name }} </p>
-                <p class=" text-gray-600">{{ $account[0]->getAccount->email }} </p>
+                <p class="text-bold text-slate-900">{{ $company->user[0]->name }} </p>
+                <p class=" text-gray-600">{{ $company->user[0]->email }} </p>
             </div>
         @endif
     </td>

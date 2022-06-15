@@ -39,3 +39,16 @@ Breadcrumbs::for('createcompany', function ($trail) {
     $trail->parent('company');
     $trail->push('Create', route("company.create"));
 });
+
+Breadcrumbs::for('topic', function ($trail) {
+    $trail->parent('home');
+    $trail->push('Topic', route("topic.index"));
+});
+Breadcrumbs::for('edittopic', function ($trail, $id) {
+    $trail->parent('topic');
+    $trail->push('Edit', route("topic.edit", ['topic' => $id]));
+});
+Breadcrumbs::for('createtopic', function ($trail) {
+    $trail->parent('topic');
+    $trail->push('Create', route("topic.create"));
+});

@@ -16,7 +16,7 @@
     <div class="col-span-4 "></div>
     <div class="col-span-2">
         <x-label>Role</x-label>
-        <select name="role" id="role" class="w-full rounded-lg border-slate-200">
+        <select name="role_id" id="role" class="w-full rounded-lg border-slate-200">
             <option value="0"  >Pick an Role</option>
             <option value="1" {{$user->role->id == 1 ? "selected" :""}}>Admin</option>
             <option value="2" {{$user->role->id == 2 ? "selected" :""}}> Company Account</option>

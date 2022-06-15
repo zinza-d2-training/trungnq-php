@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Company;
-use App\Models\CompanyAccount;
+use Illuminate\Support\Facades\Config;
 
 class CompanyService
 {
@@ -21,10 +21,10 @@ class CompanyService
     }
     public function getAll($sortData)
     {
-        if (!empty($sortData)) {
-            return Company::with('companyAccount.getAccount')->orderBy('active', $sortData['direction'])->paginate(10);
+        if(!empty($sortData)){
+            return Company::with('User')->orderBy($sortData['sort'], $sortData['direction'])->paginate(10);
         }
-        return Company::with('companyAccount.getAccount')->paginate(10);
+        return Company::with('User')->paginate(Config::get('constants.PAGINATE'));
     }
     public function create($data)
     {

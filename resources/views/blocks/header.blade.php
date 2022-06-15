@@ -8,26 +8,26 @@
                         <a class="text-white font-bold hover:text-black" href="#">Dashboard</a>
                     </li>
                     @php
-                        $role = Auth::user()->role->id;
+                        $role = Auth::user()->role->name;
                     @endphp
-                    @if ($role <=2)
-                    <li class="mr-6">
-                        <a class="text-white font-bold hover:text-black" href="{{route('user.index')}}">User</a>
-                    </li>
+                    @if ($role =="company_account" || $role =="admin")
+                        <li class="mr-6">
+                            <a class="text-white font-bold hover:text-black" href="{{route('user.index')}}">User</a>
+                        </li>
                     @endif
-                   @if ($role == 1)
-                    <li class="mr-6">
-                        <a class="text-white font-bold hover:text-black" href="{{route('company.index')}}">Company</a>
-                    </li>
+                   @if ($role == 'admin')
+                        <li class="mr-6">
+                            <a class="text-white font-bold hover:text-black" href="{{route('company.index')}}">Company</a>
+                        </li>
+                        <li class="mr-6">
+                            <a class="text-white font-bold hover:text-black " href="{{route('topic.index')}}">Topic</a>
+                        </li>
                    @endif
                     <li class="mr-6">
-                        <a class="text-white font-bold hover:text-black " href="#">Topic</a>
+                        <a class="text-white font-bold hover:text-black " href="{{route('topic.index')}}">Tag</a>
                     </li>
                     <li class="mr-6">
-                        <a class="text-white font-bold hover:text-black " href="#">Tag</a>
-                    </li>
-                    <li class="mr-6">
-                        <a class="text-white font-bold hover:text-black  " href="#">Post</a>
+                        <a class="text-white font-bold hover:text-black  " href="{{route('topic.index')}}">Post</a>
                     </li>
                 </ul>
             </div>

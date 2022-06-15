@@ -34,14 +34,9 @@
                 </thead>
             </x-slot>
             <x-slot name="tablebody">
-                @if (count($companies))
                     @foreach ($companies as $company)
-                        @php
-                            $account = $company->companyAccount;
-                        @endphp
-                        <x-company-row :company="$company" :account="$account"></x-company-row>
+                        <x-company-row :company="$company" ></x-company-row>
                     @endforeach
-                @endif
             </x-slot>
         </x-table>
     </div>

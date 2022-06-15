@@ -38,53 +38,12 @@ $(document).ready(function () {
 
     $("#form-update-user").submit(function (e) {
         e.preventDefault();
-        let formdata = new FormData();
-        formdata.append("name", $("#name").val());
-        formdata.append("email", $("#email").val());
-        formdata.append("role", $("#role").val());
-        formdata.append("company", $("#company").val());
-        formdata.append("dob", $("#dob").val());
-        formdata.append("active", $("#active").val());
-        formdata.append("id", $("#id").val());
-        $.ajax({
-            type: "POST",
-            url: "/user/edit/" + $("#id").val(),
-            data: formdata,
-            dataType: "JSON",
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (response) {
-                console.log(response);
-                toast(response.type, response.message);
-            },
-        });
+        createFormUser("/user/edit/" + $("#id").val());
     });
 
     $("#form-create-user").submit(function (e) {
         e.preventDefault();
-        let formdata = new FormData();
-        formdata.append("name", $("#name").val());
-        formdata.append("email", $("#email").val());
-        formdata.append("role", $("#role").val());
-        formdata.append("company", $("#company").val());
-        formdata.append("dob", $("#dob").val());
-        formdata.append("active", $("#active").val());
-        $.ajax({
-            type: "POST",
-            url: "/user/create",
-            data: formdata,
-            dataType: "JSON",
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (response) {
-                toast(response.type, response.message);
-                setTimeout(() => {
-                    window.location.reload();
-                }, 3500);
-            },
-        });
+        createFormUser("/user/create");
     });
 
     $(".deleteUser").click(function (e) {
@@ -104,7 +63,6 @@ $(document).ready(function () {
         }
     });
 
-    /* delete mutiple rows   */
     $("#checkfull").on("click", function (e) {
         if ($(this).is(":checked", true)) {
             $(".checkitem").prop("checked", true);
@@ -114,30 +72,10 @@ $(document).ready(function () {
     });
 
     $("#btn-delete-mutiple-user").on("click", function (e) {
-        var allVals = [];
-        $(".checkitem:checked").each(function () {
-            allVals.push($(this).attr("data-id"));
-        });
-        console.log(allVals);
-        if (allVals.length <= 0) {
-            toast("warning", "Vui lòng chọn trường muốn xóa!!!");
-        } else {
-            dataid = "ids=" + allVals.join(",");
-            $.ajax({
-                type: "POST",
-                url: "user/destroy-mutiple",
-                data: dataid,
-                dataType: "JSON",
-                success: function (response) {
-                    toast(response.type, response.message);
-                },
-            });
-            $.each(allVals, function (index, value) {
-                $(".user-row")
-                    .filter("[data-user-id='" + value + "']")
-                    .remove();
-            });
-        }
+        deleteMutiple("user/destroy-mutiple",'user-row');
+    });
+    $("#btn-delete-mutiple-topic").on("click", function (e) {
+        deleteMutiple("topic/destroy-mutiple",'topic-row');
     });
     $("#formUpdateCompany").submit(function (e) {
         e.preventDefault();
@@ -167,6 +105,7 @@ $(document).ready(function () {
             },
         });
     });
+
     $(".deletecompany").click(function (e) {
         e.preventDefault();
         let idc = $(this).attr("company_id");
@@ -175,8 +114,8 @@ $(document).ready(function () {
                 type: "POST",
                 url: "company/" + idc,
                 data: {
-                    company: idc,
-                    _method: "DELETE",
+                    "company": idc,
+                    "_method": "DELETE",
                 },
                 dataType: "JSON",
                 success: function (response) {
@@ -184,6 +123,26 @@ $(document).ready(function () {
                 },
             });
             $(this).closest(".company-row").remove();
+        }
+    });
+
+    $('.delete-topic').click(function (e) { 
+        e.preventDefault();
+        if(confirm('Bạn muốn xóa topic này ??')){
+            let idc = $(this).attr("topic_slug");
+            $.ajax({
+                type: "POST",
+                url: "topic/" + idc,
+                data: {
+                    topic: idc,
+                    _method: "DELETE",
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    toast(response.type, response.message);
+                },
+            });
+            $(this).closest(".topic-row").remove();
         }
     });
 });
@@ -226,4 +185,54 @@ function toast(type = "info", message = "") {
             main.removeChild(toast);
         }, 4000);
     }
+}
+
+function deleteMutiple(url,rowclass) {
+    var allVals = [];
+    $(".checkitem:checked").each(function () {
+        allVals.push($(this).attr("data-id"));
+    });
+    if (allVals.length <= 0) {
+        toast("warning", "Vui lòng chọn trường muốn xóa!!!");
+    } else {
+        console.log(allVals);
+        dataid = "ids=" + allVals.join(",");
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: dataid,
+            dataType: "JSON",
+            success: function (response) {
+                console.log(response);
+                toast(response.type, response.message);
+            },
+        });
+        $.each(allVals, function (index, value) {
+            console.log(value);
+            $("."+rowclass).filter("[data-id='" + value + "']").remove();
+        });
+    }
+}
+
+function createFormUser(url) {
+    let formdata = new FormData();
+    formdata.append("name", $("#name").val());
+    formdata.append("email", $("#email").val());
+    formdata.append("role_id", $("#role").val());
+    formdata.append("company", $("#company").val());
+    formdata.append("dob", $("#dob").val());
+    formdata.append("active", $("#active").val());
+    formdata.append("id", $("#id").val());
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: formdata,
+        dataType: "JSON",
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function (response) {
+            toast(response.type, response.message);
+        },
+    });
 }

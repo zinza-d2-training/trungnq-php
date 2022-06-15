@@ -16,8 +16,8 @@ class Company extends Model
         'expired_at',
         'active'
     ];
-    public function companyAccount()
+    public function User()
     {
-        return $this->hasMany(CompanyAccount::class, 'company_id', 'id');
+        return $this->belongsToMany(User::class,'company_accounts');
     }
 }

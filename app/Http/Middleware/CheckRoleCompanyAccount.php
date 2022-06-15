@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CheckRoleCompanyAccoutn
+class CheckRoleCompanyAccount
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,8 @@ class CheckRoleCompanyAccoutn
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->role_id <=2) {
+        $role = Auth::user()->role->name;
+        if ($role == "company_account" || $role =='admin') {
             return $next($request);
         } else {
             return redirect()->route('home');

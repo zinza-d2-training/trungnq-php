@@ -1,5 +1,6 @@
 <?php
 
 return [
-	'ADMIN_NAME' => 'Zinza'
+	'ADMIN_NAME' => 'Zinza',
+	'PAGINATE' => 10,
 ];

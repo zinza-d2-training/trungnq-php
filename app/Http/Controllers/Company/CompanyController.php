@@ -24,10 +24,8 @@ class CompanyController extends Controller
 
     public function index(Request $request)
     {
-        $data = $this->companyService->getAll($request->all());
-        /* dd($data[0]->companyAccount[0]->getAccount->name); */
-        /* dd($data[0]->companyAccount); */
-        return view('pages.company.index',['companies' => $data]);
+        $companies = $this->companyService->getAll($request->all());
+        return view('pages.company.index',compact('companies'));
     }
 
     /**
@@ -50,9 +48,9 @@ class CompanyController extends Controller
     {
         $res = $this->companyService->create($request->all());
         if ($res) {
-            return back()->with('message', array("type" => 'info', "content" => "Tạo company thành công!!!"));
+            return back()->with('message', ['type' => 'info', 'content' => 'Tạo company thành công!!!']);
         }
-        return back()->with('message', array("type" => 'info', "content" => "~Oppp. Đã xảy ra lỗi vui lòng thử lại!!!"));
+        return back()->with('message', ['type' => 'info', 'content' => '~Oppp. Đã xảy ra lỗi vui lòng thử lại!!!']);
     }
 
     /**
@@ -75,7 +73,7 @@ class CompanyController extends Controller
     public function edit($id)
     {
         $company = $this->companyService->getById($id);
-        return view('pages.company.edit',['company' => $company]);
+        return view('pages.company.edit',compact('company'));
     }
 
     /**
@@ -88,7 +86,7 @@ class CompanyController extends Controller
     public function update(CompanyRequest $request)
     {
         $result = $this->companyService->update($request->all());
-        return response()->json(['type' => 'info', "message" => "Cập nhật công ty thành công"]);
+        return $this->message('info','Cập nhật thông tin thành công');
     }
 
     /**
@@ -99,7 +97,14 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        $company = Company::findOrFail($id)->delete;
-        return response()->json(['type' => 'info', "message" => "Xóa công ty thành công"]);
+        $company = Company::findOrFail($id);
+        $company->delete();
+        return $this->message('info','Đã xóa công ty!');
+    }
+    public function message($type,$message){
+        return response()->json(['type' => $type,'message' => $message]);
+    }
+    public function error(){
+        return response()->json(['type' => 'danger','message' =>'Có lỗi trong quá trình thực hiện.Hãy thử lại']);
     }
 }
