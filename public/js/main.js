@@ -74,9 +74,15 @@ $(document).ready(function () {
     $("#btn-delete-mutiple-user").on("click", function (e) {
         deleteMutiple("user/destroy-mutiple",'user-row');
     });
+
     $("#btn-delete-mutiple-topic").on("click", function (e) {
         deleteMutiple("topic/destroy-mutiple",'topic-row');
     });
+
+    $("#btn-delete-mutiple-tag").on("click", function (e) {
+        deleteMutiple("tag/destroy-mutiple",'tag-row');
+    });
+
     $("#formUpdateCompany").submit(function (e) {
         e.preventDefault();
         var fd = new FormData();
@@ -110,18 +116,7 @@ $(document).ready(function () {
         e.preventDefault();
         let idc = $(this).attr("company_id");
         if (confirm("bạn có chắc muốn xóa company")) {
-            $.ajax({
-                type: "POST",
-                url: "company/" + idc,
-                data: {
-                    "company": idc,
-                    "_method": "DELETE",
-                },
-                dataType: "JSON",
-                success: function (response) {
-                    toast(response.type, response.message);
-                },
-            });
+            deleteItem('company',idc)
             $(this).closest(".company-row").remove();
         }
     });
@@ -129,20 +124,18 @@ $(document).ready(function () {
     $('.delete-topic').click(function (e) { 
         e.preventDefault();
         if(confirm('Bạn muốn xóa topic này ??')){
-            let idc = $(this).attr("topic_slug");
-            $.ajax({
-                type: "POST",
-                url: "topic/" + idc,
-                data: {
-                    topic: idc,
-                    _method: "DELETE",
-                },
-                dataType: "JSON",
-                success: function (response) {
-                    toast(response.type, response.message);
-                },
-            });
+            let id = $(this).attr("topic_slug");
+            deleteItem('topic',id);
             $(this).closest(".topic-row").remove();
+        }
+    });
+
+    $('.delete-tag').click(function (e) { 
+        e.preventDefault();
+        if(confirm('Bạn muốn xóa tag này ??')){
+            let id = $(this).attr("tag_id");
+            deleteItem('tag',id);
+            $(this).closest(".tag-row").remove();
         }
     });
 });
@@ -208,7 +201,6 @@ function deleteMutiple(url,rowclass) {
             },
         });
         $.each(allVals, function (index, value) {
-            console.log(value);
             $("."+rowclass).filter("[data-id='" + value + "']").remove();
         });
     }
@@ -231,6 +223,21 @@ function createFormUser(url) {
         contentType: false,
         cache: false,
         processData: false,
+        success: function (response) {
+            toast(response.type, response.message);
+        },
+    });
+}
+
+function deleteItem(typeItem,id){
+    $.ajax({
+        type: "POST",
+        url: typeItem + "/" + id,
+        data: {
+            typeItem: id,
+            _method: "DELETE",
+        },
+        dataType: "JSON",
         success: function (response) {
             toast(response.type, response.message);
         },

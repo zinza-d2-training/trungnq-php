@@ -1,9 +1,9 @@
 
 <div class="grid grid-cols-8 gap-4 mt-8">
     <div class="col-span-2">
-        <x-label>Email</x-label>
-        <x-input class="block mt-1 w-full bg-slate-300" type="email" name="email"  :value="$user->email" required autofocus
-            readonly />
+        <x-label>Email </x-label>
+        <input class="block mt-1 w-full bg-slate-100 bottom-2 border-slate-400 rounded-lg" type="email" name="email" id="email"  value="{{$user->email}}" required autofocus
+            {{(Auth::user()->role->name == 'admin') ? " " : "readonly"}} />
             <input type="hidden" name="id" id="id" value="{{$user->id}}"> 
         <x-span-error name='email' ></x-span-error>
     </div>

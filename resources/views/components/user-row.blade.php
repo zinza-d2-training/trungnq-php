@@ -6,19 +6,19 @@ if ($user->active == 1) {
     $user->status = 'inactive';
     $color = 'red';
 }
-if ($user->role->id == 1) {
-    $role = 'admin';
-    $bg = 'red';
-} elseif ($user->role->id == 2) {
-    $role = 'company_account';
+$role = $user->role;
+if ($role->name == 'member') {
     $bg = 'blue';
-} else {
-    $role = 'member';
+} 
+if ($role->name == 'admin') {
+    $bg = 'red';
+} 
+if ($role->name == 'company_account') {
     $bg = 'teal';
 }
 @endphp
-<tr
-    class="user-row border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700" data-id="{{$user->id}}">
+<tr class="user-row border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700"
+    data-id="{{ $user->id }}">
     <td scope="row" class="px-6 py-4 ">
         <input type="checkbox" class="mx-auto checkitem" name="" id="" data-id="{{ $user->id }}">
     </td>
@@ -26,9 +26,9 @@ if ($user->role->id == 1) {
         <div class="inline-block ">
             <img src="/storage/images/avatars/{{ $user->avatar }}" alt="" class="w-10 rounded-full">
         </div>
-        <div class="px-3 inline-block w-3">
-            <p class="text-bold text-slate-900">{{ $user->name }}</p>
-            <p class=" text-gray-600">{{ $user->email }}</p>
+        <div class="px-3 inline-block w-3 ">
+            <p class="text-bold text-slate-900 ">{{ $user->name }}</p>
+            <p class=" text-gray-700">{{ $user->email }}</p>
         </div>
     </td>
     <td class="px-6 py-4">
@@ -41,7 +41,8 @@ if ($user->role->id == 1) {
     </td>
     <td class="px-6 py-4 text-right">
         <div class="col-span-2 flex items-center  ">
-            <p class="px-3 py-1 {{ 'bg-' . $bg . '-500' }} bg-teal-500 rounded-md capitalize">{{ $role }}</p>
+            <p class="px-3 py-1 {{ 'bg-' . $bg . '-500' }} font-bold rounded-md text-white capitalize">
+                {{ $role->name }}</p>
         </div>
     </td>
     <td>

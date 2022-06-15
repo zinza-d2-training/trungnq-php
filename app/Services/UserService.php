@@ -28,6 +28,11 @@ class UserService
         if (!isset($data['password'])) {
             $data['password'] = Str::random(6);
         }
+        $email = $data['email'];
+        Mail::send('email.new-account', ['user' => $data], function ($message) use ($email) {
+            $message->to($email);
+            $message->subject('Reset Password');
+        });
         return User::create($data);
     }
 
@@ -109,7 +114,9 @@ class UserService
         if (!empty($company && $data['company'] != 0)) {
             DB::table('company_accounts')->insert(['user_id' => $user->id, 'company_id' => $data['company']]);
         }
-        unset($data['email']);
+        if (Auth::user()->role->name != 'admin') {
+            unset($data['email']);
+        }
         $user->update($data);
         return true;
     }

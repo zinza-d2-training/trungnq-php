@@ -49,7 +49,7 @@
         <button type="button" class="bg-blue-400 text-white font-bold p-3 rounded-lg mt-3 ml-4"
             id="btn-delete-mutiple-user">Delete</button>
     </div>
-    <div class="mt-auto px-6">
+    <div class="mt-auto mb-6 px-6">
         {{ $users->links() }}
     </div>
 @endsection
