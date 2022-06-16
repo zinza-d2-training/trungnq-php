@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
@@ -23,9 +24,10 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
+        $id = $this->route()->id;
         return [
             'name' => 'required|min:5',
-            'email' => 'email|unique:users|email',
+            'email' => 'required|unique:users,email,' . $id,
             'old_password' => 'sometimes|nullable|min:6',
             'password' => 'nullable|confirmed|min:6'
         ];

@@ -1,10 +1,13 @@
 @extends('layouts.client')
+@section('title')
+    Account
+@endsection
 @section('content')
     <x-breadcrumbs name='account'></x-breadcrumbs>
     <div class="mx-6">
         <div id="toast" class="bg-red-500 right-64">
         </div>
-        <form action="{{ route('account-update') }}" id="form-user" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('account-update',['id'=>$user->id])}}" id="form-user" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="flex items-end gap-2.5">
                 <div class="">
@@ -23,14 +26,14 @@
                     <x-label>Name</x-label>
                     <x-input class="block mt-1 w-full" type="text" name="name" id="name" :value="$user->name" required
                         autofocus />
+                    <x-input class="hidden" id="id_user" name="id" :value="$user->id"></x-input>
                     <x-span-error name='name'></x-span-error>
                 </div>
                 <div class="col-span-2">
                     <x-label>Email</x-label>
-                    <x-input class="block mt-1 w-full bg-slate-300" type="email" :value="$user->email" required autofocus
+                    <x-input class="block mt-1 w-full bg-slate-300" type="email" id="email" name="email" :value="$user->email" required autofocus
                         readonly />
                     <x-span-error name='email'></x-span-error>
-
                 </div>
                 <div class="col-span-4 "></div>
                 <div class="col-span-2">
