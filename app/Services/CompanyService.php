@@ -24,7 +24,7 @@ class CompanyService
         if(!empty($sortData)){
             return Company::with('User')->orderBy($sortData['sort'], $sortData['direction'])->paginate(10);
         }
-        return Company::with('User')->paginate(Config::get('constants.PAGINATE'));
+        return Company::with('User')->paginate(Config::get('constants.paginate'));
     }
     public function create($data)
     {

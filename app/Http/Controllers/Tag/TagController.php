@@ -13,7 +13,7 @@ class TagController extends Controller
 
     public function index()
     {
-        $tags = Tag::with('post')->paginate(Config::get('constants.PAGINATE'));
+        $tags = Tag::with('post')->paginate(Config::get('constants.paginate'));
         return view('pages.tag.index', compact('tags'));
     }
 

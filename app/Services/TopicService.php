@@ -10,7 +10,7 @@ class TopicService
 
     public function getAll()
     {
-        return Topic::paginate(Config::get('constants.PAGINATE'));
+        return Topic::paginate(Config::get('constants.paginate'));
     }
 
     public function getById($slug)

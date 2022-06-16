@@ -6,7 +6,7 @@
     <x-breadcrumbs name='company'></x-breadcrumbs>
     <div class="px-6">
         <div class=" my-4 py-2  flex flex-row justify-between">
-            <div class="">Company. Role admin {{ Config::get('constants.ADMIN_NAME') }} </div>
+            <div class="">Company. Role admin {{ Config::get('constants.admin_name') }} </div>
             <div class=""><a href="{{ route('company.create') }}" target="bank"
                     class="p-2 bg-blue-600 rounded-lg text-white">New Company</a></div>
         </div>

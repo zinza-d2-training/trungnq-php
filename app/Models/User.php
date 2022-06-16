@@ -51,12 +51,18 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = Hash::make($pass);
     }
+
     public function role()
     {
         return $this->hasOne(Role::class, 'id', 'role_id');
     }
+
     public function company()
     {
         return $this->belongsToMany(Company::class,'company_accounts');
+    }
+
+    public function post(){
+        return $this ->hasMany(Post::class);
     }
 }

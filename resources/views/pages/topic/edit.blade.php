@@ -14,7 +14,7 @@
             @endphp
             <x-toast :content="$message['content']" :type="$message['type']"></x-toast>
         @endif
-        <form action="{{ route('topic.update',['topic'=>$topic->slug]) }}" class="flex flex-col w-1/5" method="POST">
+        <form action="{{ route('topic.update', ['topic' => $topic->slug]) }}" class="flex flex-col w-1/5" method="POST">
             @method('PUT')
             @csrf
             <x-label>Tilte</x-label>
@@ -23,7 +23,4 @@
             <x-button>Create</x-button>
         </form>
     </div>
-@endsection
-@section('script')
-    <script></script>
 @endsection

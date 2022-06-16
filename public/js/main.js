@@ -72,15 +72,15 @@ $(document).ready(function () {
     });
 
     $("#btn-delete-mutiple-user").on("click", function (e) {
-        deleteMutiple("user/destroy-mutiple",'user-row');
+        deleteMutiple("user/destroy-mutiple", "user-row");
     });
 
     $("#btn-delete-mutiple-topic").on("click", function (e) {
-        deleteMutiple("topic/destroy-mutiple",'topic-row');
+        deleteMutiple("topic/destroy-mutiple", "topic-row");
     });
 
     $("#btn-delete-mutiple-tag").on("click", function (e) {
-        deleteMutiple("tag/destroy-mutiple",'tag-row');
+        deleteMutiple("tag/destroy-mutiple", "tag-row");
     });
 
     $("#formUpdateCompany").submit(function (e) {
@@ -116,25 +116,25 @@ $(document).ready(function () {
         e.preventDefault();
         let idc = $(this).attr("company_id");
         if (confirm("bạn có chắc muốn xóa company")) {
-            deleteItem('company',idc)
+            deleteItem("company", idc);
             $(this).closest(".company-row").remove();
         }
     });
 
-    $('.delete-topic').click(function (e) { 
+    $(".delete-topic").click(function (e) {
         e.preventDefault();
-        if(confirm('Bạn muốn xóa topic này ??')){
+        if (confirm("Bạn muốn xóa topic này ??")) {
             let id = $(this).attr("topic_slug");
-            deleteItem('topic',id);
+            deleteItem("topic", id);
             $(this).closest(".topic-row").remove();
         }
     });
 
-    $('.delete-tag').click(function (e) { 
+    $(".delete-tag").click(function (e) {
         e.preventDefault();
-        if(confirm('Bạn muốn xóa tag này ??')){
+        if (confirm("Bạn muốn xóa tag này ??")) {
             let id = $(this).attr("tag_id");
-            deleteItem('tag',id);
+            deleteItem("tag", id);
             $(this).closest(".tag-row").remove();
         }
     });
@@ -180,7 +180,7 @@ function toast(type = "info", message = "") {
     }
 }
 
-function deleteMutiple(url,rowclass) {
+function deleteMutiple(url, rowclass) {
     var allVals = [];
     $(".checkitem:checked").each(function () {
         allVals.push($(this).attr("data-id"));
@@ -188,7 +188,6 @@ function deleteMutiple(url,rowclass) {
     if (allVals.length <= 0) {
         toast("warning", "Vui lòng chọn trường muốn xóa!!!");
     } else {
-        console.log(allVals);
         dataid = "ids=" + allVals.join(",");
         $.ajax({
             type: "POST",
@@ -196,12 +195,13 @@ function deleteMutiple(url,rowclass) {
             data: dataid,
             dataType: "JSON",
             success: function (response) {
-                console.log(response);
                 toast(response.type, response.message);
             },
         });
         $.each(allVals, function (index, value) {
-            $("."+rowclass).filter("[data-id='" + value + "']").remove();
+            $("." + rowclass)
+                .filter("[data-id='" + value + "']")
+                .remove();
         });
     }
 }
@@ -229,7 +229,7 @@ function createFormUser(url) {
     });
 }
 
-function deleteItem(typeItem,id){
+function deleteItem(typeItem, id) {
     $.ajax({
         type: "POST",
         url: typeItem + "/" + id,

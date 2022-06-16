@@ -104,7 +104,7 @@ class UserService
         if (!empty($sortData)) {
             $query = $query->orderBy($sortData['sort'], $sortData['direction']);
         }
-        return $query->paginate(Config::get('constants.PAGINATE'));
+        return $query->paginate(Config::get('constants.paginate'));
     }
 
     public function updateUser($id, $data)
