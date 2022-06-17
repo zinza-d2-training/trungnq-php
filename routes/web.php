@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Authen\AuthenController;
 use App\Http\Controllers\Company\CompanyController;
+use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Tag\TagController;
 use App\Http\Controllers\Topic\ToppicController;
 use App\Http\Controllers\User\UserController;
@@ -60,6 +61,9 @@ Route::middleware('verifyLogin')->group(function () {
         Route::resource('tag', TagController::class);
         Route::post('/tag/destroy-mutiple', [TagController::class, 'destroyAll']);
     });
+
+    Route::resource('post',PostController::class);
+    Route::post('/post/upload-image',[PostController::class,'uploadImage'])->name('post.uploadImage');
 });
 
 Route::controller(AuthenController::class)->group(function () {

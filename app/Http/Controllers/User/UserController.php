@@ -26,7 +26,8 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('pages.user.create');
+        $companys = Company::all();
+        return view('pages.user.create',compact('companys'));
     }
 
     public function store(UserRequest $request)
