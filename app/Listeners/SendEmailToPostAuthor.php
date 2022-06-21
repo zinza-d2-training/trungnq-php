@@ -28,7 +28,6 @@ class SendEmailToPostAuthor implements ShouldQueue
      */
     public function handle(DeletePost $event)
     {
-        Log::info('hello');
         $email = $event->email;
         Mail::send('email.delete-post', ['post' => $event->post], function ($message) use ($email) {
             $message->to($email);

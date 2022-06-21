@@ -45,21 +45,23 @@ class PostService
     {
         $post = $this->getById($data['id']);
         $post->tag()->detach();
-        if(isset($data['tag'])){
+        if (isset($data['tag'])) {
             $post->tag()->attach($data['tag']);
         }
         $post->update($data);
 
         return true;
     }
+
     public function delete($data)
     {
         $post = $this->getById($data);
         $email = $post->user->email;
-        event(new DeletePost($post,$email));
-      
+        event(new DeletePost($post, $email));
+
         return $post->delete();
     }
+
     public function uploadImage($file)
     {
         $path = '/public/uploads';

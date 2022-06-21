@@ -21,20 +21,23 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = $this->userService->getAll($request->input());
+
         return view('pages.user.index', ['users' => $users]);
     }
 
     public function create()
     {
         $companys = Company::all();
-        return view('pages.user.create',compact('companys'));
+
+        return view('pages.user.create', compact('companys'));
     }
 
     public function store(UserRequest $request)
     {
         $res = $this->userService->create($request->input());
+
         if ($res) {
-            return $this->message('success','Taọ tài khoản thành công');
+            return $this->message('success', 'Taọ tài khoản thành công');
         } else {
             return $this->error();
         }
@@ -52,7 +55,7 @@ class UserController extends Controller
     {
         $res = $this->userService->updateUser($id, $request->input());
         if ($res) {
-            return $this->message('info','Thay đổi thông tin tài khoản thành công');
+            return $this->message('info', 'Thay đổi thông tin tài khoản thành công');
         } else {
             return $this->error();
         }
@@ -61,11 +64,12 @@ class UserController extends Controller
     public function destroy($id)
     {
         if (User::find($id)->delete()) {
-            return $this->message('info','Xóa tài khoản thành công');
+            return $this->message('info', 'Xóa tài khoản thành công');
         } else {
             return $this->error();
         }
     }
+
     public function destroyAll(Request $request)
     {
         $ids = $request->ids;
@@ -74,10 +78,13 @@ class UserController extends Controller
         return $this->message('info', 'Xóa tài khoản thành công!!!');
     }
 
-    public function message($type,$message){
-        return response()->json(['type' => $type,'message' => $message]);
+    public function message($type, $message)
+    {
+        return response()->json(['type' => $type, 'message' => $message]);
     }
-    public function error(){
-        return response()->json(['type' => 'danger','message' =>'Có lỗi trong quá trình thực hiện.Hãy thử lại']);
+
+    public function error()
+    {
+        return response()->json(['type' => 'danger', 'message' => 'Có lỗi trong quá trình thực hiện.Hãy thử lại']);
     }
 }

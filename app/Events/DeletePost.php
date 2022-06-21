@@ -21,9 +21,9 @@ class DeletePost
      *
      * @return void
      */
-    public $post;
-    public $email;
-    public function __construct(Post $post,$email)
+    public $post, $email;
+
+    public function __construct(Post $post, $email)
     {
         $this->post = $post;
         $this->email = $email;
