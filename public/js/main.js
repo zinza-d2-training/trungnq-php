@@ -138,6 +138,14 @@ $(document).ready(function () {
             $(this).closest(".tag-row").remove();
         }
     });
+    $(".delete-post").click(function (e) {
+        e.preventDefault();
+        if (confirm("Bạn muốn xóa bài đăng này ??")) {
+            let id = $(this).attr("post_id");
+            deleteItem("post", id);
+            $(this).closest(".post-row").remove();
+        }
+    });
 });
 
 function toast(type = "info", message = "") {

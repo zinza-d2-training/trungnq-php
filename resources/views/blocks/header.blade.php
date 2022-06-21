@@ -27,7 +27,7 @@
                         <a class="text-white font-bold hover:text-black " href="{{route('tag.index')}}">Tag</a>
                     </li>
                     <li class="mr-6">
-                        <a class="text-white font-bold hover:text-black  " href="{{route('tag.index')}}">Post</a>
+                        <a class="text-white font-bold hover:text-black  " href="{{route('post.index')}}">Post</a>
                     </li>
                 </ul>
             </div>

@@ -33,7 +33,11 @@ class UserService
             $message->to($email);
             $message->subject('Reset Password');
         });
-        return User::create($data);
+        $user = User::create($data);
+        if ($data['company'] != 0) {
+            $user->company()->attach($data['company']);
+        }
+        return $user;
     }
 
     public function getById($id)
@@ -54,14 +58,17 @@ class UserService
             $message->to($email);
             $message->subject('Reset Password');
         });
+
         return true;
     }
 
     public function login($data)
     {
         if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
+
             return true;
         } else {
+
             return false;
         }
     }
@@ -84,6 +91,7 @@ class UserService
             $user->avatar = $data['avatar'];
         }
         $user->update($data);
+
         return true;
     }
 
@@ -95,6 +103,7 @@ class UserService
         }
         $user = User::where('email', $request->email)->update(['password' => Hash::make($request->password)]);
         DB::table('password_resets')->where(['email' => $request->email])->delete();
+
         return true;
     }
 
@@ -104,6 +113,7 @@ class UserService
         if (!empty($sortData)) {
             $query = $query->orderBy($sortData['sort'], $sortData['direction']);
         }
+
         return $query->paginate(Config::get('constants.paginate'));
     }
 
@@ -112,12 +122,13 @@ class UserService
         $user = User::findOrFail($id);
         $company = $user->company;
         if (!empty($company && $data['company'] != 0)) {
-            DB::table('company_accounts')->insert(['user_id' => $user->id, 'company_id' => $data['company']]);
+            $user->company()->attach($data['company']);
         }
         if (Auth::user()->role->name != 'admin') {
             unset($data['email']);
         }
         $user->update($data);
+
         return true;
     }
 }

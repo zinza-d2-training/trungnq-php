@@ -36,7 +36,7 @@ class ToppicController extends Controller
 
     public function show($slug)
     {
-        //
+        return view('pages.topic.show');
     }
 
     public function edit($slug)

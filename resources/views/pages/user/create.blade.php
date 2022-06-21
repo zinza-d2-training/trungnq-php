@@ -39,9 +39,11 @@
                         <x-label>Company</x-label>
                         <select name="company" id="company" class="w-full rounded-lg border-slate-200">
                             <option value="0"> Pick an company</option>
-                            <option value="1"> Company 1</option>
-                            <option value="2"> Company 2</option>
-                            <option value="3"> Company 3</option>
+                            @if (count($companys))
+                                @foreach ($companys as $item)
+                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                     <div class="col-span-4">
