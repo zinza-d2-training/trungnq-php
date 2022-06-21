@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Events\DeletePost;
+use App\Listeners\SendEmailToPostAuthor;
 use App\Models\Post;
+use Illuminate\Console\Scheduling\Event;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -41,9 +44,10 @@ class PostService
     public function update($data)
     {
         $post = $this->getById($data['id']);
-        $arr = $post->tag->pluck('id')->toArray();
-        $post->tag()->detach($arr);
-        $post->tag()->attach($data['tag']);
+        $post->tag()->detach();
+        if(isset($data['tag'])){
+            $post->tag()->attach($data['tag']);
+        }
         $post->update($data);
 
         return true;
@@ -52,17 +56,14 @@ class PostService
     {
         $post = $this->getById($data);
         $email = $post->user->email;
-        Mail::send('email.delete-post', ['post' => $post], function ($message) use ($email) {
-            $message->to($email);
-            $message->subject('email post');
-        });
-
+        event(new DeletePost($post,$email));
+      
         return $post->delete();
     }
     public function uploadImage($file)
     {
         $path = '/public/uploads';
-        $file_name = $this->imageUpload->savefile($path,$file);
+        $file_name = $this->imageUpload->savefile($path, $file);
 
         return $file_name;
     }

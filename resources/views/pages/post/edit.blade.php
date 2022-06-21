@@ -3,7 +3,7 @@
     Edit post
 @endsection
 @section('content')
-    <x-breadcrumbs name='editpost'></x-breadcrumbs>
+    <x-breadcrumbs name='editpost' :param="$post"></x-breadcrumbs>
     <div class="px-6">
         <div class=" my-4 py-2  flex flex-row justify-between">
             <div class="">Edit post </div>
@@ -37,8 +37,8 @@
                     <x-label>Topic</x-label>
                     <select name="topic_id" id="topic_id" class="w-full border-2 border-blue-400 rounded-lg">
                         @if (count($topics))
-                            @foreach ($topics as $item)
-                                <option value="{{ $item->id }}">{{ $item->title }}</option>
+                            @foreach ($topics as $id => $title)
+                                <option value="{{ $id }}">{{ $title }}</option>
                             @endforeach
                         @endif
                     </select>
@@ -55,9 +55,9 @@
                 <x-label>Tags</x-label>
                 <select name="tag[]" multiple="multiple" class="tag w-full py-3 border-2 border-blue-400">
                     @if (count($tags))
-                        @foreach ($tags as $tag)
-                            <option value="{{ $tag->id }}" {{ in_array($tag->id, $tagSelected) ? 'selected' : '' }}>
-                                {{ $tag->name }}</option>
+                        @foreach ($tags as $id => $tag)
+                            <option value="{{ $id }}" {{ in_array($id, $tagSelected) ? 'selected' : '' }}>
+                                {{ $tag }}</option>
                         @endforeach
                     @endif
                 </select>

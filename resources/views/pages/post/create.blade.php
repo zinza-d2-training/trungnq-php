@@ -33,8 +33,8 @@
                     <x-label>Topic</x-label>
                     <select name="topic_id" id="topic_id" class="w-full border-2 border-blue-400 rounded-lg">
                         @if (count($topics))
-                            @foreach ($topics as $item)
-                                <option value="{{ $item->id }}">{{ $item->title }}</option>
+                            @foreach ($topics as $key => $title)
+                                <option value="{{ $key }}">{{ $title }}</option>
                             @endforeach
                         @endif
                     </select>
@@ -51,8 +51,8 @@
                 <x-label>Tags</x-label>
                 <select name="tag[]" multiple="multiple" class="tag w-full py-3 border-2 border-blue-400">
                     @if (count($tags))
-                        @foreach ($tags as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        @foreach ($tags as $key => $item)
+                            <option value="{{ $key }}">{{ $item}}</option>
                         @endforeach
                     @endif
                 </select>

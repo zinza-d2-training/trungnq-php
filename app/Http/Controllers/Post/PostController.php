@@ -26,8 +26,8 @@ class PostController extends Controller
 
     public function create()
     {
-        $tags = Tag::all();
-        $topics = Topic::all();
+        $tags = Tag::pluck('name','id')->toArray();
+        $topics = Topic::pluck('title','id')->toArray();
         return view('pages.post.create', compact('tags', 'topics'));
     }
 
@@ -46,8 +46,8 @@ class PostController extends Controller
 
     public function edit($id)
     {
-        $tags = Tag::all();
-        $topics = Topic::all();
+        $tags = Tag::pluck('name','id')->toArray();
+        $topics = Topic::pluck('title','id')->toArray();
         $post = $this->postService->getById($id);
         $tagSelected = $post->tag->pluck('id')->toArray();
 
