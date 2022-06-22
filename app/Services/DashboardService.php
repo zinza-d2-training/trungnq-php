@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Comment;
 use App\Models\Company;
 use Illuminate\Support\Facades\Config;
 use App\Models\Post;
@@ -46,11 +47,10 @@ class DashboardService
 
     public function getTopUser()
     {
-        $topusers = DB::table('comments')
-            ->select(DB::raw('SUM(favorite) as tongluotlike, user_id,name,avatar'))
+        $topusers = Comment::select(DB::raw('SUM(favorite) as totalLike, user_id,name,avatar'))
             ->join('users', 'comments.user_id', '=', 'users.id')
             ->groupBy('user_id')
-            ->orderBy('tongluotlike', 'desc')
+            ->orderBy('totalLike', 'desc')
             ->limit(5)
             ->get();
 

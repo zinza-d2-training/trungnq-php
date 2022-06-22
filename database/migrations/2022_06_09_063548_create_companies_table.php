@@ -23,6 +23,7 @@ class CreateCompaniesTable extends Migration
             $table->date('expired_at')->nullable();
             $table->tinyInteger('active')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

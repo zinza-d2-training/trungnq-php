@@ -75,8 +75,8 @@
                     <div class=""><img src="/storage/images/avatars/{{ $member->avatar }}" alt=""
                             class="w-10 rounded-full"></div>
                     <div class="">
-                        <p class="text-lg">adimn</p>
-                        <p class="text-md font-bold">45</p>
+                        <p class="text-lg">{{ $member->name }}</p>
+                        <p class="text-md font-bold">{{ $member->totalLike }}</p>
                     </div>
                 </div>
             @endforeach
