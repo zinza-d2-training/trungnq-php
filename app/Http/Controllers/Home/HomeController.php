@@ -25,7 +25,6 @@ class HomeController extends Controller
     {
         $topusers = $this->dashboardService->getTopUser();
         $topics = $this->dashboardService->getTopicWithPost();
-        $postLastest = $this->dashboardService->getLastestPost();
-        return view('pages.dashboard', compact('topics', 'postLastest', 'topusers'));
+        return view('pages.dashboard', compact('topics', 'topusers'));
     }
 }

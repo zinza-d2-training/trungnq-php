@@ -1,13 +1,13 @@
 @extends('layouts.client')
 @section('title')
-    Topic
+    Post
 @endsection
 @section('content')
     <x-breadcrumbs name='topic'></x-breadcrumbs>
     <div class="mx-6">
         <div id="toast" class="bg-red-500 right-64">
         </div>
-        <div class="font-bold my-5">Topic detail</div>
+        <div class="font-bold my-5">Search post</div>
         @if (Session::has('message'))
             @php
                 $message = Session::get('message');
@@ -17,10 +17,12 @@
         <div class="grid grid-cols-5 gap-x-2.5     p-2 bg-slate-50">
             <div class="col-span-4 pl-6">
                 <div class="table-data  mb-2.5 ">
-                    @if (count($topic->post))
-                        @foreach ($topic->post as $item)
+                    @if (count($posts))
+                        @foreach ($posts as $item)
                             <x-post-row :post="$item"></x-post-row>
                         @endforeach
+                    @else
+                    <i>Không có kết quả tìm kiếm phù hợp</i>
                     @endif
                     
                 </div>

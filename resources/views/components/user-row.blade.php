@@ -26,7 +26,7 @@ if ($role->name == 'company_account') {
         <div class="inline-block ">
             <img src="/storage/images/avatars/{{ $user->avatar }}" alt="" class="w-10 rounded-full">
         </div>
-        <div class="px-3 inline-block w-3 ">
+        <div class="px-3 inline-block ">
             <p class="text-bold text-slate-900 ">{{ $user->name }}</p>
             <p class=" text-gray-700">{{ $user->email }}</p>
         </div>

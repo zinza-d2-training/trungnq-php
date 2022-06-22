@@ -69,4 +69,11 @@ class PostService
 
         return $file_name;
     }
+
+    public function search($data)
+    {
+        $result = Post::where('title', 'LIKE', '%' . $data . '%')-> 
+        withCount('comments')->with('user')->orderBy('pin', 'desc')->orderBy('created_at', 'desc')->paginate(Config::get('constants.paginate'));
+        return $result;
+    }
 }

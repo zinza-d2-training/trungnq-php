@@ -66,7 +66,7 @@
         </div>
         <div class="col-span-1 border-l-4 pl-2 ">
             <p class="uppercase text-lg font-bold"> Laster post</p>
-            @foreach ($postLastest as $post)
+            @foreach ($latestPost as $post)
                 <x-laster-post :post="$post"></x-laster-post>
             @endforeach
             <p class="uppercase text-lg font-bold">Top user</p>

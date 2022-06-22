@@ -146,6 +146,18 @@ $(document).ready(function () {
             $(this).closest(".post-row").remove();
         }
     });
+
+    $('.pin-post').click(function (e) { 
+        e.preventDefault();
+        alert($(this).attr('data-id'));
+    });
+
+    $('#search-post').change(function (e) { 
+        e.preventDefault();
+        setTimeout(()=>{
+            $('#searchForm').submit();
+        },1000)
+    });
 });
 
 function toast(type = "info", message = "") {
@@ -252,3 +264,4 @@ function deleteItem(typeItem, id) {
         },
     });
 }
+

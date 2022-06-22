@@ -9,6 +9,7 @@ use App\Models\Tag;
 use App\Models\Topic;
 use App\Services\PostService;
 use Illuminate\Http\Request;
+use Laravel\Ui\Presets\React;
 
 class PostController extends Controller
 {
@@ -69,6 +70,7 @@ class PostController extends Controller
     {
         $this->postService->delete($id);
     }
+
     public function uploadImage(Request $request)
     {
         if ($request->hasFile('upload')) {
@@ -83,5 +85,11 @@ class PostController extends Controller
                 'url' => $url
             ]);
         }
+    }
+
+    public function search(Request $request){
+        $posts =  $this->postService->search($request->keyword);
+        
+        return view('pages.post.search',compact('posts'));
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\TopicRequest;
 use App\Models\Topic;
 use App\Services\TopicService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class ToppicController extends Controller
 {
@@ -38,7 +39,7 @@ class ToppicController extends Controller
     public function show($slug)
     {
         $topic = Topic::where('slug', $slug)->with(['post' => function ($query) {
-            $query->withCount('comments')->orderBy('created_at', 'desc');
+            $query->withCount('comments')->orderBy('pin','desc')->orderBy('created_at','desc')->paginate(Config::get('constants.paginate'));
         }])->firstOrFail();
 
         return view('pages.topic.show', compact('topic'));

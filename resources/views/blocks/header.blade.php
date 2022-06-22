@@ -33,8 +33,9 @@
             </div>
         </div>
         <div class="hidden sm:flex sm:items-center sm:ml-6 ">
-            <form action="">
-                <x-input placeholder="Search..." class="mr-6 py-2 pl-3"></x-input>
+            <form action="{{route('post.search')}}" id="searchForm">
+                @csrf
+                <x-input placeholder="Search..." class="mr-6 py-2 pl-3" name="keyword" id="search-post"></x-input>
             </form>
             <x-dropdown align="left" class="min-w-full">
                 <x-slot name="trigger">

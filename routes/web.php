@@ -64,6 +64,8 @@ Route::middleware('verifyLogin')->group(function () {
 
     Route::resource('post', PostController::class);
     Route::post('/post/upload-image', [PostController::class, 'uploadImage'])->name('post.uploadImage');
+    Route::get('/search', [PostController::class, 'search'])->name('post.search');
+
     Route::resource('comment', CommentController::class);
 });
 

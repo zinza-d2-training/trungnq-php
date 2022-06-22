@@ -31,7 +31,7 @@ class DashboardService
     {
         $topics = Topic::withCount('post')->withCount('comments')->with(
             ['post' => function ($query) {
-                $query->withCount('comments')->orderBy('created_at', 'desc')->limit('5');
+                $query->withCount('comments')->orderBy('pin','desc')->orderBy('created_at', 'desc')->limit('5');
             }]
         );
 
@@ -39,7 +39,7 @@ class DashboardService
             $topics = Cache::get('dashboard');
         } else {
             $topics = $topics->get();
-            Cache::put('dashboard', $topics, 300);
+            Cache::put('dashboard', $topics, 120);
         }
 
         return $topics;

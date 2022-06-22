@@ -29,8 +29,13 @@
                                 alt="">
                         </div>
                         <div>
-                            <p>{{ $post->user->name }}</p>
-                            <p> {{ $post->user->company[0]->name }}</p>
+                            <p class="font-bold">{{ $post->user->name }}</p>
+                            @if (isset($post->user->company[0]))
+                                <p> {{ $post->user->company[0]->name }}</p>
+                            @else
+                                <p> Member </p>
+                            @endif
+                            
                         </div>
                     </div>
                 </div>
@@ -54,7 +59,7 @@
                                 alt="">
                         </div>
                         <div>
-                            <p>{{ Auth::user()->name }}</p>
+                            <p class="font-bold">{{ Auth::user()->name }}</p>
                         </div>
                     </div>
                 </div>
