@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Topic extends Model
 {
     use HasFactory;
+    public $table="topics";
     protected $fillable = [
         'title',
         'slug',

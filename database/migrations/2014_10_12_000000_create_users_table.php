@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('role_id')->default('3');
             $table->tinyInteger('active')->default('0');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
