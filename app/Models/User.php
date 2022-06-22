@@ -59,10 +59,16 @@ class User extends Authenticatable
 
     public function company()
     {
-        return $this->belongsToMany(Company::class,'company_accounts');
+        return $this->belongsToMany(Company::class, 'company_accounts');
     }
 
-    public function post(){
-        return $this ->hasMany(Post::class);
+    public function post()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

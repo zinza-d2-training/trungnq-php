@@ -14,6 +14,7 @@ class TagController extends Controller
     public function index()
     {
         $tags = Tag::with('post')->paginate(Config::get('constants.paginate'));
+
         return view('pages.tag.index', compact('tags'));
     }
 
@@ -25,6 +26,7 @@ class TagController extends Controller
     public function store(TagRequest $request)
     {
         Tag::create($request->input());
+
         return back()->with('message', ['type' => 'success', 'content' => 'Tạo tag thành công']);
     }
 
@@ -36,6 +38,7 @@ class TagController extends Controller
     public function edit($id)
     {
         $tag = Tag::findOrFail($id);
+
         return view('pages.tag.edit', compact('tag'));
     }
 
@@ -43,6 +46,7 @@ class TagController extends Controller
     {
         $tag = Tag::findOrFail($id);
         $tag->update($request->input());
+
         return back()->with('message', ['type' => 'success', 'content' => 'Cập nhật thành công!!!']);
     }
 
@@ -50,6 +54,16 @@ class TagController extends Controller
     {
         $tag = Tag::findOrFail($id);
         $tag->delete();
+
         return response()->json(['info', 'Xóa tag thành công!!!']);
+    }
+
+    public function destroyAll(Request $request)
+    {
+        $ids = $request->ids;
+        $ids = explode(',', $ids);
+        Tag::whereIn('id', $ids)->delete();
+
+        return response()->json(['type' => 'info', 'message' => 'Xóa tag thành công!!!']);
     }
 }

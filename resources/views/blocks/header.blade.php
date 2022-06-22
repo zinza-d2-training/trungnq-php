@@ -5,7 +5,7 @@
             <div class="ml-5">
                 <ul class="flex">
                     <li class="mr-6">
-                        <a class="text-white font-bold hover:text-black" href="#">Dashboard</a>
+                        <a class="text-white font-bold hover:text-black" href="{{route('home')}}">Dashboard</a>
                     </li>
                     @php
                         $role = Auth::user()->role->name;

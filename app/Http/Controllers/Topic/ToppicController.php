@@ -31,17 +31,23 @@ class ToppicController extends Controller
     public function store(TopicRequest $request)
     {
         $res = $this->topicService->create($request->all());
+
         return  back()->with('message', ['type' => 'success', 'content' => 'Thêm thành công 1 topic!!!']);
     }
 
     public function show($slug)
     {
-        return view('pages.topic.show');
+        $topic = Topic::where('slug', $slug)->with(['post' => function ($query) {
+            $query->withCount('comments')->orderBy('created_at', 'desc');
+        }])->firstOrFail();
+
+        return view('pages.topic.show', compact('topic'));
     }
 
     public function edit($slug)
     {
         $topic = $this->topicService->getById($slug);
+
         return view('pages.topic.edit', compact('topic'));
     }
 
@@ -51,12 +57,14 @@ class ToppicController extends Controller
         $data['title'] = $request->title;
         $data['slug'] = $request->title;
         $topic->update($data);
+
         return  back()->with('message', ['type' => 'success', 'content' => 'Thay đổi thông tin thành công!!!']);
     }
 
     public function destroy($slug)
     {
         $topic = Topic::where('slug', $slug)->firstOrFail()->delete();
+
         return $this->message('info', 'Xóa topic thành công!!!');
     }
 
@@ -65,6 +73,7 @@ class ToppicController extends Controller
         $ids = $request->ids;
         $ids = explode(',', $ids);
         Topic::whereIn('slug', $ids)->firstOrFail()->delete();
+
         return $this->message('info', 'Xóa topic thành công!!!');
     }
 

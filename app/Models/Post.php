@@ -16,15 +16,23 @@ class Post extends Model
         'topic_id',
     ];
 
-    public function topic(){
+    public function topic()
+    {
         return $this->belongsTo(Topic::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function tag(){
-        return $this->belongsToMany(Tag::class,'post_tags');
+    public function tag()
+    {
+        return $this->belongsToMany(Tag::class, 'post_tags');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

@@ -190,6 +190,7 @@ function toast(type = "info", message = "") {
 
 function deleteMutiple(url, rowclass) {
     var allVals = [];
+    console.log(allVals);
     $(".checkitem:checked").each(function () {
         allVals.push($(this).attr("data-id"));
     });

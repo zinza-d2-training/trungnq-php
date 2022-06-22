@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Post;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
+use App\Models\Post;
 use App\Models\Tag;
 use App\Models\Topic;
 use App\Services\PostService;
@@ -26,8 +27,8 @@ class PostController extends Controller
 
     public function create()
     {
-        $tags = Tag::pluck('name','id')->toArray();
-        $topics = Topic::pluck('title','id')->toArray();
+        $tags = Tag::pluck('name', 'id')->toArray();
+        $topics = Topic::pluck('title', 'id')->toArray();
         return view('pages.post.create', compact('tags', 'topics'));
     }
 
@@ -41,13 +42,14 @@ class PostController extends Controller
 
     public function show($id)
     {
-        //
+        $post = Post::with(['tag', 'user', 'comments'])->firstOrFail();
+        return view('pages.post.show', compact('post'));
     }
 
     public function edit($id)
     {
-        $tags = Tag::pluck('name','id')->toArray();
-        $topics = Topic::pluck('title','id')->toArray();
+        $tags = Tag::pluck('name', 'id')->toArray();
+        $topics = Topic::pluck('title', 'id')->toArray();
         $post = $this->postService->getById($id);
         $tagSelected = $post->tag->pluck('id')->toArray();
 

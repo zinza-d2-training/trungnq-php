@@ -40,13 +40,13 @@
                         @foreach ($posts as $post)
                             <tr class="border-b-2 post-row">
                                 <td class="py-5 px-6 w-64 truncate" style="max-width: 400px">
-                                    {{ $post->title }}
+                                    <a href="{{ route('post.show', ['post' => $post]) }}">{{ $post->title }}</a>
                                 </td>
                                 <td class="py-5 px-6 text-center"><span class=" text-md font-bold px-3 py-1 rounded-lg">
                                         {{ $post->user->name }}
                                 </td>
                                 <td class="text-center">
-                                    {{ ($post->status == 1 )? "Resolve" : "Not resolve" }}
+                                    {{ $post->status == 1 ? 'Resolve' : 'Not resolve' }}
                                 </td>
                                 <td class="text-center">
                                     @if (count($post->tag))
@@ -58,24 +58,24 @@
                                 </td>
                                 <td>
                                     @if (Auth::user()->role->name == 'admin' || Auth::user()->email == $post->user->email)
-                                    <div class="hidden sm:flex sm:items-center sm:ml-6">
-                                        <x-dropdown align="right" width="48">
-                                            <x-slot name="trigger">
-                                                <button class="flex items-center text-sm font-medium text-gray-500 ">
-                                                    <div><i class="fa-solid fa-ellipsis"></i></div>
-                                                </button>
-                                            </x-slot>
-                                            <x-slot name="content">
-                                                <x-dropdown-link :href="route('post.edit', ['post' => $post])">
-                                                    {{ __('Edit') }}
-                                                </x-dropdown-link>
-                                                <x-dropdown-link>
-                                                    <button class="delete-post"
-                                                        post_id="{{ $post->id }}">Delete</button>
-                                                </x-dropdown-link>
-                                            </x-slot>
-                                        </x-dropdown>
-                                    </div>
+                                        <div class="hidden sm:flex sm:items-center sm:ml-6">
+                                            <x-dropdown align="right" width="48">
+                                                <x-slot name="trigger">
+                                                    <button class="flex items-center text-sm font-medium text-gray-500 ">
+                                                        <div><i class="fa-solid fa-ellipsis"></i></div>
+                                                    </button>
+                                                </x-slot>
+                                                <x-slot name="content">
+                                                    <x-dropdown-link :href="route('post.edit', ['post' => $post])">
+                                                        {{ __('Edit') }}
+                                                    </x-dropdown-link>
+                                                    <x-dropdown-link>
+                                                        <button class="delete-post"
+                                                            post_id="{{ $post->id }}">Delete</button>
+                                                    </x-dropdown-link>
+                                                </x-slot>
+                                            </x-dropdown>
+                                        </div>
                                     @endif
                                 </td>
                             </tr>
@@ -87,4 +87,4 @@
         <div class="mt-auto px-6">
             {{ $posts->links() }}
         </div>
-@endsection
+    @endsection

@@ -18,11 +18,19 @@ class Topic extends Model
     {
         return 'slug';
     }
-    public function setSlugAttribute($slug){
+    
+    public function setSlugAttribute($slug)
+    {
         $this->attributes['slug'] = str_replace(' ', '-', strtolower($slug));
     }
 
-    public function post(){
+    public function post()
+    {
         return $this->hasMany(Post::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasManyThrough(Comment::class, Post::class);
     }
 }
