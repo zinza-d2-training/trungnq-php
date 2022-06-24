@@ -19,7 +19,7 @@ class UploadImage
     {
         if (file_exists($path)) {
             unlink($path);
-            
+
             return true;
         }
 

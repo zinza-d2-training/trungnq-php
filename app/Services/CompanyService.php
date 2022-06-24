@@ -27,7 +27,7 @@ class CompanyService
                 ->orderBy($sortData['sort'], $sortData['direction'])
                 ->paginate(Config::get('constants.paginate'));
         }
-        
+
         return Company::with('user')->paginate(Config::get('constants.paginate'));
     }
 

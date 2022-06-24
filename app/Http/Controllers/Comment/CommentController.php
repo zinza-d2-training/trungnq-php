@@ -22,7 +22,7 @@ class CommentController extends Controller
     public function update(Request $request, $id)
     {
         $comment = Comment::with('user_like')->findOrFail($id);
-        if($request->status == 0){
+        if ($request->status == 0) {
             $comment->user_like()->attach($request->user_id);
             $comment->favorite = $comment->increment('favorite');
         } else {
