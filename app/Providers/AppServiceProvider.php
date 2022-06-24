@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Observers\AccountObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,5 +30,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $listTopic = Topic::pluck('title', 'slug')->toArray();
         View::share('listTopic', $listTopic);
+
+        Paginator::defaultView('');
+ 
+        Paginator::defaultSimpleView('view-name');
     }
 }

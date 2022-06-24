@@ -40,7 +40,7 @@
                                 </td>
                                 <td class="py-5 px-6"><a
                                         href="{{ route('topic.show', ['topic' => $item]) }}">{{ $item->title }}</a></td>
-                                <td>10</td>
+                                <td class="px-6">{{ $item->post_count }}</td>
                                 <td>
                                     <div class="hidden sm:flex sm:items-center sm:ml-6">
                                         <x-dropdown align="right" width="48">
@@ -70,7 +70,7 @@
         <button class="bg-blue-400 text-white border-2 border-slate-500 p-3 mt-4 rounded-lg font-bold"
             id="btn-delete-mutiple-topic">Delete Topic</button>
         <div class="mt-auto px-6">
-            {{ $topic->links() }}
+            {{ $topic->links('vendor.pagination.tailwind') }}
         </div>
     </div>
 @endsection

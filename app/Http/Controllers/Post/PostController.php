@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Post;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\Topic;
+use App\Models\User;
 use App\Services\PostService;
 use Illuminate\Http\Request;
-use Laravel\Ui\Presets\React;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -30,6 +32,7 @@ class PostController extends Controller
     {
         $tags = Tag::pluck('name', 'id')->toArray();
         $topics = Topic::pluck('title', 'id')->toArray();
+
         return view('pages.post.create', compact('tags', 'topics'));
     }
 
@@ -43,8 +46,12 @@ class PostController extends Controller
 
     public function show($id)
     {
-        $post = Post::with(['tag', 'user', 'comments'])->firstOrFail();
-        return view('pages.post.show', compact('post'));
+        $data = $this->postService->show($id);
+
+        return view('pages.post.show', [
+            'post' => $data['post'], 
+            'comments' => $data['comments'], 
+        ]);
     }
 
     public function edit($id)
@@ -69,6 +76,8 @@ class PostController extends Controller
     public function destroy($id)
     {
         $this->postService->delete($id);
+        
+        return true;
     }
 
     public function uploadImage(Request $request)
@@ -91,5 +100,17 @@ class PostController extends Controller
         $posts =  $this->postService->search($request->keyword);
         
         return view('pages.post.search',compact('posts'));
+    }
+
+    public function resolve(Request $request, $id){
+        $res = $this->postService->resolve($request->all(),$id);
+
+        return response()->json(['type' => 'info', 'content' => '']);
+    }
+
+    public function pin($id){
+        $res = $this->postService->pin($id);
+
+        return $res;
     }
 }

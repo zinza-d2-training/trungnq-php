@@ -149,7 +149,18 @@ $(document).ready(function () {
 
     $('.pin-post').click(function (e) { 
         e.preventDefault();
-        alert($(this).attr('data-id'));
+        let id = $(this).attr('data-id');
+        $.ajax({
+            type: "POST",
+            url: "/post/pin/"+id,
+            data: {
+                'comment_id' : id,
+            },
+            dataType: "JSON",
+            success: function (response) {
+                location.reload();
+            }
+        });
     });
 
     $('#search-post').change(function (e) { 
@@ -157,6 +168,59 @@ $(document).ready(function () {
         setTimeout(()=>{
             $('#searchForm').submit();
         },1000)
+    });
+
+    $('.like-comment').click(function (e) { 
+        e.preventDefault();
+        let comment_id = $(this).attr('data-comment-id');
+        let user_id = $(this).attr('data-user-id');
+        let status = $(this).attr('data-status');
+        let text = $(this).closest(".favorite").find('.comment-favorite');
+        let count = text.text();
+        if($(this).hasClass('fa-solid')){
+            $(this).removeClass('fa-solid').addClass('fa-regular');
+            $(this).attr('data-status',0);
+            count--;
+            text.text(count);
+        }
+        else{
+            $(this).addClass('fa-solid').removeClass('fa-regular');
+            $(this).attr('data-status',1);
+            count++;
+            text.text(count);
+        }
+        
+        $.ajax({
+            type: "POST",
+            url: "/comment/"+comment_id,
+            data: {
+                'user_id' : user_id,
+                'comment_id' : comment_id,
+                'status' : status,
+                _method: "PUT",
+            },
+            dataType: "JSON",
+            success: function (response) {
+            }
+        });
+       
+    });
+
+    $('.click-resolve').click(function (e) { 
+        e.preventDefault();
+        let post_id = $('#post').attr('post-id');
+        let id = $(this).attr('data-id');
+        $.ajax({
+            type: "POST",
+            url: "/post/resolve/"+id,
+            data: {
+                'comment_id' : id,
+            },
+            dataType: "JSON",
+            success: function (response) {
+                location.reload();
+            }
+        });
     });
 });
 
@@ -251,9 +315,10 @@ function createFormUser(url) {
 }
 
 function deleteItem(typeItem, id) {
+    console.log(typeItem + "/" + id);
     $.ajax({
         type: "POST",
-        url: typeItem + "/" + id,
+        url: "/"+typeItem + "/" + id,
         data: {
             typeItem: id,
             _method: "DELETE",
@@ -264,4 +329,3 @@ function deleteItem(typeItem, id) {
         },
     });
 }
-

@@ -9,15 +9,15 @@ if ($user->active == 1) {
 $role = $user->role;
 if ($role->name == 'member') {
     $bg = 'blue';
-} 
+}
 if ($role->name == 'admin') {
     $bg = 'red';
-} 
+}
 if ($role->name == 'company_account') {
-    $bg = 'teal';
+    $bg = 'blue';
 }
 @endphp
-<tr class="user-row border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700"
+<tr class="user-row border-b dark:bg-gray-800 dark:border-gray-700  odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700"
     data-id="{{ $user->id }}">
     <td scope="row" class="px-6 py-4 ">
         <input type="checkbox" class="mx-auto checkitem" name="" id="" data-id="{{ $user->id }}">
@@ -54,7 +54,6 @@ if ($role->name == 'company_account') {
                     </button>
                 </x-slot>
                 <x-slot name="content">
-                    <!-- Authentication -->
                     <x-dropdown-link :href="route('user.edit', ['id' => $user->id])">
                         {{ __('Edit') }}
                     </x-dropdown-link>

@@ -16,6 +16,7 @@ class Post extends Model
         'user_id',
         'status',
         'topic_id',
+        'comment_id',
     ];
 
     public function topic()
@@ -36,5 +37,9 @@ class Post extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function comment_resolve(){
+        return $this->hasOne(Comment::class,'id','comment_id');
     }
 }

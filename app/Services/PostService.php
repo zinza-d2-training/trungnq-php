@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Comment;
 
 class PostService
 {
@@ -72,8 +73,43 @@ class PostService
 
     public function search($data)
     {
-        $result = Post::where('title', 'LIKE', '%' . $data . '%')-> 
-        withCount('comments')->with('user')->orderBy('pin', 'desc')->orderBy('created_at', 'desc')->paginate(Config::get('constants.paginate'));
+        $result = Post::where('title', 'LIKE', '%' . $data . '%')->withCount('comments')->with('user')->orderBy('pin', 'desc')->orderBy('created_at', 'desc')->paginate(Config::get('constants.paginate'));
         return $result;
+    }
+
+    public function show($id)
+    {
+        $post = Post::with(['tag', 'user', 'comment_resolve'])->with(['comments' => function ($query) {
+            $query->with('user_like')->paginate(2);
+        }])->findOrFail($id);
+        $comments =  Comment::where('post_id', $post->id)->with('user')->withCount('user_like')->paginate(10);
+
+        return compact('post', 'comments');
+    }
+
+    public function resolve($data, $id)
+    {
+        $post = Post::findOrFail($id);
+        if ($post->comment_id == $data['comment_id']) {
+            $data['comment_id'] = "";
+            $data['status'] = "0";
+        }
+        $data['status'] = "1";
+
+        $post->update($data);
+    }
+
+    public function pin($id)
+    {
+        $post = Post::findOrFail($id);
+        if($post->pin == 0) {
+            $post->pin = 1;
+        } else {
+            $post->pin = 0;
+        }
+
+        $post->update();
+
+        return true;
     }
 }

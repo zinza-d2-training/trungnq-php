@@ -34,13 +34,13 @@
                 </thead>
             </x-slot>
             <x-slot name="tablebody">
-                    @foreach ($companies as $company)
-                        <x-company-row :company="$company" ></x-company-row>
-                    @endforeach
+                @foreach ($companies as $company)
+                    <x-company-row :company="$company"></x-company-row>
+                @endforeach
             </x-slot>
         </x-table>
     </div>
     <div class="mt-auto px-6">
-        {{ $companies->links() }}
+        {{ $companies->links('vendor.pagination.tailwind') }}
     </div>
 @endsection

@@ -41,7 +41,6 @@ class DashboardService
             $topics = $topics->get();
             Cache::put('dashboard', $topics, 120);
         }
-
         return $topics;
     }
 

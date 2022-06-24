@@ -13,6 +13,7 @@ class ToppicController extends Controller
 {
 
     protected $topicService;
+
     public function __construct(TopicService $topicService)
     {
         $this->topicService = $topicService;
@@ -21,6 +22,7 @@ class ToppicController extends Controller
     public function index()
     {
         $topic = $this->topicService->getAll();
+        
         return view('pages.topic.index', compact("topic"));
     }
 

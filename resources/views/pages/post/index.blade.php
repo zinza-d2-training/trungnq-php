@@ -85,6 +85,6 @@
             </x-slot>
         </x-table>
         <div class="mt-auto px-6">
-            {{ $posts->links() }}
+            {{ $posts->links('vendor.pagination.tailwind') }}
         </div>
     @endsection

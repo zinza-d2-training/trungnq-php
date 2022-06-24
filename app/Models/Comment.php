@@ -16,4 +16,13 @@ class Comment extends Model
         'description',
         'favorite',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function user_like(){
+        return $this->belongsToMany(User::class,'user_like');
+    }
+
 }
