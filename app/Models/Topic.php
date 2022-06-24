@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Topic extends Model
 {
     use HasFactory;
-    public $table="topics";
+
+    public $table = "topics";
     protected $fillable = [
         'title',
         'slug',
@@ -19,7 +20,7 @@ class Topic extends Model
     {
         return 'slug';
     }
-    
+
     public function setSlugAttribute($slug)
     {
         $this->attributes['slug'] = str_replace(' ', '-', strtolower($slug));

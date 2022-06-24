@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Company extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'name',
         'avatar',
@@ -17,8 +17,9 @@ class Company extends Model
         'expired_at',
         'active'
     ];
+
     public function User()
     {
-        return $this->belongsToMany(User::class,'company_accounts');
+        return $this->belongsToMany(User::class, 'company_accounts');
     }
 }

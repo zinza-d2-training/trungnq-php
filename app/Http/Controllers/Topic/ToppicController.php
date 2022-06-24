@@ -8,6 +8,7 @@ use App\Models\Topic;
 use App\Services\TopicService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use App\Models\Post;
 
 class ToppicController extends Controller
 {
@@ -22,7 +23,7 @@ class ToppicController extends Controller
     public function index()
     {
         $topic = $this->topicService->getAll();
-        
+
         return view('pages.topic.index', compact("topic"));
     }
 
@@ -40,11 +41,15 @@ class ToppicController extends Controller
 
     public function show($slug)
     {
-        $topic = Topic::where('slug', $slug)->with(['post' => function ($query) {
-            $query->withCount('comments')->orderBy('pin','desc')->orderBy('created_at','desc')->paginate(Config::get('constants.paginate'));
-        }])->firstOrFail();
+        $topic = Topic::where('slug', $slug)->findOrFail();
 
-        return view('pages.topic.show', compact('topic'));
+        $listPost =  Post::where('topic_id',$topic->id)
+            ->withCount('comments')
+            ->orderBy('pin', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(Config::get('constants.paginate'));
+
+        return view('pages.topic.show', compact('topic', 'listPost'));
     }
 
     public function edit($slug)

@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -72,8 +72,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
-    
-    public function comment_like(){
-        return $this->belongsToMany(Comment::class,'user_like');
+
+    public function comment_like()
+    {
+        return $this->belongsToMany(Comment::class, 'user_like');
     }
 }

@@ -15,12 +15,10 @@ class DashboardService
 
     public function getLastestPost()
     {
-        $postLastest = Post::orderBy('created_at', 'desc')->limit('5');
-
         if (Cache::has('post-lastest')) {
             $postLastest = Cache::get('post-lastest');
         } else {
-            $postLastest =  $postLastest->get();
+            $postLastest = Post::orderBy('created_at', 'desc')->limit('5')->get();
             Cache::put('post-lastest', $postLastest, 300);
         }
 
@@ -29,11 +27,15 @@ class DashboardService
 
     public function getTopicWithPost()
     {
-        $topics = Topic::withCount('post')->withCount('comments')->with(
-            ['post' => function ($query) {
-                $query->withCount('comments')->orderBy('pin','desc')->orderBy('created_at', 'desc')->limit('5');
-            }]
-        );
+        $topics = Topic::withCount('post')
+            ->withCount('comments')->with(
+                ['post' => function ($query) {
+                    $query->withCount('comments')
+                        ->orderBy('pin', 'desc')
+                        ->orderBy('created_at', 'desc')
+                        ->limit('5');
+                }]
+            );
 
         if (Cache::has('dashboard')) {
             $topics = Cache::get('dashboard');
@@ -41,6 +43,7 @@ class DashboardService
             $topics = $topics->get();
             Cache::put('dashboard', $topics, 120);
         }
+
         return $topics;
     }
 

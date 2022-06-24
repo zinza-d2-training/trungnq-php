@@ -8,11 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
-    use HasFactory,SoftDeletes;
-    
+    use HasFactory, SoftDeletes;
+
     const resolve = 1;
     const not_resolve = 0;
-
 
     protected $fillable = [
         'title',
@@ -43,7 +42,8 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function comment_resolve(){
-        return $this->hasOne(Comment::class,'id','comment_id');
+    public function comment_resolve()
+    {
+        return $this->hasOne(Comment::class, 'id', 'comment_id');
     }
 }

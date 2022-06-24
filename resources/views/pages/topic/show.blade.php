@@ -17,8 +17,8 @@
         <div class="grid grid-cols-5 gap-x-2.5     p-2 bg-slate-50">
             <div class="col-span-4 pl-6">
                 <div class="table-data  mb-2.5 ">
-                    @if (count($topic->post))
-                        @foreach ($topic->post as $item)
+                    @if (count($listPost))
+                        @foreach ($listPost as $item)
                             <x-post-row :post="$item"></x-post-row>
                         @endforeach
                     @endif

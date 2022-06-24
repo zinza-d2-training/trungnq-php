@@ -73,7 +73,13 @@ class PostService
 
     public function search($data)
     {
-        $result = Post::where('title', 'LIKE', '%' . $data . '%')->withCount('comments')->with('user')->orderBy('pin', 'desc')->orderBy('created_at', 'desc')->paginate(Config::get('constants.paginate'));
+        $result = Post::where('title', 'LIKE', '%' . $data . '%')
+            ->withCount('comments')
+            ->with('user')
+            ->orderBy('pin', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(Config::get('constants.paginate'));
+            
         return $result;
     }
 
@@ -84,7 +90,7 @@ class PostService
                 $query->with('user_like')->paginate(2);
             }])
             ->findOrFail($id);
-            
+
         $comments =  Comment::where('post_id', $post->id)
             ->with('user')
             ->withCount('user_like')
@@ -95,7 +101,7 @@ class PostService
 
     public function resolve($data, $id)
     {
-        
+
         $post = Post::findOrFail($id);
         if ($post->comment_id == $data['comment_id']) {
             $data['comment_id'] = null;
