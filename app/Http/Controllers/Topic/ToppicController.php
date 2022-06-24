@@ -75,8 +75,7 @@ class ToppicController extends Controller
     {
         $ids = $request->ids;
         $ids = explode(',', $ids);
-        Topic::whereIn('slug', $ids)->firstOrFail()->delete();
-
+        Topic::whereIn('slug', $ids)->delete();
         return $this->message('info', 'Xóa topic thành công!!!');
     }
 

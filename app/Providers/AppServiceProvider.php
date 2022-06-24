@@ -31,8 +31,7 @@ class AppServiceProvider extends ServiceProvider
         $listTopic = Topic::pluck('title', 'slug')->toArray();
         View::share('listTopic', $listTopic);
 
-        Paginator::defaultView('');
+        Paginator::defaultView('vendor.pagination.custom-paginate');
  
-        Paginator::defaultSimpleView('view-name');
     }
 }

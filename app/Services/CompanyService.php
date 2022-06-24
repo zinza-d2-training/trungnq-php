@@ -22,7 +22,7 @@ class CompanyService
     public function getAll($sortData)
     {
         if(!empty($sortData)){
-            return Company::with('user')->orderBy($sortData['sort'], $sortData['direction'])->paginate(10);
+            return Company::with('user')->orderBy($sortData['sort'], $sortData['direction'])->paginate(Config::get('constants.paginate'));
         }
         return Company::with('user')->paginate(Config::get('constants.paginate'));
     }

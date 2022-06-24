@@ -10,6 +10,10 @@ class Post extends Model
 {
     use HasFactory,SoftDeletes;
     
+    const resolve = 1;
+    const not_resolve = 0;
+
+
     protected $fillable = [
         'title',
         'description',

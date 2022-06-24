@@ -23,15 +23,15 @@
             <x-toast :content="$message['content']" :type="$message['type']"></x-toast>
         @endif
         <div class="bg-slate-300 p-2">
+            @php
+                $author = $post->user;
+                if (!empty($post->comment_resolve)) {
+                    $resolve = $post->comment_resolve->id;
+                } else {
+                    $resolve = null;
+                }
+            @endphp
             @if ($comments->currentPage() == 1)
-                @php
-                    $author = $post->user;
-                    if (!empty($post->comment_resolve)) {
-                        $resolve = $post->comment_resolve->id;
-                    } else {
-                        $resolve = null;
-                    }
-                @endphp
                 <div class="grid grid-cols-6 gap-4 mb-2 bg-slate-300" id="post" post-id="{{ $post->id }}">
                     <div class="p-6 bg-white  ">
                         <div class="d-flex flex-row  justify-center items-end text-center">
@@ -97,7 +97,7 @@
             </div>
 
             <div class="mt-auto mb-6 px-6">
-                {{ $comments->links('vendor.pagination.custom-paginate') }}
+                {{ $comments->links(/* 'vendor.pagination.custom-paginate' */) }}
             </div>
         </div>
     </div>

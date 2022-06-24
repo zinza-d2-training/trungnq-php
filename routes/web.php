@@ -68,7 +68,8 @@ Route::middleware('verifyLogin')->group(function () {
     Route::post('/post/pin/{id}', [PostController::class, 'pin'])->name('post.pin');
     Route::get('/search', [PostController::class, 'search'])->name('post.search');
 
-    Route::resource('comment', CommentController::class);
+    Route::resource('comment', CommentController::class)->only(['update', 'store']);
+    
 });
 
 Route::controller(AuthenController::class)->group(function () {

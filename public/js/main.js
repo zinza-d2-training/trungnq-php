@@ -19,6 +19,7 @@ $(document).ready(function () {
         fd.append("password", $("#password").val());
         fd.append("password_confirmation", $("#password_confirmation").val());
         id = $("#id_user").val();
+
         $.ajax({
             type: "POST",
             url: "/account/" + id,
@@ -48,6 +49,7 @@ $(document).ready(function () {
 
     $(".deleteUser").click(function (e) {
         e.preventDefault();
+
         if (confirm("xoas user")) {
             let id = $(this).attr("user_id");
             $.ajax({
@@ -87,6 +89,7 @@ $(document).ready(function () {
         e.preventDefault();
         var fd = new FormData();
         var files = $("#avatar")[0].files;
+
         if (files.length > 0) {
             fd.append("avatar", files[0]);
         }
@@ -98,6 +101,7 @@ $(document).ready(function () {
         fd.append("company", $("#id_company").val());
         fd.append("_method", "PUT");
         id = $("#id_company").val();
+
         $.ajax({
             type: "POST",
             url: "/company/" + id,
@@ -115,6 +119,7 @@ $(document).ready(function () {
     $(".deletecompany").click(function (e) {
         e.preventDefault();
         let idc = $(this).attr("company_id");
+
         if (confirm("bạn có chắc muốn xóa company")) {
             deleteItem("company", idc);
             $(this).closest(".company-row").remove();
@@ -123,6 +128,7 @@ $(document).ready(function () {
 
     $(".delete-topic").click(function (e) {
         e.preventDefault();
+
         if (confirm("Bạn muốn xóa topic này ??")) {
             let id = $(this).attr("topic_slug");
             deleteItem("topic", id);
@@ -132,14 +138,17 @@ $(document).ready(function () {
 
     $(".delete-tag").click(function (e) {
         e.preventDefault();
+
         if (confirm("Bạn muốn xóa tag này ??")) {
             let id = $(this).attr("tag_id");
             deleteItem("tag", id);
             $(this).closest(".tag-row").remove();
         }
     });
+
     $(".delete-post").click(function (e) {
         e.preventDefault();
+
         if (confirm("Bạn muốn xóa bài đăng này ??")) {
             let id = $(this).attr("post_id");
             deleteItem("post", id);
@@ -147,79 +156,78 @@ $(document).ready(function () {
         }
     });
 
-    $('.pin-post').click(function (e) { 
+    $(".pin-post").click(function (e) {
         e.preventDefault();
-        let id = $(this).attr('data-id');
+        let id = $(this).attr("data-id");
         $.ajax({
             type: "POST",
-            url: "/post/pin/"+id,
+            url: "/post/pin/" + id,
             data: {
-                'comment_id' : id,
+                comment_id: id,
             },
             dataType: "JSON",
             success: function (response) {
                 location.reload();
-            }
+            },
         });
     });
 
-    $('#search-post').change(function (e) { 
+    $("#search-post").change(function (e) {
         e.preventDefault();
-        setTimeout(()=>{
-            $('#searchForm').submit();
-        },1000)
+        setTimeout(() => {
+            $("#searchForm").submit();
+        }, 1000);
     });
 
-    $('.like-comment').click(function (e) { 
+    $(".like-comment").click(function (e) {
         e.preventDefault();
-        let comment_id = $(this).attr('data-comment-id');
-        let user_id = $(this).attr('data-user-id');
-        let status = $(this).attr('data-status');
-        let text = $(this).closest(".favorite").find('.comment-favorite');
+        let comment_id = $(this).attr("data-comment-id");
+        let user_id = $(this).attr("data-user-id");
+        let status = $(this).attr("data-status");
+        let text = $(this).closest(".favorite").find(".comment-favorite");
         let count = text.text();
-        if($(this).hasClass('fa-solid')){
-            $(this).removeClass('fa-solid').addClass('fa-regular');
-            $(this).attr('data-status',0);
+
+        if ($(this).hasClass("fa-solid")) {
+            $(this).removeClass("fa-solid").addClass("fa-regular");
+            $(this).attr("data-status", 0);
             count--;
             text.text(count);
-        }
-        else{
-            $(this).addClass('fa-solid').removeClass('fa-regular');
-            $(this).attr('data-status',1);
+        } else {
+            $(this).addClass("fa-solid").removeClass("fa-regular");
+            $(this).attr("data-status", 1);
             count++;
             text.text(count);
         }
-        
+
         $.ajax({
             type: "POST",
-            url: "/comment/"+comment_id,
+            url: "/comment/" + comment_id,
             data: {
-                'user_id' : user_id,
-                'comment_id' : comment_id,
-                'status' : status,
+                user_id: user_id,
+                comment_id: comment_id,
+                status: status,
                 _method: "PUT",
             },
             dataType: "JSON",
-            success: function (response) {
-            }
+            success: function (response) {},
         });
-       
     });
 
-    $('.click-resolve').click(function (e) { 
+    $(".click-resolve").click(function (e) {
         e.preventDefault();
-        let post_id = $('#post').attr('post-id');
-        let id = $(this).attr('data-id');
+        let post_id = $("#post").attr("post-id");
+        let id = $(this).attr("data-id");
+
         $.ajax({
             type: "POST",
-            url: "/post/resolve/"+id,
+            url: "/post/resolve/" + post_id,
             data: {
-                'comment_id' : id,
+                comment_id: id,
             },
             dataType: "JSON",
             success: function (response) {
                 location.reload();
-            }
+            },
         });
     });
 });
@@ -228,6 +236,7 @@ function toast(type = "info", message = "") {
     const main = document.getElementById("toast");
     var color = "blue";
     icon = "fa-circle-info";
+
     switch (type) {
         case "success":
             color = "green";
@@ -245,6 +254,7 @@ function toast(type = "info", message = "") {
         default:
             icon = "fa-question";
     }
+
     if (main) {
         const toast = document.createElement("div");
         toast.innerHTML = `<div class="flex items-center toast-${color} max-w-sm  p-4 mb-4 text-gray-700 rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 absolute right-64 top-24  toast" role="alert">
@@ -266,10 +276,11 @@ function toast(type = "info", message = "") {
 
 function deleteMutiple(url, rowclass) {
     var allVals = [];
-    console.log(allVals);
+
     $(".checkitem:checked").each(function () {
         allVals.push($(this).attr("data-id"));
     });
+
     if (allVals.length <= 0) {
         toast("warning", "Vui lòng chọn trường muốn xóa!!!");
     } else {
@@ -300,6 +311,7 @@ function createFormUser(url) {
     formdata.append("dob", $("#dob").val());
     formdata.append("active", $("#active").val());
     formdata.append("id", $("#id").val());
+
     $.ajax({
         type: "POST",
         url: url,
@@ -315,10 +327,9 @@ function createFormUser(url) {
 }
 
 function deleteItem(typeItem, id) {
-    console.log(typeItem + "/" + id);
     $.ajax({
         type: "POST",
-        url: "/"+typeItem + "/" + id,
+        url: "/" + typeItem + "/" + id,
         data: {
             typeItem: id,
             _method: "DELETE",

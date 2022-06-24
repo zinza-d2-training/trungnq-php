@@ -25,6 +25,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = $this->postService->getAll();
+        
         return view('pages.post.index', compact('posts'));
     }
 
@@ -76,8 +77,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $this->postService->delete($id);
-        
-        return true;
+        return response()->json('true');
     }
 
     public function uploadImage(Request $request)
@@ -96,21 +96,24 @@ class PostController extends Controller
         }
     }
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
         $posts =  $this->postService->search($request->keyword);
-        
+
         return view('pages.post.search',compact('posts'));
     }
 
-    public function resolve(Request $request, $id){
+    public function resolve(Request $request, $id)
+    {
         $res = $this->postService->resolve($request->all(),$id);
 
-        return response()->json(['type' => 'info', 'content' => '']);
+        return response()->json('true');
     }
 
-    public function pin($id){
+    public function pin($id)
+    {
         $res = $this->postService->pin($id);
 
-        return $res;
+        return response()->json('true');
     }
 }

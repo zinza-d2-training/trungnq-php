@@ -79,22 +79,29 @@ class PostService
 
     public function show($id)
     {
-        $post = Post::with(['tag', 'user', 'comment_resolve'])->with(['comments' => function ($query) {
-            $query->with('user_like')->paginate(2);
-        }])->findOrFail($id);
-        $comments =  Comment::where('post_id', $post->id)->with('user')->withCount('user_like')->paginate(10);
+        $post = Post::with(['tag', 'user', 'comment_resolve'])
+            ->with(['comments' => function ($query) {
+                $query->with('user_like')->paginate(2);
+            }])
+            ->findOrFail($id);
+            
+        $comments =  Comment::where('post_id', $post->id)
+            ->with('user')
+            ->withCount('user_like')
+            ->paginate(Config::get('constants.paginate'));
 
         return compact('post', 'comments');
     }
 
     public function resolve($data, $id)
     {
+        
         $post = Post::findOrFail($id);
         if ($post->comment_id == $data['comment_id']) {
-            $data['comment_id'] = "";
-            $data['status'] = "0";
+            $data['comment_id'] = null;
+            $data['status'] = Post::not_resolve;
         }
-        $data['status'] = "1";
+        $data['status'] = Post::resolve;
 
         $post->update($data);
     }
@@ -102,12 +109,7 @@ class PostService
     public function pin($id)
     {
         $post = Post::findOrFail($id);
-        if($post->pin == 0) {
-            $post->pin = 1;
-        } else {
-            $post->pin = 0;
-        }
-
+        $post->pin = !$post->pin;
         $post->update();
 
         return true;
