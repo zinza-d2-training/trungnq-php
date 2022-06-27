@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCompanyAccountsTable extends Migration
+class CreateUserLikeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateCompanyAccountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('company_accounts', function (Blueprint $table) {
+        Schema::create('user_like', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('comment_id');
             $table->foreign("user_id")->references('id')->on('users');
-            $table->foreign("company_id")->references('id')->on('companies');
-            $table->softDeletes();
+            $table->foreign("comment_id")->references('id')->on('comments');
         });
     }
 
@@ -30,6 +29,6 @@ class CreateCompanyAccountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('company_accounts');
+        Schema::dropIfExists('user_like');
     }
 }

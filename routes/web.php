@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Authen\AuthenController;
+use App\Http\Controllers\Comment\CommentController;
 use App\Http\Controllers\Company\CompanyController;
+use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Post\PostController;
 use App\Http\Controllers\Tag\TagController;
 use App\Http\Controllers\Topic\ToppicController;
@@ -26,17 +28,15 @@ Route::get('/', function () {
 Route::get('/c-forgot-password', [AuthenController::class, 'login']);
 Route::get('c-reset-password/{token}', [AuthenController::class, 'showResetPasswordForm'])->name('custom.reset.password.get');
 Route::post('c-reset-password', [AuthenController::class, 'submitResetPasswordForm'])->name('custom.reset.password.post');
-Route::get('/dashboard', function () {
+/* Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard'); */
 
 /* require __DIR__.'/auth.php'; */
 
 
 Route::middleware('verifyLogin')->group(function () {
-    Route::get('/home', function () {
-        return view('pages.dashboard');
-    })->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/account', [AuthenController::class, 'edit'])->name('account');
     Route::post('/account/{id}', [AuthenController::class, 'update'])->name("account-update");
 
@@ -62,8 +62,14 @@ Route::middleware('verifyLogin')->group(function () {
         Route::post('/tag/destroy-mutiple', [TagController::class, 'destroyAll']);
     });
 
-    Route::resource('post',PostController::class);
-    Route::post('/post/upload-image',[PostController::class,'uploadImage'])->name('post.uploadImage');
+    Route::resource('post', PostController::class);
+    Route::post('/post/upload-image', [PostController::class, 'uploadImage'])->name('post.uploadImage');
+    Route::post('/post/resolve/{id}', [PostController::class, 'resolve'])->name('post.resolve');
+    Route::post('/post/pin/{id}', [PostController::class, 'pin'])->name('post.pin');
+    Route::get('/search', [PostController::class, 'search'])->name('post.search');
+
+    Route::resource('comment', CommentController::class)->only(['update', 'store']);
+    
 });
 
 Route::controller(AuthenController::class)->group(function () {

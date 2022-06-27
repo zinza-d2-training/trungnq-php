@@ -2,9 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Topic;
 use App\Models\User;
 use App\Observers\AccountObserver;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        User::observe(AccountObserver::class);
+        $listTopic = Topic::pluck('title', 'slug')->toArray();
+        View::share('listTopic', $listTopic);
+
+        Paginator::defaultView('vendor.pagination.custom-paginate');
+ 
     }
 }

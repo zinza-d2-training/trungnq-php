@@ -1,14 +1,20 @@
 <tr class="company-row">
     <td class="px-6 py-4">
         @if (count($company->user))
-            <div class="inline-block ">
-                <img src="/storage/images/avatars/{{ $company->user[0]->avatar }}" alt=""
-                    class="w-10 rounded-full">
-            </div>
-            <div class="px-3 inline-block w-3">
-                <p class="text-bold text-slate-900">{{ $company->user[0]->name }} </p>
-                <p class=" text-gray-600">{{ $company->user[0]->email }} </p>
-            </div>
+            
+            @foreach ($company->user as $item)
+                @if ($item->role->name == "company_account")
+                <div class="inline-block ">
+                    <img src="/storage/images/avatars/{{ $company->user[0]->avatar }}" alt=""
+                        class="w-10 rounded-full">
+                </div>
+                <div class="px-3 inline-block w-3">
+                    <p class="text-bold text-slate-900">{{ $company->user[0]->name }} </p>
+                    <p class=" text-gray-600">{{ $company->user[0]->email }} </p>
+                </div>
+                @break
+                @endif
+            @endforeach
         @endif
     </td>
     <td class="px-6 py-4">{{ $company->name }}</td>

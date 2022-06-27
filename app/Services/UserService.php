@@ -121,6 +121,7 @@ class UserService
     {
         $user = User::findOrFail($id);
         $company = $user->company;
+        $user->company()->detach();
         if (!empty($company && $data['company'] != 0)) {
             $user->company()->attach($data['company']);
         }

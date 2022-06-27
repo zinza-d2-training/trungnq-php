@@ -34,11 +34,12 @@
                 <tbody class="text-lg text-gray-900 text-left">
                     @if (count($tags))
                         @foreach ($tags as $item)
-                            <tr class="border-b-2 tag-row" data-id="{{$item->id}}">
+                            <tr class="border-b-2 tag-row" data-id="{{ $item->id }}">
                                 <td class="py-5 px-6">
-                                    <input type="checkbox" name="" class="checkitem" data-id="{{$item->id}}">
+                                    <input type="checkbox" name="" class="checkitem" data-id="{{ $item->id }}">
                                 </td>
-                                <td class="py-5 px-6"><span class=" text-xl px-3 py-1 rounded-lg" style="background-color: {{$item->color}}">{{ $item->name }}</span></td>
+                                <td class="py-5 px-6"><span class=" text-xl px-3 py-1 rounded-lg"
+                                        style="background-color: {{ $item->color }}">{{ $item->name }}</span></td>
                                 <td>10</td>
                                 <td>
                                     <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -53,8 +54,7 @@
                                                     {{ __('Edit') }}
                                                 </x-dropdown-link>
                                                 <x-dropdown-link>
-                                                    <button class="delete-tag"
-                                                        tag_id="{{ $item->id }}">Delete</button>
+                                                    <button class="delete-tag" tag_id="{{ $item->id }}">Delete</button>
                                                 </x-dropdown-link>
                                             </x-slot>
                                         </x-dropdown>
@@ -66,9 +66,10 @@
                 </tbody>
             </x-slot>
         </x-table>
-        <button class="bg-blue-400 text-white border-2 border-slate-500 p-3 mt-4 rounded-lg font-bold" id="btn-delete-mutiple-tag">Delete Tags</button>
+        <button class="bg-blue-400 text-white border-2 border-slate-500 p-3 mt-4 rounded-lg font-bold"
+            id="btn-delete-mutiple-tag">Delete Tags</button>
         <div class="mt-auto px-6">
-            {{ $tags->links() }}
+            {{ $tags->links('vendor.pagination.tailwind') }}
         </div>
     </div>
 @endsection

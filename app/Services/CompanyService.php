@@ -9,7 +9,7 @@ class CompanyService
 {
 
     public $uploadImage;
-    
+
     public function __construct(UploadImage $uploadImage)
     {
         $this->uploadImage = $uploadImage;
@@ -19,20 +19,27 @@ class CompanyService
     {
         return Company::findOrFail($id);
     }
+
     public function getAll($sortData)
     {
-        if(!empty($sortData)){
-            return Company::with('User')->orderBy($sortData['sort'], $sortData['direction'])->paginate(10);
+        if (!empty($sortData)) {
+            return Company::with('user')
+                ->orderBy($sortData['sort'], $sortData['direction'])
+                ->paginate(Config::get('constants.paginate'));
         }
-        return Company::with('User')->paginate(Config::get('constants.paginate'));
+
+        return Company::with('user')->paginate(Config::get('constants.paginate'));
     }
+
     public function create($data)
     {
         $path = 'public/images/company';
         $data['avatar'] = $this->uploadImage->savefile($path, $data['avatar']);
         Company::create($data);
+
         return true;
     }
+
     public function update($data)
     {
         $company = Company::find($data['company']);
@@ -42,6 +49,7 @@ class CompanyService
             $company->avatar = $data['avatar'];
         }
         $company->update($data);
+
         return true;
     }
 }

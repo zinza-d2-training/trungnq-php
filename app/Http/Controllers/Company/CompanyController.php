@@ -25,7 +25,7 @@ class CompanyController extends Controller
     public function index(Request $request)
     {
         $companies = $this->companyService->getAll($request->all());
-        return view('pages.company.index',compact('companies'));
+        return view('pages.company.index', compact('companies'));
     }
 
     /**
@@ -73,7 +73,7 @@ class CompanyController extends Controller
     public function edit($id)
     {
         $company = $this->companyService->getById($id);
-        return view('pages.company.edit',compact('company'));
+        return view('pages.company.edit', compact('company'));
     }
 
     /**
@@ -86,7 +86,7 @@ class CompanyController extends Controller
     public function update(CompanyRequest $request)
     {
         $result = $this->companyService->update($request->all());
-        return $this->message('info','Cập nhật thông tin thành công');
+        return $this->message('info', 'Cập nhật thông tin thành công');
     }
 
     /**
@@ -99,12 +99,14 @@ class CompanyController extends Controller
     {
         $company = Company::findOrFail($id);
         $company->delete();
-        return $this->message('info','Đã xóa công ty!');
+        return $this->message('info', 'Đã xóa công ty!');
     }
-    public function message($type,$message){
-        return response()->json(['type' => $type,'message' => $message]);
+    public function message($type, $message)
+    {
+        return response()->json(['type' => $type, 'message' => $message]);
     }
-    public function error(){
-        return response()->json(['type' => 'danger','message' =>'Có lỗi trong quá trình thực hiện.Hãy thử lại']);
+    public function error()
+    {
+        return response()->json(['type' => 'danger', 'message' => 'Có lỗi trong quá trình thực hiện.Hãy thử lại']);
     }
 }

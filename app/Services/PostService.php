@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Comment;
 
 class PostService
 {
@@ -68,5 +69,55 @@ class PostService
         $file_name = $this->imageUpload->savefile($path, $file);
 
         return $file_name;
+    }
+
+    public function search($data)
+    {
+        $result = Post::where('title', 'LIKE', '%' . $data . '%')
+            ->withCount('comments')
+            ->with('user')
+            ->orderBy('pin', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(Config::get('constants.paginate'));
+            
+        return $result;
+    }
+
+    public function show($id)
+    {
+        $post = Post::with(['tag', 'user', 'comment_resolve'])
+            ->with(['comments' => function ($query) {
+                $query->with('user_like')->paginate(2);
+            }])
+            ->findOrFail($id);
+
+        $comments =  Comment::where('post_id', $post->id)
+            ->with('user')
+            ->withCount('user_like')
+            ->paginate(Config::get('constants.paginate'));
+
+        return compact('post', 'comments');
+    }
+
+    public function resolve($data, $id)
+    {
+
+        $post = Post::findOrFail($id);
+        if ($post->comment_id == $data['comment_id']) {
+            $data['comment_id'] = null;
+            $data['status'] = Post::not_resolve;
+        }
+        $data['status'] = Post::resolve;
+
+        $post->update($data);
+    }
+
+    public function pin($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->pin = !$post->pin;
+        $post->update();
+
+        return true;
     }
 }

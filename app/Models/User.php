@@ -8,10 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -59,10 +60,21 @@ class User extends Authenticatable
 
     public function company()
     {
-        return $this->belongsToMany(Company::class,'company_accounts');
+        return $this->belongsToMany(Company::class, 'company_accounts');
     }
 
-    public function post(){
-        return $this ->hasMany(Post::class);
+    public function post()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function comment_like()
+    {
+        return $this->belongsToMany(Comment::class, 'user_like');
     }
 }

@@ -34,12 +34,13 @@
                 <tbody class="text-lg text-gray-900 text-left">
                     @if (count($topic))
                         @foreach ($topic as $item)
-                            <tr class="border-b-2 topic-row" data-id="{{$item->slug}}">
+                            <tr class="border-b-2 topic-row" data-id="{{ $item->slug }}">
                                 <td class="py-5 px-6">
-                                    <input type="checkbox" name="" class="checkitem" data-id="{{$item->slug}}">
+                                    <input type="checkbox" name="" class="checkitem" data-id="{{ $item->slug }}">
                                 </td>
-                                <td class="py-5 px-6">{{ $item->title }}</td>
-                                <td>10</td>
+                                <td class="py-5 px-6"><a
+                                        href="{{ route('topic.show', ['topic' => $item]) }}">{{ $item->title }}</a></td>
+                                <td class="px-6">{{ $item->post_count }}</td>
                                 <td>
                                     <div class="hidden sm:flex sm:items-center sm:ml-6">
                                         <x-dropdown align="right" width="48">
@@ -66,9 +67,10 @@
                 </tbody>
             </x-slot>
         </x-table>
-        <button class="bg-blue-400 text-white border-2 border-slate-500 p-3 mt-4 rounded-lg font-bold" id="btn-delete-mutiple-topic">Delete Topic</button>
+        <button class="bg-blue-400 text-white border-2 border-slate-500 p-3 mt-4 rounded-lg font-bold"
+            id="btn-delete-mutiple-topic">Delete Topic</button>
         <div class="mt-auto px-6">
-            {{ $topic->links() }}
+            {{ $topic->links('vendor.pagination.tailwind') }}
         </div>
     </div>
 @endsection

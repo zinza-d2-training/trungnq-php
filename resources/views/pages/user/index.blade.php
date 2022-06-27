@@ -16,7 +16,7 @@
             <x-slot name="tablehead" class="w-full">
                 <thead class="text-xs text-gray-700 uppercase bg-slate-300 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th class="px-6 py-3 w-3"> 
+                        <th class="px-6 py-3 w-3">
                             <input type="checkbox" class="mx-auto" name="" id="checkfull">
                         </th>
                         <th scope="col" class="px-6 py-3">
@@ -50,6 +50,6 @@
             id="btn-delete-mutiple-user">Delete</button>
     </div>
     <div class="mt-auto mb-6 px-6">
-        {{ $users->links() }}
+        {{ $users->links('vendor.pagination.tailwind') }}
     </div>
 @endsection

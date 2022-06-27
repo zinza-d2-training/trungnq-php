@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model
 {
     use HasFactory;
-    protected $fillable =[
+    protected $fillable = [
         'name',
         'color',
     ];
 
-    public function post(){
-        return $this->belongsToMany(Post::class,'post_tags');
+    public function post()
+    {
+        return $this->belongsToMany(Post::class, 'post_tags');
     }
 }
