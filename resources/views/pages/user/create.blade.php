@@ -9,31 +9,36 @@
         <div class=" my-4 py-2 ">
             Create user
         </div>
+        @if (Session::has('message'))
+            @php
+                $message = Session::get('message');
+            @endphp
+            <x-toast :content="$message['content']" :type="$message['type']"></x-toast>
+        @endif
         <div class="">
-            <form action="{{ route('user.create') }}" id="form-create-user" method="POST">
+            <form action="{{ route('user.create') }}" method="POST">
                 @csrf
                 <div class="grid grid-cols-8 gap-4 mt-8">
                     <div class="col-span-2">
                         <x-label>Email</x-label>
                         <x-input class="block mt-1 w-full " type="email" name="email" id='email' required
                             autofocus  />
-                        <x-span-error name='email'></x-span-error>
+                        <x-span-error class="text-red-500" name='email'></x-span-error>
                     </div>
                     <div class="col-span-2 ">
                         <x-label>Username</x-label>
                         <x-input class="block mt-1 w-full" type="text" name="name" id="name" required autofocus />
-                        <x-span-error name='name'></x-span-error>
+                        <x-span-error class="text-red-500" name='name'></x-span-error>
                     </div>
                     <div class="col-span-4 "></div>
                     <div class="col-span-2">
                         <x-label>Role</x-label>
                         <select name="role" id="role" class="w-full rounded-lg border-slate-200">
-                            <option value="0"> Pick an Role</option>
                             <option value="1"> Admin</option>
                             <option value="2"> Company Accoutn</option>
-                            <option value="3"> Member</option>
+                            <option value="3" selected> Member</option>
                         </select>
-                        <x-span-error name='old_password'></x-span-error>
+                        <x-span-error class="text-red-500" name='old_password'></x-span-error>
                     </div>
                     <div class="col-span-2">
                         <x-label>Company</x-label>
@@ -52,7 +57,7 @@
                         <x-label>Date of birth</x-label>
                         <input class="border-slate-300 rounded-lg w-full " type="text" name="dob" id="dob"
                             :value="$user - > dob">
-                        <x-span-error name='dob'></x-span-error>
+                        <x-span-error class="text-red-500" name='dob'></x-span-error>
                     </div>
                     <div class="col-span-2">
                         <x-label>Active</x-label>
@@ -60,7 +65,7 @@
                             <option value="1"> Active</option>
                             <option value="0"> InActive</option>
                         </select>
-                        <x-span-error name='old_password'></x-span-error>
+                        <x-span-error class="text-red-500" name='old_password'></x-span-error>
                     </div>
                     <div class="col-span-4"></div>
                     <div class="col-span-2">

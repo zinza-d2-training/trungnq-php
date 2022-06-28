@@ -50,7 +50,7 @@ class CompanyController extends Controller
         if ($res) {
             return back()->with('message', ['type' => 'info', 'content' => 'Tạo company thành công!!!']);
         }
-        return back()->with('message', ['type' => 'info', 'content' => '~Oppp. Đã xảy ra lỗi vui lòng thử lại!!!']);
+        return back()->with('message', ['type' => 'warning', 'content' => '~Oppp. Đã xảy ra lỗi vui lòng thử lại!!!']);
     }
 
     /**

@@ -10,8 +10,13 @@
             <div class=""><a href="{{ route('user.create') }}" target="bank"
                     class="p-2 bg-blue-600 rounded-lg text-white">New user</a></div>
         </div>
-        <div id="toast">
-        </div>
+        @if (Session::has('message'))
+        @php
+            $message = Session::get('message');
+        @endphp
+        <x-toast :content="$message['content']" :type="$message['type']"></x-toast>
+    @endif
+        <div id="toast"></div>
         <x-table class="w-full">
             <x-slot name="tablehead" class="w-full">
                 <thead class="text-xs text-gray-700 uppercase bg-slate-300 dark:bg-gray-700 dark:text-gray-400">

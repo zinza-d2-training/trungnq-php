@@ -33,8 +33,12 @@ class CompanyService
 
     public function create($data)
     {
-        $path = 'public/images/company';
-        $data['avatar'] = $this->uploadImage->savefile($path, $data['avatar']);
+        if (empty($data['avatar'])) {
+            $data['avatar'] = 'default-user.jpg';
+        } else {
+            $path = 'public/images/company';
+            $data['avatar'] = $this->uploadImage->savefile($path, $data['avatar']);
+        }
         Company::create($data);
 
         return true;

@@ -41,14 +41,12 @@ class ToppicController extends Controller
 
     public function show($slug)
     {
-        $topic = Topic::where('slug', $slug)->findOrFail();
-
+        $topic = Topic::where('slug',$slug)->firstOrFail();
         $listPost =  Post::where('topic_id',$topic->id)
             ->withCount('comments')
             ->orderBy('pin', 'desc')
             ->orderBy('created_at', 'desc')
             ->paginate(Config::get('constants.paginate'));
-
         return view('pages.topic.show', compact('topic', 'listPost'));
     }
 
@@ -66,7 +64,7 @@ class ToppicController extends Controller
         $data['slug'] = $request->title;
         $topic->update($data);
 
-        return  back()->with('message', ['type' => 'success', 'content' => 'Thay đổi thông tin thành công!!!']);
+        return  redirect()->route('topic.index')->with('message', ['type' => 'success', 'content' => 'Thay đổi thông tin thành công!!!']);
     }
 
     public function destroy($slug)

@@ -7,7 +7,7 @@
     <div class="mx-6">
         <div id="toast" class="bg-red-500 right-64">
         </div>
-        <div class="font-bold my-5">Topic detail</div>
+        <div class="font-bold my-5">Topic: {{$topic->title}}</div>
         @if (Session::has('message'))
             @php
                 $message = Session::get('message');
@@ -21,6 +21,8 @@
                         @foreach ($listPost as $item)
                             <x-post-row :post="$item"></x-post-row>
                         @endforeach
+                    @else
+                    <h3 class="text-xl"><i>Không có bài viết nào thuộc topic này</i></h3>
                     @endif
                     
                 </div>

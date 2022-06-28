@@ -7,6 +7,12 @@
     <div class="mx-6">
         <div id="toast" class="bg-red-500 right-64">
         </div>
+        @if (Session::has('message'))
+            @php
+                $message = Session::get('message');
+            @endphp
+            <x-toast :content="$message['content']" :type="$message['type']"></x-toast>
+        @endif
         <div class="my-5 flex justify-between ">
             <div class="">List topic</div>
             <div class=""><a href="{{ route('topic.create') }}"

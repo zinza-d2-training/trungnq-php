@@ -5,38 +5,38 @@
 @section('content')
     <x-breadcrumbs name='post'></x-breadcrumbs>
     <div class="mx-6">
-        <div id="toast" class="bg-red-500 right-64">
-        </div>
+        <div id="toast" class="bg-red-500 right-64"></div>
         <div class="my-5 flex justify-between ">
             <div class="">List post</div>
-            <div class=""><a href="{{ route('post.create') }}"
-                    class="p-3 bg-blue-400 text-white font-bold rounded-lg ">New post</a></div>
+            <div class="">
+                <a href="{{ route('post.create') }}"class="p-3 bg-blue-400 text-white font-bold rounded-lg ">New post</a>
+            </div>
         </div>
-        <x-table class="w-full">
-            <x-slot name="tablehead" class="w-full">
-                <thead class="text-xs text-gray-900 uppercase bg-slate-300 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 w-64 overflow-hidden">
-                            <i class="fa-solid fa-user"></i> title
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            <i class="fa-solid fa-user"></i> Author
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            <i class="fa-solid fa-user"></i> Status
-                        </th>
-                        <th scope="col" class="px-6 py-3  text-center">
-                            <i class="fa-solid fa-user"></i> Tags
-                        </th>
-                        <th scope="col" class="px-6 py-3 w-24">
-                            <i class="fa-solid fa-user"></i> ---
-                        </th>
-                    </tr>
-                </thead>
-            </x-slot>
-            <x-slot name="tablebody">
-                <tbody class="text-md text-gray-900 text-left">
-                    @if (count($posts))
+        @if (count($posts))
+            <x-table class="w-full">
+                <x-slot name="tablehead" class="w-full">
+                    <thead class="text-xs text-gray-900 uppercase bg-slate-300 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 w-64 overflow-hidden">
+                                <i class="fa-solid fa-user"></i> title
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-center">
+                                <i class="fa-solid fa-user"></i> Author
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-center">
+                                <i class="fa-solid fa-user"></i> Status
+                            </th>
+                            <th scope="col" class="px-6 py-3  text-center">
+                                <i class="fa-solid fa-user"></i> Tags
+                            </th>
+                            <th scope="col" class="px-6 py-3 w-24">
+                                <i class="fa-solid fa-user"></i> ---
+                            </th>
+                        </tr>
+                    </thead>
+                </x-slot>
+                <x-slot name="tablebody">
+                    <tbody class="text-md text-gray-900 text-left">
                         @foreach ($posts as $post)
                             <tr class="border-b-2 post-row">
                                 <td class="py-5 px-6 w-64 truncate" style="max-width: 400px">
@@ -80,11 +80,14 @@
                                 </td>
                             </tr>
                         @endforeach
-                    @endif
-                </tbody>
-            </x-slot>
-        </x-table>
+                    </tbody>
+                </x-slot>
+            </x-table>
+        @else
+            <h4 class="p-3 border-t-2 "> <i>Chưa có bài đăng.</i> </h4>
+        @endif
         <div class="mt-auto px-6">
             {{ $posts->links('vendor.pagination.tailwind') }}
         </div>
-    @endsection
+    </div>
+@endsection

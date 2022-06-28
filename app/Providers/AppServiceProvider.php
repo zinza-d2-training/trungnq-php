@@ -8,6 +8,7 @@ use App\Observers\AccountObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Pagination\Paginator;
+use App\Observers\UserObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +33,5 @@ class AppServiceProvider extends ServiceProvider
         View::share('listTopic', $listTopic);
 
         Paginator::defaultView('vendor.pagination.custom-paginate');
- 
     }
 }

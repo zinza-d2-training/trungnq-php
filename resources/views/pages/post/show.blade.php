@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <x-breadcrumbs name='createpost'></x-breadcrumbs>
-    <div class="px-6 ">
+    <div class="px-6 mb-6 ">
         <div class=" my-4 py-2  flex flex-row justify-between">
             <div class="">
                 <p class="font-bold">Post {{ $post->title }}</p>
@@ -12,7 +12,7 @@
             </div>
             @if (Auth::user()->role->name == 'admin' || Auth::id() == $post->user->id || (Auth::user()->role->name == 'company_account' && $post->user->company[0]->id == Auth::user()->company[0]->id))
                 <div class="">
-                    <button class="delete-post" post_id="{{ $post->id }}">Delete</button>
+                    <button class="delete-post bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-700" post_id="{{ $post->id }}">Delete</button>
                 </div>
             @endif
         </div>
@@ -32,7 +32,7 @@
                 }
             @endphp
             @if ($comments->currentPage() == 1)
-                <div class="grid grid-cols-6 gap-4 mb-2 bg-slate-300" id="post" post-id="{{ $post->id }}">
+                <div class="grid grid-cols-6 gap-4 mb-4 bg-slate-300" id="post" post-id="{{ $post->id }}">
                     <div class="p-6 bg-white  ">
                         <div class="d-flex flex-row  justify-center items-end text-center">
                             <div class="mx-auto w-20">

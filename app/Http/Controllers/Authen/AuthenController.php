@@ -92,6 +92,8 @@ class AuthenController extends Controller
     public function submitResetPasswordForm(PasswordRequest $request)
     {
         $result = $this->userService->createNewPassword($request);
-        return back()->withInput()->with('message', 'Update password!!!');
+        if($result){
+            return back()->withInput()->with('message', 'Update password!!!');
+        }
     }
 }

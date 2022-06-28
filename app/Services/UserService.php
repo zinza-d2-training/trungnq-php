@@ -101,7 +101,9 @@ class UserService
         if (!$updatePassword) {
             return false;
         }
-        $user = User::where('email', $request->email)->update(['password' => Hash::make($request->password)]);
+        $user = User::where('email', $request->email);
+        $data['password'] = Hash::make($request->password);
+        $user->update($data);
         DB::table('password_resets')->where(['email' => $request->email])->delete();
 
         return true;
@@ -123,7 +125,12 @@ class UserService
         $company = $user->company;
         $user->company()->detach();
         if (!empty($company && $data['company'] != 0)) {
-            $user->company()->attach($data['company']);
+            $company = Company::withCount('user')->findOrFail($data['company']);
+            if($company->max_users > $company->user_count ){
+                $user->company()->attach($data['company']);
+            } else {
+                return false;
+            }
         }
         if (Auth::user()->role->name != 'admin') {
             unset($data['email']);

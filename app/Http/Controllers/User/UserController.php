@@ -37,9 +37,9 @@ class UserController extends Controller
         $res = $this->userService->create($request->input());
 
         if ($res) {
-            return $this->message('success', 'Taọ tài khoản thành công');
+            return back()->with('message', ['type' => 'success', 'content' => 'Tạo tài khoản thành công!!!']);
         } else {
-            return $this->error();
+            return back()->with('message', ['warning' => 'success', 'content' => 'Có lỗi khi thực hiện vui long kiểm tra lại!!!']);
         }
     }
     public function show($id)
@@ -55,18 +55,20 @@ class UserController extends Controller
     {
         $res = $this->userService->updateUser($id, $request->input());
         if ($res) {
-            return $this->message('info', 'Thay đổi thông tin tài khoản thành công');
+            return $this->message('info', 'Thay đổi thông tin tài khoản thành công!!!');
         } else {
-            return $this->error();
+            return $this->message('danger', 'Thất bại. Công ty đã full thành viên!!! ');
         }
     }
 
     public function destroy($id)
     {
-        if (User::find($id)->delete()) {
+        $user = User::with('role')->find($id);
+        if ($user->role->name != 'admin') {
+            $user->delete();
             return $this->message('info', 'Xóa tài khoản thành công');
         } else {
-            return $this->error();
+            return $this->message('danger','Không thể xóa admin');
         }
     }
 
@@ -74,7 +76,15 @@ class UserController extends Controller
     {
         $ids = $request->ids;
         $ids = explode(',', $ids);
-        User::whereIn('id', $ids)->delete();
+        $a =User::whereIn('id', $ids)->with('role')->get();
+        foreach($a as $user){
+            if($user->role->name == "admin"){
+                return $this->message('danger','Không thể xóa admin');
+            }
+            else {
+                $user->delete();
+            }
+        }
         return $this->message('info', 'Xóa tài khoản thành công!!!');
     }
 

@@ -34,9 +34,14 @@
                         <div class="col-span-1 ">
                             <x-label>Avatar</x-label>
                             <div class="flex gap-4">
-                                <img src="/storage/images/company/{{ $company->avatar }}"
+                                <div class="">
+                                    <img src="/storage/images/company/{{ $company->avatar }}"
                                     class="w-10 h-10 mr-3 rounded-full" alt="">
-                                <x-input class="mt-1 w-7 py-2 " type="file" name="avatar" id='avatar' />
+                                </div>
+                                <div class="relative">
+                                    <div class=""><img src="/images/camera.png" alt="" class="w-8"></div>
+                                    <input class="absolute  top-0 w-10 opacity-0 " type="file" name="avatar" id='avatar' />
+                                </div>
                             </div>
                             <x-span-error name='avatar'></x-span-error>
                         </div>
@@ -67,7 +72,7 @@
                             <x-span-error name='active'></x-span-error>
                         </div>
                         <div class="col-span-1 mb-4 bg-blue-200">
-                            <button class="py-2 text-black w-full font-bold text-center" id="btnUpdateCompany"
+                            <button class="py-2 text-black w-full bg-blue-300 font-bold text-center rounded-lg hover:bg-blue-500" id="btnUpdateCompany"
                                 type="submit">Update</button>
                         </div>
                     </div>

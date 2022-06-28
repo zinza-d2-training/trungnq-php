@@ -34,6 +34,9 @@ $(document).ready(function () {
                     window.location.reload();
                 }, 3500);
             },
+            error: function(error){
+                console.log(error);
+            }
         });
     });
 
@@ -50,7 +53,7 @@ $(document).ready(function () {
     $(".deleteUser").click(function (e) {
         e.preventDefault();
 
-        if (confirm("xoas user")) {
+        if (confirm("Xóa user")) {
             let id = $(this).attr("user_id");
             $.ajax({
                 type: "POST",
@@ -58,7 +61,12 @@ $(document).ready(function () {
                 data: "id=" + id,
                 dataType: "JSON",
                 success: function (response) {
-                    toast(response.type, response.message);
+                    if(response.type == 'danger'){
+                        toast(response.type, response.message);
+                        setTimeout(()=>{
+                            location.reload();
+                        },1500)
+                    }
                 },
             });
             $(this).closest(".user-row").remove();
@@ -226,9 +234,16 @@ $(document).ready(function () {
             },
             dataType: "JSON",
             success: function (response) {
-                location.reload();
+
             },
         });
+        if ($(this).hasClass("text-green-400")) {
+            $(this).removeClass("text-green-400 hover:text-gray-400").addClass("text-gray-400 hover:text-green-600");
+        /*     $(this).attr("data-status", 0); */
+        } else {
+            $(this).addClass("text-green-400 hover:text-gray-400").removeClass("text-gray-400 hover:text-green-600");
+          
+        }    
     });
 });
 
@@ -292,13 +307,19 @@ function deleteMutiple(url, rowclass) {
             dataType: "JSON",
             success: function (response) {
                 toast(response.type, response.message);
+                if(response.type != 'info'){
+                    setTimeout(()=>{
+                        location.reload();
+                    },1500)
+                }
+                $.each(allVals, function (index, value) {
+                    $("." + rowclass)
+                        .filter("[data-id='" + value + "']")
+                        .remove();
+                });
             },
         });
-        $.each(allVals, function (index, value) {
-            $("." + rowclass)
-                .filter("[data-id='" + value + "']")
-                .remove();
-        });
+        
     }
 }
 

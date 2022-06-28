@@ -28,7 +28,7 @@ class PostService
 
     public function getAll()
     {
-        return Post::with('tag')->with('user')->paginate(Config::get('constants.paginate'));
+        return Post::with('tag')->with('user')->orderBy('created_at','desc')->paginate(Config::get('constants.paginate'));
     }
 
     public function create($data)
@@ -50,7 +50,7 @@ class PostService
             $post->tag()->attach($data['tag']);
         }
         $post->update($data);
-
+        dd($post);
         return true;
     }
 
@@ -58,7 +58,9 @@ class PostService
     {
         $post = $this->getById($data);
         $email = $post->user->email;
-        event(new DeletePost($post, $email));
+        if(Auth::user()->id != $post->user_id){
+            event(new DeletePost($post, $email));
+        }
 
         return $post->delete();
     }
