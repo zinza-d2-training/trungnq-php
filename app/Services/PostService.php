@@ -50,7 +50,7 @@ class PostService
             $post->tag()->attach($data['tag']);
         }
         $post->update($data);
-        dd($post);
+        
         return true;
     }
 

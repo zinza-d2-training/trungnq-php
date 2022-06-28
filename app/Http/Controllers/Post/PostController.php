@@ -77,7 +77,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $this->postService->delete($id);
-        return response()->json(['type' => 'info', 'content' => 'Thay đổi thông tin thành công']);
+        return response()->json(['type' => 'info', 'message' => 'Xóa bài đăng thành công!!!']);
     }
 
     public function uploadImage(Request $request)

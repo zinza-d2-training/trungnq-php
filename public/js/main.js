@@ -156,7 +156,6 @@ $(document).ready(function () {
 
     $(".delete-post").click(function (e) {
         e.preventDefault();
-
         if (confirm("Bạn muốn xóa bài đăng này ??")) {
             let id = $(this).attr("post_id");
             deleteItem("post", id);
@@ -237,12 +236,11 @@ $(document).ready(function () {
 
             },
         });
+
         if ($(this).hasClass("text-green-400")) {
             $(this).removeClass("text-green-400 hover:text-gray-400").addClass("text-gray-400 hover:text-green-600");
-        /*     $(this).attr("data-status", 0); */
         } else {
             $(this).addClass("text-green-400 hover:text-gray-400").removeClass("text-gray-400 hover:text-green-600");
-          
         }    
     });
 });

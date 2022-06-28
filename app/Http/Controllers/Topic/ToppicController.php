@@ -47,6 +47,7 @@ class ToppicController extends Controller
             ->orderBy('pin', 'desc')
             ->orderBy('created_at', 'desc')
             ->paginate(Config::get('constants.paginate'));
+
         return view('pages.topic.show', compact('topic', 'listPost'));
     }
 
@@ -79,6 +80,7 @@ class ToppicController extends Controller
         $ids = $request->ids;
         $ids = explode(',', $ids);
         Topic::whereIn('slug', $ids)->delete();
+        
         return $this->message('info', 'Xóa topic thành công!!!');
     }
 
