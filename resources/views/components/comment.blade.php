@@ -5,7 +5,10 @@
                 <img class="rounded-full" src="/storage/images/avatars/{{ $item->user->avatar }}" alt="">
             </div>
             <div>
-                <p class="font-bold">{{ $item->user->name }} (author)</p>
+                @php
+                    
+                @endphp
+                <p class="font-bold">{{ $item->user->name }} </p>
                 @if (isset($item->user->company[0]))
                     <p> {{ $item->user->company[0]->name }}</p>
                 @else
@@ -28,13 +31,14 @@
                     </span>
                 @endif
                 <span class="text-2xl text-red-500 cursor-pointer favorite">
-                    <i class="like-comment icon fa-{{ in_array($auth, $arrUserLike) ? 'solid' : 'regular' }} fa-heart"
+                    <i class="like-comment icon fa-{{ $like ? 'solid' : 'regular' }} fa-heart"
                         data-comment-id="{{ $item->id }}" data-user-id="{{ $auth }}"
-                        data-status="{{ in_array($auth, $arrUserLike) ? '1' : '0' }}"></i>
-                    <span class="text-red-500 comment-favorite"  count= "{{$item->favorite}}">{{ $item->favorite }}</span>
+                        data-status="{{ $like ? '1' : '0' }}"></i>
+                    <span class="text-red-500 comment-favorite"
+                        count="{{ $item->favorite }}">{{ $item->favorite }}</span>
                 </span>
             </div>
         </div>
-        <div class="">{!! $item->description !!}</div>
+        <div class="whitespace-pre">{!! $item->description !!}</div>
     </div>
 </div>

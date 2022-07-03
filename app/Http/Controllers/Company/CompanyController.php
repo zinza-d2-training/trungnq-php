@@ -98,6 +98,8 @@ class CompanyController extends Controller
     public function destroy($id)
     {
         $company = Company::findOrFail($id);
+        $company->user()->detach();
+        $company->user()->delete();
         $company->delete();
         return $this->message('info', 'Đã xóa công ty!');
     }

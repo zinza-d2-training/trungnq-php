@@ -131,6 +131,8 @@ class UserService
             } else {
                 return false;
             }
+        } else {
+            $user->company()->detach();
         }
         if (Auth::user()->role->name != 'admin') {
             unset($data['email']);

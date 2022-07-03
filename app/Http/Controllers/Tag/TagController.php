@@ -54,7 +54,7 @@ class TagController extends Controller
         $tag = Tag::findOrFail($id);
         $tag->delete();
 
-        return response()->json(['info', 'Xóa tag thành công!!!']);
+        return response()->json(['type' => 'info', 'message' => 'Xóa tag thành công!!!']);
     }
 
     public function destroyAll(Request $request)

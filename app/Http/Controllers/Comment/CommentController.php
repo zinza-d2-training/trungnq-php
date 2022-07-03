@@ -15,8 +15,8 @@ class CommentController extends Controller
         $data = request()->all();
         $data['user_id'] = Auth::id();
         $comment = Comment::create($data);
-
-        return back();
+        $id = $data['post_id'];
+        return redirect(route('post.show',['post'=> $id,'page'=>$request->last_page]));
     }
 
     public function update(Request $request, $id)
@@ -30,6 +30,6 @@ class CommentController extends Controller
             $comment->user_like()->detach($request->user_id);
         }
 
-        return response()->json('true');
+        return response()->noContent();
     }
 }

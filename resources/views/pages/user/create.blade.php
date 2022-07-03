@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-span-2">
                         <x-label>Active</x-label>
-                        <select name="ative" id="active" class="w-full rounded-lg border-slate-200">
+                        <select name="active" id="active" class="w-full rounded-lg border-slate-200">
                             <option value="1"> Active</option>
                             <option value="0"> InActive</option>
                         </select>

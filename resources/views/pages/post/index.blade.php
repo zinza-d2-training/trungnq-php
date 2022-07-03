@@ -35,6 +35,7 @@
                         </tr>
                     </thead>
                 </x-slot>
+
                 <x-slot name="tablebody">
                     <tbody class="text-md text-gray-900 text-left">
                         @foreach ($posts as $post)
@@ -46,7 +47,8 @@
                                         {{ $post->user->name }}
                                 </td>
                                 <td class="text-center">
-                                    {{ $post->status == 1 ? 'Resolve' : 'Not resolve' }}
+                                    <span
+                                        class=" px-3 py-2 text-white font-bold rounded-lg {{ $post->status == 1 ? 'bg-blue-500' : 'bg-fuchsia-600 ' }}">{{ $post->status == 1 ? 'Resolve' : 'Not resolve' }}</span>
                                 </td>
                                 <td class="text-center">
                                     @if (count($post->tag))

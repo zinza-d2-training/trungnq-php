@@ -22,15 +22,16 @@
                         <li class="mr-6">
                             <a class="text-white font-bold hover:text-black " href="{{route('topic.index')}}">Topic</a>
                         </li>
+                        <li class="mr-6">
+                            <a class="text-white font-bold hover:text-black " href="{{route('tag.index')}}">Tag</a>
+                        </li>
                    @endif
-                    <li class="mr-6">
-                        <a class="text-white font-bold hover:text-black " href="{{route('tag.index')}}">Tag</a>
-                    </li>
                     <li class="mr-6">
                         <a class="text-white font-bold hover:text-black  " href="{{route('post.index')}}">Post</a>
                     </li>
                 </ul>
             </div>
+            
         </div>
         <div class="hidden sm:flex sm:items-center sm:ml-6 ">
             <form action="{{route('post.search')}}" id="searchForm">
@@ -41,8 +42,8 @@
                 <x-slot name="trigger">
                     <button
                         class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 mr-6 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                        <div class=" rounded-full px-3"><img
-                                src="/storage/images/avatars/{{ Auth::user()->avatar }}" alt="" width="27px"
+                        <div class=" rounded-full border-2"><img
+                                src="/storage/images/avatars/{{ Auth::user()->avatar }}" alt="" width="36px"
                                 class="rounded-full"></div>
                     </button>
                 </x-slot>

@@ -65,10 +65,13 @@ class UserController extends Controller
     {
         $user = User::with('role')->find($id);
         if ($user->role->name != 'admin') {
-            $user->delete();
+            $user->comments()->delete();
+            $user->post()->delete();
+            $user->post()->delete();
+            $user->comment_like()->delete();
             return $this->message('info', 'Xóa tài khoản thành công');
         } else {
-            return $this->message('danger','Không thể xóa admin');
+            return $this->message('danger', 'Không thể xóa admin');
         }
     }
 
@@ -76,12 +79,14 @@ class UserController extends Controller
     {
         $ids = $request->ids;
         $ids = explode(',', $ids);
-        $a =User::whereIn('id', $ids)->with('role')->get();
-        foreach($a as $user){
-            if($user->role->name == "admin"){
-                return $this->message('danger','Không thể xóa admin');
-            }
-            else {
+        $a = User::whereIn('id', $ids)->with('role')->get();
+        foreach ($a as $user) {
+            if ($user->role->name == "admin") {
+                return $this->message('danger', 'Không thể xóa admin');
+            } else {
+                $user->comments()->delete();
+                $user->post()->delete();
+                $user->comment_like()->delete();
                 $user->delete();
             }
         }

@@ -17,19 +17,21 @@
                                 <a href="{{ route('topic.show', ['topic' => $item->slug]) }}"
                                     class="font-bold">{{ $item->title }}</a>
                             </div>
-                            <div class="col-span-5 flex items-center">
+                            <div class="col-span-5 flex flex-row items-center">
                                 <div class=" text-center pr-5">
                                     <p class="text-gray-400">Post</p>
                                     <p class="font-bold text-base">{{ $item->post_count }}</p>
                                 </div>
-                                <div class=" text-center px-3">
+                                <div class=" text-center mr-4">
                                     <p class="text-gray-400">Commnents</p>
                                     <p class="font-bold text-base">{{ $item->comments_count }}</p>
                                 </div>
                                 @if (count($item->post))
-                                    <div class=" mr-4">
-                                        <img src="storage/images/avatars/{{ $item->post[0]->user->avatar }}"
+                                    <div class="flex flex-row">
+                                        <div class="mr-4">
+                                            <img src="storage/images/avatars/{{ $item->post[0]->user->avatar }}"
                                             data-tooltip-target="tooltip-author" alt="" class="w-10 rounded-full">
+                                        </div>
                                         <div id="tooltip-author" role="tooltip"
                                             class="inline-block absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700"
                                             data-popper-placement="top"
@@ -40,15 +42,16 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="mx-3 w-48">
-                                        <a href="{{route('post.show',['post'=>$item->post[0]->id])}}" class="truncate">{{ $item->post[0]->title }}</a>
+                                    <div class=" truncate">
+                                        <a href="{{ route('post.show', ['post' => $item->post[0]->id]) }}"
+                                            class="truncate">{{ $item->post[0]->title }}</a>
                                         <p class="text-sm">{{ $item->post[0]->created_at }}</p>
                                     </div>
                                 @endif
                             </div>
                         </div>
                     @endforeach
-                    </div>
+                </div>
             </div>
             @foreach ($topics as $item)
                 <div class="table-data  mb-4  ">
@@ -73,7 +76,7 @@
             @foreach ($latestPost as $post)
                 <x-laster-post :post="$post"></x-laster-post>
             @endforeach
-            
+
             <p class="uppercase text-lg font-bold">Top user</p>
             @if (!count($topusers))
                 <i class="px-3">Trống</i>
@@ -84,7 +87,8 @@
                             class="w-10 rounded-full"></div>
                     <div class="">
                         <p class="text-lg">{{ $member->name }}</p>
-                        <p class="text-md font-bold">{{ $member->totalLike }} <span class="text-red-500"><i class="fa-solid fa-heart"></i></span></p>
+                        <p class="text-md font-bold">{{ $member->totalLike }} <span class="text-red-500"><i
+                                    class="fa-solid fa-heart"></i></span></p>
                     </div>
                 </div>
             @endforeach
