@@ -34,9 +34,9 @@ $(document).ready(function () {
                     window.location.reload();
                 }, 3500);
             },
-            error: function(error){
+            error: function (error) {
                 console.log(error);
-            }
+            },
         });
     });
 
@@ -61,11 +61,12 @@ $(document).ready(function () {
                 data: "id=" + id,
                 dataType: "JSON",
                 success: function (response) {
-                    if(response.type == 'danger'){
+                    if (response.type == "danger") {
                         toast(response.type, response.message);
-                        setTimeout(()=>{
+
+                        setTimeout(function () {
                             location.reload();
-                        },1500)
+                        }, 1500);
                     }
                 },
             });
@@ -232,16 +233,18 @@ $(document).ready(function () {
                 comment_id: id,
             },
             dataType: "JSON",
-            success: function (response) {
-
-            },
+            success: function (response) {},
         });
 
         if ($(this).hasClass("text-green-400")) {
-            $(this).removeClass("text-green-400 hover:text-gray-400").addClass("text-gray-400 hover:text-green-600");
+            $(this)
+                .removeClass("text-green-400 hover:text-gray-400")
+                .addClass("text-gray-400 hover:text-green-600");
         } else {
-            $(this).addClass("text-green-400 hover:text-gray-400").removeClass("text-gray-400 hover:text-green-600");
-        }    
+            $(this)
+                .addClass("text-green-400 hover:text-gray-400")
+                .removeClass("text-gray-400 hover:text-green-600");
+        }
     });
 });
 
@@ -305,10 +308,10 @@ function deleteMutiple(url, rowclass) {
             dataType: "JSON",
             success: function (response) {
                 toast(response.type, response.message);
-                if(response.type != 'info'){
-                    setTimeout(()=>{
+                if (response.type != "info") {
+                    setTimeout(() => {
                         location.reload();
-                    },1500)
+                    }, 1500);
                 }
                 $.each(allVals, function (index, value) {
                     $("." + rowclass)
@@ -317,7 +320,6 @@ function deleteMutiple(url, rowclass) {
                 });
             },
         });
-        
     }
 }
 

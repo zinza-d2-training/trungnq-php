@@ -15,8 +15,8 @@ class CommentController extends Controller
         $data = request()->all();
         $data['user_id'] = Auth::id();
         $comment = Comment::create($data);
-        $id = $data['post_id'];
-        return redirect(route('post.show',['post'=> $id,'page'=>$request->last_page]));
+
+        return redirect(route('post.show', ['post' => $data['post_id'], 'page' => $request->last_page]));
     }
 
     public function update(Request $request, $id)

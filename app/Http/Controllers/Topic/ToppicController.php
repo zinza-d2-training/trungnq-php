@@ -83,12 +83,10 @@ class ToppicController extends Controller
         $ids = explode(',', $ids);
         $topic = Topic::whereIn('slug', $ids)->get();
         foreach ($topic as $item) {
-            $post = Post::where('topic_id', $item->id)->get();
-            if (empty($post)) {
-                $post->delete();
-            }
+            $post = Post::where('topic_id', $item->id)->delete();
             $item->delete();
         }
+
         return $this->message('info', 'Xóa topic thành công!!!');
     }
 

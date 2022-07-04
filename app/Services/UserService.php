@@ -124,7 +124,8 @@ class UserService
         $user = User::findOrFail($id);
         $company = $user->company;
         $user->company()->detach();
-        if (!empty($company && $data['company'] != 0)) {
+
+        if (!empty($company ) && $data['company']) {
             $company = Company::withCount('user')->findOrFail($data['company']);
             if($company->max_users > $company->user_count ){
                 $user->company()->attach($data['company']);
@@ -134,6 +135,7 @@ class UserService
         } else {
             $user->company()->detach();
         }
+
         if (Auth::user()->role->name != 'admin') {
             unset($data['email']);
         }

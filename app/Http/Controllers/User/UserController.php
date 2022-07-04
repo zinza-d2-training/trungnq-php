@@ -67,7 +67,6 @@ class UserController extends Controller
         if ($user->role->name != 'admin') {
             $user->comments()->delete();
             $user->post()->delete();
-            $user->post()->delete();
             $user->comment_like()->delete();
             return $this->message('info', 'Xóa tài khoản thành công');
         } else {
@@ -79,8 +78,8 @@ class UserController extends Controller
     {
         $ids = $request->ids;
         $ids = explode(',', $ids);
-        $a = User::whereIn('id', $ids)->with('role')->get();
-        foreach ($a as $user) {
+        $listUser = User::whereIn('id', $ids)->with('role')->get();
+        foreach ($listUser as $user) {
             if ($user->role->name == "admin") {
                 return $this->message('danger', 'Không thể xóa admin');
             } else {

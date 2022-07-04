@@ -11,11 +11,11 @@
                     class="p-2 bg-blue-600 rounded-lg text-white">New user</a></div>
         </div>
         @if (Session::has('message'))
-        @php
-            $message = Session::get('message');
-        @endphp
-        <x-toast :content="$message['content']" :type="$message['type']"></x-toast>
-    @endif
+            @php
+                $message = Session::get('message');
+            @endphp
+            <x-toast :content="$message['content']" :type="$message['type']"></x-toast>
+        @endif
         <div id="toast"></div>
         <x-table class="w-full">
             <x-slot name="tablehead" class="w-full">
