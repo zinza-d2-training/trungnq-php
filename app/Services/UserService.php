@@ -125,9 +125,9 @@ class UserService
         $company = $user->company;
         $user->company()->detach();
 
-        if (!empty($company ) && $data['company']) {
+        if (!empty($company) && $data['company']) {
             $company = Company::withCount('user')->findOrFail($data['company']);
-            if($company->max_users > $company->user_count ){
+            if ($company->max_users > $company->user_count) {
                 $user->company()->attach($data['company']);
             } else {
                 return false;
