@@ -81,7 +81,7 @@ class ToppicController extends Controller
     {
         $ids = $request->ids;
         $ids = explode(',', $ids);
-        $topic = Topic::whereIn('slug', $ids)->get();
+        $topic = Topic::whereIn('id', $ids)->get();
         foreach ($topic as $item) {
             $post = Post::where('topic_id', $item->id)->delete();
             $item->delete();
