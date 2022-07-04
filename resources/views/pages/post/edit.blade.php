@@ -38,7 +38,7 @@
                     <select name="topic_id" id="topic_id" class="w-full border-2 border-blue-400 rounded-lg">
                         @if (count($topics))
                             @foreach ($topics as $id => $title)
-                                <option value="{{ $id }}">{{ $title }}</option>
+                                <option value="{{ $id }}" {{($post->topic_id == $id)?"selected" : ""}} >{{ $title }}</option>
                             @endforeach
                         @endif
                     </select>

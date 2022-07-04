@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\UserService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AuthenController extends Controller
 {
@@ -31,7 +32,13 @@ class AuthenController extends Controller
     public function postLogin(LoginRequest $request)
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->route('home');
+            $user = User::where('email', $request->email)->firstOrFail();
+            if ($user->active == User::isActive) {
+                return redirect()->route('home');
+            } else {
+                session()->flash('error', 'Tài khoản của bạn chưa được active');
+                return redirect()->back();
+            }
         } else {
             session()->flash('error', 'Email hoặc mật khẩu không chính xác');
             return redirect()->back();
@@ -92,6 +99,8 @@ class AuthenController extends Controller
     public function submitResetPasswordForm(PasswordRequest $request)
     {
         $result = $this->userService->createNewPassword($request);
-        return back()->withInput()->with('message', 'Update password!!!');
+        if ($result) {
+            return back()->withInput()->with('message', 'Update password!!!');
+        }
     }
 }

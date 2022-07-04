@@ -19,6 +19,8 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    const isActive = 1;
+
     protected $fillable = [
         'name',
         'email',
@@ -60,7 +62,7 @@ class User extends Authenticatable
 
     public function company()
     {
-        return $this->belongsToMany(Company::class, 'company_accounts');
+        return $this->belongsToMany(Company::class, 'company_accounts')->limit(1);
     }
 
     public function post()

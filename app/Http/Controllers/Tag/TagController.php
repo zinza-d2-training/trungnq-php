@@ -13,8 +13,7 @@ class TagController extends Controller
 
     public function index()
     {
-        $tags = Tag::with('post')->paginate(Config::get('constants.paginate'));
-
+        $tags = Tag::withCount('post')->paginate(Config::get('constants.paginate'));
         return view('pages.tag.index', compact('tags'));
     }
 
@@ -55,7 +54,7 @@ class TagController extends Controller
         $tag = Tag::findOrFail($id);
         $tag->delete();
 
-        return response()->json(['info', 'Xóa tag thành công!!!']);
+        return response()->json(['type' => 'info', 'message' => 'Xóa tag thành công!!!']);
     }
 
     public function destroyAll(Request $request)

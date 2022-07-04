@@ -24,13 +24,23 @@
         </select>
         <x-span-error name='old_password'></x-span-error>
     </div>
+   
     <div class="col-span-2">
         <x-label>Company</x-label>
         <select name="company" id="company" class="w-full rounded-lg border-slate-200">
-            <option value="0" selected>Choose an company</option>
+            <option value="0" >Choose an company</option>
+           
             @if (count($companyList))
                 @foreach ($companyList as $company)
-                    <option value="{{$company->id}}">{{$company->name}}</option>
+                @php
+                    $selected = "";
+                    if(!empty($user->company[0])){
+                        if(($user->company[0]->id == $company->id)){
+                        $selected = "selected";
+                        } 
+                    }
+                @endphp
+                    <option value="{{$company->id}}" {{ $selected}}>{{$company->name}}  </option>
                 @endforeach
             @endif
         </select>

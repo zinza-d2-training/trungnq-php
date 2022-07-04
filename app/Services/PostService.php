@@ -28,7 +28,7 @@ class PostService
 
     public function getAll()
     {
-        return Post::with('tag')->with('user')->paginate(Config::get('constants.paginate'));
+        return Post::with('tag')->with('user')->orderBy('created_at', 'desc')->paginate(Config::get('constants.paginate'));
     }
 
     public function create($data)
@@ -58,8 +58,10 @@ class PostService
     {
         $post = $this->getById($data);
         $email = $post->user->email;
-        event(new DeletePost($post, $email));
-
+        if (Auth::user()->id != $post->user_id) {
+            event(new DeletePost($post, $email));
+        }
+        $post->comments()->delete();
         return $post->delete();
     }
 
@@ -79,24 +81,20 @@ class PostService
             ->orderBy('pin', 'desc')
             ->orderBy('created_at', 'desc')
             ->paginate(Config::get('constants.paginate'));
-            
+
         return $result;
     }
 
     public function show($id)
     {
-        $post = Post::with(['tag', 'user', 'comment_resolve'])
-            ->with(['comments' => function ($query) {
-                $query->with('user_like')->paginate(2);
-            }])
-            ->findOrFail($id);
+        $post = Post::with(['tag', 'user', 'comment_resolve'])->findOrFail($id);
 
         $comments =  Comment::where('post_id', $post->id)
-            ->with('user')
+            ->with(['user', 'user.company', 'like'])
             ->withCount('user_like')
             ->paginate(Config::get('constants.paginate'));
 
-        return compact('post', 'comments');
+        return compact('post', 'comments', 'id');
     }
 
     public function resolve($data, $id)

@@ -34,6 +34,9 @@ $(document).ready(function () {
                     window.location.reload();
                 }, 3500);
             },
+            error: function (error) {
+                console.log(error);
+            },
         });
     });
 
@@ -50,7 +53,7 @@ $(document).ready(function () {
     $(".deleteUser").click(function (e) {
         e.preventDefault();
 
-        if (confirm("xoas user")) {
+        if (confirm("Xóa user")) {
             let id = $(this).attr("user_id");
             $.ajax({
                 type: "POST",
@@ -58,7 +61,13 @@ $(document).ready(function () {
                 data: "id=" + id,
                 dataType: "JSON",
                 success: function (response) {
-                    toast(response.type, response.message);
+                    if (response.type == "danger") {
+                        toast(response.type, response.message);
+
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1500);
+                    }
                 },
             });
             $(this).closest(".user-row").remove();
@@ -148,7 +157,6 @@ $(document).ready(function () {
 
     $(".delete-post").click(function (e) {
         e.preventDefault();
-
         if (confirm("Bạn muốn xóa bài đăng này ??")) {
             let id = $(this).attr("post_id");
             deleteItem("post", id);
@@ -225,10 +233,18 @@ $(document).ready(function () {
                 comment_id: id,
             },
             dataType: "JSON",
-            success: function (response) {
-                location.reload();
-            },
+            success: function (response) {},
         });
+
+        if ($(this).hasClass("text-green-400")) {
+            $(this)
+                .removeClass("text-green-400 hover:text-gray-400")
+                .addClass("text-gray-400 hover:text-green-600");
+        } else {
+            $(this)
+                .addClass("text-green-400 hover:text-gray-400")
+                .removeClass("text-gray-400 hover:text-green-600");
+        }
     });
 });
 
@@ -292,12 +308,17 @@ function deleteMutiple(url, rowclass) {
             dataType: "JSON",
             success: function (response) {
                 toast(response.type, response.message);
+                if (response.type != "info") {
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                }
+                $.each(allVals, function (index, value) {
+                    $("." + rowclass)
+                        .filter("[data-id='" + value + "']")
+                        .remove();
+                });
             },
-        });
-        $.each(allVals, function (index, value) {
-            $("." + rowclass)
-                .filter("[data-id='" + value + "']")
-                .remove();
         });
     }
 }

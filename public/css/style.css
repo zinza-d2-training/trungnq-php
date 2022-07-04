@@ -5,16 +5,20 @@
 .toast {
     animation: sideInLeft ease-in 0.5s, fadeOut linear 1s 3s forwards;
 }
-.toast-green{
+
+.toast-green {
     background-color: #dcfce7;
 }
-.toast-red{
+
+.toast-red {
     background-color: #fee2e2;
 }
-.toast-blue{
+
+.toast-blue {
     background-color: #dbeafe;
 }
-.toast-orange{
+
+.toast-orange {
     background-color: #ffedd5;
 
 }
@@ -24,6 +28,7 @@
         opacity: 0;
         transform: translateY(-150px);
     }
+
     to {
         opacity: 100;
         transform: translateY(0);
@@ -54,4 +59,11 @@
 
 .icon-orange {
     color: orange;
+}
+
+.post-title-laster {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }

@@ -10,8 +10,11 @@
         <div class="my-5 flex justify-between ">
             <div class="">List tags</div>
             <div class=""><a href="{{ route('tag.create') }}"
-                    class="p-3 bg-blue-400 text-white font-bold rounded-lg ">New tags</a></div>
+                    class="p-3 bg-blue-400 text-white font-bold rounded-lg ">New tags</a>
+            </div>
         </div>
+        <hr>
+        @if (count($tags))
         <x-table class="w-full">
             <x-slot name="tablehead" class="w-full">
                 <thead class="text-xs text-gray-900 uppercase bg-slate-300 dark:bg-gray-700 dark:text-gray-400">
@@ -32,7 +35,6 @@
             </x-slot>
             <x-slot name="tablebody">
                 <tbody class="text-lg text-gray-900 text-left">
-                    @if (count($tags))
                         @foreach ($tags as $item)
                             <tr class="border-b-2 tag-row" data-id="{{ $item->id }}">
                                 <td class="py-5 px-6">
@@ -40,7 +42,7 @@
                                 </td>
                                 <td class="py-5 px-6"><span class=" text-xl px-3 py-1 rounded-lg"
                                         style="background-color: {{ $item->color }}">{{ $item->name }}</span></td>
-                                <td>10</td>
+                                <td class="py-5 px-6">{{$item->post_count}}</td>
                                 <td>
                                     <div class="hidden sm:flex sm:items-center sm:ml-6">
                                         <x-dropdown align="right" width="48">
@@ -62,14 +64,14 @@
                                 </td>
                             </tr>
                         @endforeach
-                    @endif
-                </tbody>
-            </x-slot>
-        </x-table>
-        <button class="bg-blue-400 text-white border-2 border-slate-500 p-3 mt-4 rounded-lg font-bold"
+                    </tbody>
+                </x-slot>
+            </x-table>
+            <button class="bg-blue-400 text-white border-2 border-slate-500 p-2 my-3 rounded-lg font-bold"
             id="btn-delete-mutiple-tag">Delete Tags</button>
-        <div class="mt-auto px-6">
-            {{ $tags->links('vendor.pagination.tailwind') }}
-        </div>
+            <div class="mt-auto px-6">
+                {{ $tags->links('vendor.pagination.tailwind') }}
+            </div>
+            @endif
     </div>
 @endsection

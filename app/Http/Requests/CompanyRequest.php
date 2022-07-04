@@ -28,7 +28,7 @@ class CompanyRequest extends FormRequest
             'max_users' => 'required|integer',
             'expired_at' => 'required',
             'active' => 'required',
-            'avatar' => 'file|max:2048|mimes:png,jpg'
+            'avatar' => 'nullable|file|max:2048|mimes:png,jpg'
         ];
     }
 }

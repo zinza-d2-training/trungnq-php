@@ -8,54 +8,66 @@
         <div class=" my-4 py-2  flex flex-row justify-between">
             <div class="">Create company </div>
             <div class="">
-                <a href="{{ route('company.create') }}" class="p-2 bg-blue-600 rounded-lg text-white">Back</a></div>
+                <a href="{{ route('company.create') }}" class="p-2 bg-blue-600 rounded-lg text-white">Back</a>
+            </div>
         </div>
-         @if (Session::has('message'))
-             @php
-             $message = Session::get('message');
-             @endphp
-             <x-toast :content="$message['content']" :type="$message['type']"></x-toast>
-         @endif
-        <form action="{{route('company.store')}}" method="POST" enctype="multipart/form-data">
+        @if (Session::has('message'))
+            @php
+                $message = Session::get('message');
+            @endphp
+            <x-toast :content="$message['content']" :type="$message['type']"></x-toast>
+        @endif
+        <form action="{{ route('company.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="grid grid-cols-2 gap-4">
                 <div class="col-span-1">
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-1">
                             <x-label>Name</x-label>
-                            <x-input class="block mt-1 w-full " type="text" name="name" id='name'  :value="old('name')" re />
+                            <x-input class="block mt-1 w-full " type="text" name="name" id='name'
+                                :value="old('name')" re />
                             <x-span-error name='name'></x-span-error>
                         </div>
                         <div class="col-span-1">
                             <x-label>Avatar</x-label>
-                            <x-input class="block mt-1 w-full py-2 " type="file" name="avatar" id='avatar' :value="old('avatar')"/>
+                            <div class="relative">
+                                <div class=""><img src="/images/camera.png" alt="" class="w-10"></div>
+                                <x-input class="block mt-1 top-0 opacity-0 py-2 absolute w-8" type="file" name="avatar"
+                                    id='avatar' :value="old('avatar')" />
+                            </div>
                             <x-span-error name='avatar'></x-span-error>
                         </div>
                         <div class="col-span-1">
                             <x-label>Address</x-label>
-                            <x-input class="block mt-1 w-full py-2 " type="text" name="address" id='address' :value="old('address')"  />
+                            <x-input class="block mt-1 w-full py-2 " type="text" name="address" id='address'
+                                :value="old('address')" />
                             <x-span-error name='address'></x-span-error>
                         </div>
                         <div class="col-span-1">
                             <x-label>Max-users</x-label>
-                            <x-input class="block mt-1 w-full py-2 " type="text" name="max_users" id='max_users' :value="old('max_users')" />
+                            <x-input class="block mt-1 w-full py-2 " type="text" name="max_users" id='max_users'
+                                :value="old('max_users')" />
                             <x-span-error name='max_users'></x-span-error>
                         </div>
                         <div class="col-span-1">
                             <x-label>Expired at</x-label>
-                            <x-input class="block mt-1 w-full py-2 " type="text" name="expired_at" id='expired_at' :value="old('expired_at')" />
+                            <x-input class="block mt-1 w-full py-2 " type="text" name="expired_at" id='expired_at'
+                                :value="old('expired_at')" />
                             <x-span-error name='expired_at'></x-span-error>
                         </div>
                         <div class="col-span-1">
                             <x-label>Active</x-label>
-                            <select name="active" id="adtive" class="w-full py-2 border-slate-300 mt-1 border-2 rounded-lg">
+                            <select name="active" id="adtive"
+                                class="w-full py-2 border-slate-300 mt-1 border-2 rounded-lg">
                                 <option value="0">InActive</option>
                                 <option value="1">Active</option>
                             </select>
                             <x-span-error name='active'></x-span-error>
                         </div>
-                        <div class="col-span-1 mb-4 bg-blue-200">
-                            <button class="py-2 text-black w-full font-bold text-center" id="btnCreateCompany"type ="submit" >Create</button>
+                        <div class="col-span-1 mb-4 ">
+                            <button
+                                class="py-2 text-black w-full bg-blue-300 font-bold text-center rounded-lg hover:bg-blue-500"
+                                id="btnCreateCompany"type="submit">Create</button>
                         </div>
                     </div>
                 </div>

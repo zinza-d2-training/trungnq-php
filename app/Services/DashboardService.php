@@ -19,7 +19,7 @@ class DashboardService
             $postLastest = Cache::get('post-lastest');
         } else {
             $postLastest = Post::orderBy('created_at', 'desc')->limit('5')->get();
-            Cache::put('post-lastest', $postLastest, 300);
+            Cache::put('post-lastest', $postLastest, 120);
         }
 
         return $postLastest;
@@ -35,13 +35,13 @@ class DashboardService
                         ->orderBy('created_at', 'desc')
                         ->limit('5');
                 }]
-            );
+            )->limit('5');
 
         if (Cache::has('dashboard')) {
             $topics = Cache::get('dashboard');
         } else {
             $topics = $topics->get();
-            Cache::put('dashboard', $topics, 120);
+            Cache::put('dashboard', $topics, 30);
         }
 
         return $topics;

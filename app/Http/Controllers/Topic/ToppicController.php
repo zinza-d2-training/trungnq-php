@@ -41,9 +41,8 @@ class ToppicController extends Controller
 
     public function show($slug)
     {
-        $topic = Topic::where('slug', $slug)->findOrFail();
-
-        $listPost =  Post::where('topic_id',$topic->id)
+        $topic = Topic::where('slug', $slug)->firstOrFail();
+        $listPost =  Post::where('topic_id', $topic->id)
             ->withCount('comments')
             ->orderBy('pin', 'desc')
             ->orderBy('created_at', 'desc')
@@ -66,13 +65,15 @@ class ToppicController extends Controller
         $data['slug'] = $request->title;
         $topic->update($data);
 
-        return  back()->with('message', ['type' => 'success', 'content' => 'Thay đổi thông tin thành công!!!']);
+        return  redirect()->route('topic.index')->with('message', ['type' => 'success', 'content' => 'Thay đổi thông tin thành công!!!']);
     }
 
     public function destroy($slug)
     {
-        $topic = Topic::where('slug', $slug)->firstOrFail()->delete();
+        $topic = Topic::where('slug', $slug)->firstOrFail();
+        $post = Post::where('topic_id', $topic->id)->delete();
 
+        $topic->delete();
         return $this->message('info', 'Xóa topic thành công!!!');
     }
 
@@ -80,7 +81,12 @@ class ToppicController extends Controller
     {
         $ids = $request->ids;
         $ids = explode(',', $ids);
-        Topic::whereIn('slug', $ids)->delete();
+        $topic = Topic::whereIn('id', $ids)->get();
+        foreach ($topic as $item) {
+            $post = Post::where('topic_id', $item->id)->delete();
+            $item->delete();
+        }
+
         return $this->message('info', 'Xóa topic thành công!!!');
     }
 

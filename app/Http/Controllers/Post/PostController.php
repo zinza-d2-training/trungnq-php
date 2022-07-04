@@ -25,7 +25,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = $this->postService->getAll();
-        
+
         return view('pages.post.index', compact('posts'));
     }
 
@@ -48,10 +48,9 @@ class PostController extends Controller
     public function show($id)
     {
         $data = $this->postService->show($id);
-
         return view('pages.post.show', [
-            'post' => $data['post'], 
-            'comments' => $data['comments'], 
+            'post' => $data['post'],
+            'comments' => $data['comments'],
         ]);
     }
 
@@ -77,7 +76,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $this->postService->delete($id);
-        return response()->json('true');
+        return response()->json(['type' => 'info', 'message' => 'Xóa bài đăng thành công!!!']);
     }
 
     public function uploadImage(Request $request)
@@ -100,20 +99,20 @@ class PostController extends Controller
     {
         $posts =  $this->postService->search($request->keyword);
 
-        return view('pages.post.search',compact('posts'));
+        return view('pages.post.search', compact('posts'));
     }
 
     public function resolve(Request $request, $id)
     {
-        $res = $this->postService->resolve($request->all(),$id);
+        $res = $this->postService->resolve($request->all(), $id);
 
-        return response()->json('true');
+        return response()->noContent();
     }
 
     public function pin($id)
     {
         $res = $this->postService->pin($id);
 
-        return response()->json('true');
+        return response()->noContent();
     }
 }

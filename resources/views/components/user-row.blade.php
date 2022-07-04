@@ -35,7 +35,7 @@ if ($role->name == 'company_account') {
         {{ $user->dob }}
     </td>
     <td class="px-6 py-4">
-        <div class=" flex items-center font-bold uppercase ">
+        <div class=" flex items-center font-bold text-white uppercase ">
             <p class="px-3 bg-{{ $color }}-500   rounded-md">{{ $user->status }}</p>
         </div>
     </td>
