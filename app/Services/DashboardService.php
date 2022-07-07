@@ -30,6 +30,7 @@ class DashboardService
         $topics = Topic::withCount('post')
             ->withCount('comments')->with(
                 ['post' => function ($query) {
+                    $query->with('user');
                     $query->withCount('comments')
                         ->orderBy('pin', 'desc')
                         ->orderBy('created_at', 'desc')

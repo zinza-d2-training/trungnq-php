@@ -25,6 +25,7 @@ class HomeController extends Controller
     {
         $topusers = $this->dashboardService->getTopUser();
         $topics = $this->dashboardService->getTopicWithPost();
+        return response()->json(compact('topics', 'topusers'),200);
         return view('pages.dashboard', compact('topics', 'topusers'));
     }
 }

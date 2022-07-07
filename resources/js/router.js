@@ -3,19 +3,27 @@ import VueRouter from "vue-router";
 import HomeView from "./page/HomeView.vue";
 import UserEdit from "./page/UserEdit.vue";
 import LoginView from "./page/LoginView.vue";
-import axios from "axios";
 
 Vue.use(VueRouter);
 
 const routes = [
-    { path: "/login", name: "login", component: LoginView },
+    {
+        path: "/login",
+        name: "login",
+        component: LoginView,
+    },
+    {
+        path: "/logout",
+        name: "logout",
+        component: LoginView,
+    },
     {
         path: "/",
         name: "home",
         component: HomeView,
         meta: {
             auth: "true",
-            role: "admin"
+            role: "admin",
         },
     },
     {
@@ -35,27 +43,11 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     if (to.meta.auth == "true") {
         let token = window.localStorage.getItem("token");
-        if (token == null) {
-            next({ name: "login" });
+        if (token != null) {
+            next();
         } else {
-            const config = {
-                headers: {
-                    Authorization: "Bearer " + token,
-                },
-            };
-            axios
-                .get("/api/checkToken", config)
-                .then(function (response) {
-                    next();
-                })
-                .catch(() => {
-                    next({ name: "login" });
-                });
+            next({ name: "login" });
         }
-        next();
-    }
-    if(to.meta.role = "admin"){
-
     }
     next();
 });

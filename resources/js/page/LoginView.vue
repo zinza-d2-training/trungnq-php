@@ -18,8 +18,7 @@
 
             <ValidationObserver v-slot="{ handleSubmit }">
                 <form action="" @submit.prevent="handleSubmit(submitLogin)">
-                    <ValidationProvider
-                        name="email"
+                    <ValidationProvider name="email"
                         rules="required|email"
                         v-slot="v"
                     >
