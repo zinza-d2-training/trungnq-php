@@ -20,8 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::controller(AuthenController::class)->group(function () {
-    Route::post('/login', 'postLogin')->name('login');
-    Route::get('/checkToken', 'checkToken')->name('checktoken');
+    Route::post('login', 'postLogin')->name('login');
+    Route::get('checkToken', 'checkToken')->name('checktoken');
     Route::post('reset-password', 'sendPass')->name('make-password');
-    Route::post('/logout', 'create');
+    Route::get('logout', 'logout');
 });
+
+Route::get('account', [AuthenController::class, 'edit'])->name('account');
+Route::post('account/{id}', [AuthenController::class, 'update'])->name("account-update");

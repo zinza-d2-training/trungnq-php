@@ -25,7 +25,7 @@ class AuthenController extends Controller
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
-        $this->middleware('auth:api', ['except' => ['postLogin']]);
+        $this->middleware(['auth:api'], ['except' => ['postLogin']]);
     }
 
     public function postLogin(Request $request)
@@ -38,16 +38,16 @@ class AuthenController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-
-        if (!$token = JWTAuth::attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        } else {
-            $user = User::where('email', $request->email)->firstOrFail();
-            if ($user->active == User::isActive) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            if (Auth::user()->active == User::isActive) {
+                $token = JWTAuth::attempt($validator->validated());
                 return response()->json(['type' => 'success', 'token' => $token], 200);
-            } else {
-                return response()->json(['type' => 'error', 'message' => 'InActive account'], 401);
             }
+            else {
+                return response()->json(['type' =>'error','message' => "Account InActive"],200);
+            }
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
 
@@ -59,7 +59,7 @@ class AuthenController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('custom-login');
+        return response()->json(['success' => true], 200);
     }
 
     public function resetPass()
@@ -81,7 +81,7 @@ class AuthenController extends Controller
     public function edit()
     {
         $data = $this->userService->getById(Auth::id());
-        return view('pages.account', ['user' => $data]);
+        return response()->json($data);
     }
 
     public function update(UserRequest $request)

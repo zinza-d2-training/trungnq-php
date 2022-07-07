@@ -29,7 +29,7 @@
                                 v-model="email"
                                 :type="type.email"
                             ></InputText>
-                            <span>{{ v.errors[0] }}</span>
+                            <span class="text-red-500">{{ v.errors[0] }}</span>
                         </div>
                     </ValidationProvider>
 
@@ -44,7 +44,7 @@
                                 v-model="password"
                                 :type="type.password"
                             ></InputText>
-                            <span>{{ v.errors[0] }}</span>
+                            <span class="text-red-500">{{ v.errors[0] }}</span>
                         </div>
                     </ValidationProvider>
                     <div class="mr-6 my-4 text-right">
@@ -86,15 +86,15 @@ export default {
         };
     },
     components: {
-    LabelComp,
-    ButtonSubmit,
-    InputText,
-    OtherLoginComponent
-},
+        LabelComp,
+        ButtonSubmit,
+        InputText,
+        OtherLoginComponent,
+    },
     methods: {
         submitLogin() {
             axios
-                .post(`http://127.0.0.1:8000/api/login`, {
+                .post("/api/login", {
                     email: this.email,
                     password: this.password,
                 })
