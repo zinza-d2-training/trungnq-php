@@ -30,7 +30,7 @@ Route::controller(AuthenController::class)->group(function () {
 
 
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth.jwt')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::resource('post', PostController::class);

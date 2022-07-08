@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'checkRoleAdmin' => \App\Http\Middleware\CheckRoleAdmin::class,
         'checkRoleCompanyAccount' => \App\Http\Middleware\CheckRoleCompanyAccount::class,
         'cors' => \App\Http\Middleware\Cors::class, 
+        'auth.jwt' => \Tymon\JWTAuth\Http\Middleware\Authenticate::class, 
     ];
 }
