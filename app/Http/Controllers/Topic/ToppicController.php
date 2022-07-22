@@ -24,7 +24,7 @@ class ToppicController extends Controller
     {
         $topic = $this->topicService->getAll();
 
-        return view('pages.topic.index', compact("topic"));
+        return response()->json(['success' => true, 'data' => $topic]);
     }
 
     public function create()
@@ -36,36 +36,39 @@ class ToppicController extends Controller
     {
         $res = $this->topicService->create($request->all());
 
-        return  back()->with('message', ['type' => 'success', 'content' => 'Thêm thành công 1 topic!!!']);
+        return response()->json(['success' => true, 'data' => $res]);
     }
 
     public function show($slug)
     {
         $topic = Topic::where('slug', $slug)->firstOrFail();
         $listPost =  Post::where('topic_id', $topic->id)
+            ->with('user')
             ->withCount('comments')
             ->orderBy('pin', 'desc')
             ->orderBy('created_at', 'desc')
             ->paginate(Config::get('constants.paginate'));
 
-        return view('pages.topic.show', compact('topic', 'listPost'));
+        return response()->json(['success' => true, 'data' => compact('topic', 'listPost')]);
+
+        /* return view('pages.topic.show', compact('topic', 'listPost')); */
     }
 
     public function edit($slug)
     {
         $topic = $this->topicService->getById($slug);
 
-        return view('pages.topic.edit', compact('topic'));
+        return response()->json(['success' => true, 'data' => $topic]);
     }
 
-    public function update(Request $request, $slug)
+    public function update(TopicRequest $request)
     {
-        $topic = Topic::where('slug', $slug)->firstOrFail();
+        $topic = Topic::where('slug', $request->slug)->firstOrFail();
         $data['title'] = $request->title;
         $data['slug'] = $request->title;
         $topic->update($data);
 
-        return  redirect()->route('topic.index')->with('message', ['type' => 'success', 'content' => 'Thay đổi thông tin thành công!!!']);
+        return response()->json(['success' => true, 'data' => $topic]);
     }
 
     public function destroy($slug)

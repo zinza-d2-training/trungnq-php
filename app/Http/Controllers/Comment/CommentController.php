@@ -23,11 +23,11 @@ class CommentController extends Controller
     {
         $comment = Comment::with('user_like')->findOrFail($id);
         if ($request->status == 0) {
-            $comment->user_like()->attach($request->user_id);
+            $comment->user_like()->attach(Auth::id());
             $comment->favorite = $comment->increment('favorite');
         } else {
             $comment->favorite = $comment->decrement('favorite');
-            $comment->user_like()->detach($request->user_id);
+            $comment->user_like()->detach(Auth::id());
         }
 
         return response()->noContent();

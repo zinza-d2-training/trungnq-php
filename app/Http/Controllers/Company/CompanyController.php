@@ -7,6 +7,7 @@ use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
 use App\Services\CompanyService;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class CompanyController extends Controller
 {
@@ -25,7 +26,7 @@ class CompanyController extends Controller
     public function index(Request $request)
     {
         $companies = $this->companyService->getAll($request->all());
-        return view('pages.company.index', compact('companies'));
+        return response()->json($companies);
     }
 
     /**
@@ -48,9 +49,9 @@ class CompanyController extends Controller
     {
         $res = $this->companyService->create($request->all());
         if ($res) {
-            return back()->with('message', ['type' => 'info', 'content' => 'Tạo company thành công!!!']);
+            return response()->json('create company success', 201);
         }
-        return back()->with('message', ['type' => 'warning', 'content' => '~Oppp. Đã xảy ra lỗi vui lòng thử lại!!!']);
+        return response()->json('error', 400);
     }
 
     /**
@@ -73,7 +74,7 @@ class CompanyController extends Controller
     public function edit($id)
     {
         $company = $this->companyService->getById($id);
-        return view('pages.company.edit', compact('company'));
+        return response()->json(['type' => 'success', 'data' => $company]);
     }
 
     /**
@@ -86,7 +87,7 @@ class CompanyController extends Controller
     public function update(CompanyRequest $request)
     {
         $result = $this->companyService->update($request->all());
-        return $this->message('info', 'Cập nhật thông tin thành công');
+        return response()->json(['success' => true, "message" => "update success"]);
     }
 
     /**

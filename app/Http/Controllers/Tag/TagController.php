@@ -14,7 +14,7 @@ class TagController extends Controller
     public function index()
     {
         $tags = Tag::withCount('post')->paginate(Config::get('constants.paginate'));
-        return view('pages.tag.index', compact('tags'));
+        return response()->json(['data' => $tags, "success" => true], 200);
     }
 
     public function create()
@@ -26,7 +26,7 @@ class TagController extends Controller
     {
         Tag::create($request->input());
 
-        return back()->with('message', ['type' => 'success', 'content' => 'Tạo tag thành công']);
+        return response()->json(['success' => 'true', 'message' => 'Tạo tag thành công'], 201);
     }
 
     public function show($id)
@@ -38,15 +38,15 @@ class TagController extends Controller
     {
         $tag = Tag::findOrFail($id);
 
-        return view('pages.tag.edit', compact('tag'));
+        return response()->json(['success' => true, 'data' => $tag]);
     }
 
-    public function update(TagRequest $request, $id)
+    public function update(TagRequest $request)
     {
-        $tag = Tag::findOrFail($id);
+        $tag = Tag::findOrFail($request->id);
         $tag->update($request->input());
 
-        return back()->with('message', ['type' => 'success', 'content' => 'Cập nhật thành công!!!']);
+        return response()->json(['success' => true, 'message' => 'Cập nhật thành công!!!']);
     }
 
     public function destroy($id)
@@ -54,7 +54,7 @@ class TagController extends Controller
         $tag = Tag::findOrFail($id);
         $tag->delete();
 
-        return response()->json(['type' => 'info', 'message' => 'Xóa tag thành công!!!']);
+        return response()->json(['success' => true, 'message' => 'Xóa tag thành công!!!']);
     }
 
     public function destroyAll(Request $request)
@@ -63,6 +63,6 @@ class TagController extends Controller
         $ids = explode(',', $ids);
         Tag::whereIn('id', $ids)->delete();
 
-        return response()->json(['type' => 'info', 'message' => 'Xóa tag thành công!!!']);
+        return response()->json(['success' => true, 'message' => 'Xóa tag thành công!!!']);
     }
 }

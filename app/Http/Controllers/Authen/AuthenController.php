@@ -42,9 +42,8 @@ class AuthenController extends Controller
             if (Auth::user()->active == User::isActive) {
                 $token = JWTAuth::attempt($validator->validated());
                 return response()->json(['type' => 'success', 'token' => $token], 200);
-            }
-            else {
-                return response()->json(['type' =>'error','message' => "Account InActive"],200);
+            } else {
+                return response()->json(['type' => 'error', 'message' => "Account InActive"], 200);
             }
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
