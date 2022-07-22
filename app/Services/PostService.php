@@ -102,7 +102,7 @@ class PostService
 
         $post = Post::findOrFail($id);
         if ($post->comment_id == $data['comment_id']) {
-            $data['comment_id'] = null;
+            $post->comment_id = null;
             $data['status'] = Post::not_resolve;
         }
         $data['status'] = Post::resolve;

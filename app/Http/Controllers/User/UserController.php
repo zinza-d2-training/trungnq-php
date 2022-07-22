@@ -22,14 +22,14 @@ class UserController extends Controller
     {
         $users = $this->userService->getAll($request->input());
 
-        return view('pages.user.index', ['users' => $users]);
+        return response()->json(['success' => true, 'data' => $users], 200);
     }
 
     public function create()
     {
-        $companys = Company::all();
+        $companys = Company::select('name', 'id')->get();
 
-        return view('pages.user.create', compact('companys'));
+        return response()->json(['success' => true, 'data' => $companys], 200);
     }
 
     public function store(UserRequest $request)
@@ -37,9 +37,9 @@ class UserController extends Controller
         $res = $this->userService->create($request->input());
 
         if ($res) {
-            return back()->with('message', ['type' => 'success', 'content' => 'Tạo tài khoản thành công!!!']);
+            return response()->json(['success' => true, 'data' => $res], 201);
         } else {
-            return back()->with('message', ['warning' => 'success', 'content' => 'Có lỗi khi thực hiện vui long kiểm tra lại!!!']);
+            return response()->json(['success' => false], 401);
         }
     }
     public function show($id)
@@ -48,16 +48,18 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        return view('pages.user.edit', ['user' => $this->userService->getById($id), 'companyList' => Company::all()]);
+        $companys = Company::pluck('name', 'id')->toArray();
+        $user = $this->userService->getById($id);
+        return response()->json(['success' => true, 'user' => $user, 'companyList' => $companys], 200);
     }
 
     public function update(UserRequest $request, $id)
     {
         $res = $this->userService->updateUser($id, $request->input());
         if ($res) {
-            return $this->message('info', 'Thay đổi thông tin tài khoản thành công!!!');
+            return response()->json(['success' => true, "data" => $res]);
         } else {
-            return $this->message('danger', 'Thất bại. Công ty đã full thành viên!!! ');
+            return response()->json(['success' => false]);
         }
     }
 
@@ -68,9 +70,10 @@ class UserController extends Controller
             $user->comments()->delete();
             $user->post()->delete();
             $user->comment_like()->delete();
-            return $this->message('info', 'Xóa tài khoản thành công');
+            $user->delete();
+            return response()->json(['success' => true]);
         } else {
-            return $this->message('danger', 'Không thể xóa admin');
+            return response()->json(['success' => false]);
         }
     }
 

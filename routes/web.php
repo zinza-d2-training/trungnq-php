@@ -21,20 +21,20 @@ use App\Http\Controllers\User\UserController;
 |
 */
 
-Route::get('/', function () {
+/* Route::get('/', function () {
     return redirect()->route("home");
 });
 
 Route::get('/c-forgot-password', [AuthenController::class, 'login']);
 Route::get('c-reset-password/{token}', [AuthenController::class, 'showResetPasswordForm'])->name('custom.reset.password.get');
-Route::post('c-reset-password', [AuthenController::class, 'submitResetPasswordForm'])->name('custom.reset.password.post');
+Route::post('c-reset-password', [AuthenController::class, 'submitResetPasswordForm'])->name('custom.reset.password.post'); */
 /* Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard'); */
 
 /* require __DIR__.'/auth.php'; */
 
-
+/* 
 Route::middleware('verifyLogin')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/account', [AuthenController::class, 'edit'])->name('account');
@@ -79,4 +79,7 @@ Route::controller(AuthenController::class)->group(function () {
     Route::get('reset-password', 'resetPass')->name('custom-reset-password');
     Route::post('reset-password', 'sendPass')->name('make-password');
     Route::get('usermanager/create', 'create');
-});
+}); */
+
+Route::view('/{any}', 'welcome')
+    ->where('any', '.*');

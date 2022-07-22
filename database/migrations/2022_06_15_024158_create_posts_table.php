@@ -22,8 +22,7 @@ class CreatePostsTable extends Migration
             $table->integer('status');
             $table->tinyInteger('pin')->default(0);
             $table->unsignedBigInteger('topic_id');
-            $table->unsignedBigInteger('comment_id')->nullable()->onDelete('cascade');
-            $table->foreign("comment_id")->references('id')->on('topics')->onDelete('cascade');
+            $table->unsignedBigInteger('comment_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\UserService;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use GrahamCampbell\ResultType\Success;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthenController extends Controller
 {
@@ -22,33 +25,40 @@ class AuthenController extends Controller
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
+        $this->middleware(['auth:api'], ['except' => ['postLogin']]);
     }
 
-    public function login()
+    public function postLogin(Request $request)
     {
-        return view("authen.login");
-    }
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string|min:6',
+        ]);
 
-    public function postLogin(LoginRequest $request)
-    {
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = User::where('email', $request->email)->firstOrFail();
-            if ($user->active == User::isActive) {
-                return redirect()->route('home');
+            if (Auth::user()->active == User::isActive) {
+                $token = JWTAuth::attempt($validator->validated());
+                return response()->json(['type' => 'success', 'token' => $token], 200);
             } else {
-                session()->flash('error', 'Tài khoản của bạn chưa được active');
-                return redirect()->back();
+                return response()->json(['type' => 'error', 'message' => "Account InActive"], 200);
             }
         } else {
-            session()->flash('error', 'Email hoặc mật khẩu không chính xác');
-            return redirect()->back();
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
+    }
+
+    public function checkToken()
+    {
+        return response()->json(['success' => true], 200);
     }
 
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('custom-login');
+        return response()->json(['success' => true], 200);
     }
 
     public function resetPass()
@@ -70,7 +80,7 @@ class AuthenController extends Controller
     public function edit()
     {
         $data = $this->userService->getById(Auth::id());
-        return view('pages.account', ['user' => $data]);
+        return response()->json($data);
     }
 
     public function update(UserRequest $request)

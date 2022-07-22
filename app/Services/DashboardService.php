@@ -15,12 +15,7 @@ class DashboardService
 
     public function getLastestPost()
     {
-        if (Cache::has('post-lastest')) {
-            $postLastest = Cache::get('post-lastest');
-        } else {
-            $postLastest = Post::orderBy('created_at', 'desc')->limit('5')->get();
-            Cache::put('post-lastest', $postLastest, 120);
-        }
+        $postLastest = Post::with('user')->orderBy('created_at', 'desc')->limit('5')->get();
 
         return $postLastest;
     }
@@ -30,6 +25,7 @@ class DashboardService
         $topics = Topic::withCount('post')
             ->withCount('comments')->with(
                 ['post' => function ($query) {
+                    $query->with('user');
                     $query->withCount('comments')
                         ->orderBy('pin', 'desc')
                         ->orderBy('created_at', 'desc')

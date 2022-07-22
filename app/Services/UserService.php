@@ -42,7 +42,7 @@ class UserService
 
     public function getById($id)
     {
-        return User::findOrFail($id);
+        return User::with('company')->findOrFail($id);
     }
 
     public function forgotPassword($email)
