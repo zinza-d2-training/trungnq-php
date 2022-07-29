@@ -8,13 +8,16 @@ use Illuminate\Http\Request;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Config;
 
+use function App\Http\Helpers\responseSuccess;
+
 class TagController extends Controller
 {
 
     public function index()
     {
         $tags = Tag::withCount('post')->paginate(Config::get('constants.paginate'));
-        return response()->json(['data' => $tags, "success" => true], 200);
+
+        return responseSuccess($tags, "", 200);
     }
 
     public function create()
@@ -26,7 +29,7 @@ class TagController extends Controller
     {
         Tag::create($request->input());
 
-        return response()->json(['success' => 'true', 'message' => 'Tạo tag thành công'], 201);
+        return responseSuccess(true, 'Create tag success', 201);
     }
 
     public function show($id)
@@ -38,7 +41,7 @@ class TagController extends Controller
     {
         $tag = Tag::findOrFail($id);
 
-        return response()->json(['success' => true, 'data' => $tag]);
+        return responseSuccess($tag, "", 200);
     }
 
     public function update(TagRequest $request)
@@ -46,7 +49,7 @@ class TagController extends Controller
         $tag = Tag::findOrFail($request->id);
         $tag->update($request->input());
 
-        return response()->json(['success' => true, 'message' => 'Cập nhật thành công!!!']);
+        return responseSuccess($tag, "Update tag success", 200);
     }
 
     public function destroy($id)
@@ -54,7 +57,7 @@ class TagController extends Controller
         $tag = Tag::findOrFail($id);
         $tag->delete();
 
-        return response()->json(['success' => true, 'message' => 'Xóa tag thành công!!!']);
+        return responseSuccess(null, "Delete tag success", 200);
     }
 
     public function destroyAll(Request $request)
@@ -63,6 +66,6 @@ class TagController extends Controller
         $ids = explode(',', $ids);
         Tag::whereIn('id', $ids)->delete();
 
-        return response()->json(['success' => true, 'message' => 'Xóa tag thành công!!!']);
+        return responseSuccess(null, "Delete tag success", 200);
     }
 }

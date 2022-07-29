@@ -13,6 +13,8 @@ use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use function App\Http\Helpers\responseSuccess;
+
 class PostController extends Controller
 {
     protected $postService;
@@ -26,7 +28,7 @@ class PostController extends Controller
     {
         $posts = $this->postService->getAll();
 
-        return response()->json(['success' => true, 'data' => $posts]);
+        return responseSuccess($posts, "", 200);
     }
 
     public function create()
@@ -34,22 +36,25 @@ class PostController extends Controller
         $tags = Tag::select('name', 'id')->get();
         $topics = Topic::select('title', 'id')->get();
 
-        return response()->json(['success' => true, 'data' => compact('tags', 'topics')]);
+        return responseSuccess(compact('tags', 'topics'), "", 200);
     }
 
     public function store(PostRequest $request)
     {
         $res = $this->postService->create($request->all());
         if ($res) {
-            return response()->json(['success' => true, 'data' => "create post success!!!"]);
+
+            return responseSuccess(null, "Create post success!!!", 200);
         }
     }
 
     public function show($id)
     {
         $data = $this->postService->show($id);
+        $post = $data['post'];
+        $comments = $data['comments'];
 
-        return response()->json(["success" => true, 'post' => $data['post'], 'comments' => $data['comments']]);
+        return responseSuccess(compact('post', 'comments'), "", 200);
     }
 
     public function edit($id)
@@ -74,7 +79,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $this->postService->delete($id);
-        return response()->json(['type' => 'info', 'message' => 'Xóa bài đăng thành công!!!']);
+        return responseSuccess(null, "Delete company successfully", 200);
     }
 
     public function uploadImage(Request $request)

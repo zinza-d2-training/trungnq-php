@@ -47,7 +47,7 @@ class CompanyService
     public function update($data)
     {
         $company = Company::find($data['id']);
-        if (!empty($data['avatar'])) {
+        if (!empty($data['avatar'] && is_file($data['avatar']))) {
             $path = 'public/images/company';
             $data['avatar'] = $this->uploadImage->savefile($path, $data['avatar']);
             $company->avatar = $data['avatar'];

@@ -15,7 +15,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use GrahamCampbell\ResultType\Success;
+use phpDocumentor\Reflection\DocBlock\Tags\Uses;
 use Tymon\JWTAuth\Facades\JWTAuth;
+
+use function App\Http\Helpers\responseError;
+use function App\Http\Helpers\responseSuccess;
 
 class AuthenController extends Controller
 {
@@ -41,7 +45,9 @@ class AuthenController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             if (Auth::user()->active == User::isActive) {
                 $token = JWTAuth::attempt($validator->validated());
-                return response()->json(['type' => 'success', 'token' => $token], 200);
+                $user = User::with("role")->findOrFail(Auth::id());
+
+                return response()->json(['type' => 'success', 'token' => $token, 'user' => $user], 200);
             } else {
                 return response()->json(['type' => 'error', 'message' => "Account InActive"], 200);
             }
@@ -80,7 +86,7 @@ class AuthenController extends Controller
     public function edit()
     {
         $data = $this->userService->getById(Auth::id());
-        return response()->json($data);
+        return responseSuccess($data, "", 200);
     }
 
     public function update(UserRequest $request)
@@ -88,17 +94,9 @@ class AuthenController extends Controller
         $input = $request->all();
         $response = $this->userService->update($input);
         if (!$response) {
-            return response()->json([
-                'status' => 'false',
-                'message' => "Thay đôỉ thông tin tài khoản không thành công!!! Mật khẩu không chính xác!!!",
-                'type' => 'danger'
-            ]);
+            return responseError("Thay đôỉ thông tin tài khoản không thành công!!! Mật khẩu không chính xác!!!", 400);
         }
-        return response()->json([
-            'status' => 'true',
-            'type' => 'success',
-            'message' => "Thay đôỉ thông tin tài khoản thành công!!!"
-        ]);
+        return responseSuccess(null, "Thay đôỉ thông tin tài khoản thành công!!!", 200);
     }
 
     public function showResetPasswordForm($token)

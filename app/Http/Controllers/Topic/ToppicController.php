@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use App\Models\Post;
 
+use function App\Http\Helpers\responseSuccess;
+
 class ToppicController extends Controller
 {
 
@@ -24,7 +26,7 @@ class ToppicController extends Controller
     {
         $topic = $this->topicService->getAll();
 
-        return response()->json(['success' => true, 'data' => $topic]);
+        return responseSuccess($topic, "", 200);
     }
 
     public function create()
@@ -36,7 +38,7 @@ class ToppicController extends Controller
     {
         $res = $this->topicService->create($request->all());
 
-        return response()->json(['success' => true, 'data' => $res]);
+        return responseSuccess($res, "Create topic success", 200);
     }
 
     public function show($slug)
@@ -48,17 +50,16 @@ class ToppicController extends Controller
             ->orderBy('pin', 'desc')
             ->orderBy('created_at', 'desc')
             ->paginate(Config::get('constants.paginate'));
+        $lastesPost = Post::with('user')->orderBy('created_at', 'desc')->limit(5)->get();
 
-        return response()->json(['success' => true, 'data' => compact('topic', 'listPost')]);
-
-        /* return view('pages.topic.show', compact('topic', 'listPost')); */
+        return responseSuccess(compact('topic', 'listPost', 'lastesPost'), "", 200);
     }
 
     public function edit($slug)
     {
         $topic = $this->topicService->getById($slug);
 
-        return response()->json(['success' => true, 'data' => $topic]);
+        return responseSuccess($topic, "", 200);
     }
 
     public function update(TopicRequest $request)
@@ -68,7 +69,7 @@ class ToppicController extends Controller
         $data['slug'] = $request->title;
         $topic->update($data);
 
-        return response()->json(['success' => true, 'data' => $topic]);
+        return responseSuccess($topic, "Update topic success", 200);
     }
 
     public function destroy($slug)
@@ -77,7 +78,7 @@ class ToppicController extends Controller
         $post = Post::where('topic_id', $topic->id)->delete();
 
         $topic->delete();
-        return $this->message('info', 'Xóa topic thành công!!!');
+        return responseSuccess(null, "Delete topic successfully", 200);
     }
 
     public function destroyAll(Request $request)
@@ -90,16 +91,19 @@ class ToppicController extends Controller
             $item->delete();
         }
 
-        return $this->message('info', 'Xóa topic thành công!!!');
+        return responseSuccess(null, "Delete topic successfully", 200);
     }
-
-    public function message($type, $message)
+    public function lastesTopic()
     {
-        return response()->json(['type' => $type, 'message' => $message]);
-    }
+        $topics = Topic::with(
+            ['post' => function ($query) {
+                $query->with('user')
+                    ->orderBy('pin', 'desc')
+                    ->orderBy('created_at', 'desc')
+                    ->limit('5');
+            }]
+        )->orderBy('created_at', 'desc')->limit('5')->get();
 
-    public function error()
-    {
-        return response()->json(['type' => 'danger', 'message' => 'Có lỗi trong quá trình thực hiện.Hãy thử lại']);
+        return responseSuccess($topics, "", 200);
     }
 }
