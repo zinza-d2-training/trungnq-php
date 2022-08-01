@@ -13,6 +13,8 @@ use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use function App\Http\Helpers\responseSuccess;
+
 class PostController extends Controller
 {
     protected $postService;
@@ -26,57 +28,58 @@ class PostController extends Controller
     {
         $posts = $this->postService->getAll();
 
-        return view('pages.post.index', compact('posts'));
+        return responseSuccess($posts, "", 200);
     }
 
     public function create()
     {
-        $tags = Tag::pluck('name', 'id')->toArray();
-        $topics = Topic::pluck('title', 'id')->toArray();
+        $tags = Tag::select('name', 'id')->get();
+        $topics = Topic::select('title', 'id')->get();
 
-        return view('pages.post.create', compact('tags', 'topics'));
+        return responseSuccess(compact('tags', 'topics'), "", 200);
     }
 
     public function store(PostRequest $request)
     {
         $res = $this->postService->create($request->all());
         if ($res) {
-            return back()->with('message', ['type' => 'info', 'content' => 'Tạo post thành công']);
+
+            return responseSuccess(null, "Create post success!!!", 200);
         }
     }
 
     public function show($id)
     {
         $data = $this->postService->show($id);
-        return view('pages.post.show', [
-            'post' => $data['post'],
-            'comments' => $data['comments'],
-        ]);
+        $post = $data['post'];
+        $comments = $data['comments'];
+
+        return responseSuccess(compact('post', 'comments'), "", 200);
     }
 
     public function edit($id)
     {
-        $tags = Tag::pluck('name', 'id')->toArray();
-        $topics = Topic::pluck('title', 'id')->toArray();
+            /*  $tags = Tag::pluck('name', 'id')->toArray();
+        $topics = Topic::pluck('title', 'id')->toArray() */;
         $post = $this->postService->getById($id);
         $tagSelected = $post->tag->pluck('id')->toArray();
 
-        return view('pages.post.edit', compact('post', 'tags', 'topics', 'tagSelected'));
+        return response()->json(["status" => true, "data" => compact('post'/* , 'tags', 'topics', 'tagSelected' */)]);
     }
 
-    public function update(PostRequest $request, $id)
+    public function update(PostRequest $request)
     {
         $data = $request->all();
-        $data['id'] = $id;
+        $data['id'] = $request->id;
         $this->postService->update($data);
 
-        return back()->with('message', ['type' => 'info', 'content' => 'Thay đổi thông tin thành công']);
+        return response()->json(['success' => 'true', 'content' => 'Thay đổi thông tin thành công']);
     }
 
     public function destroy($id)
     {
         $this->postService->delete($id);
-        return response()->json(['type' => 'info', 'message' => 'Xóa bài đăng thành công!!!']);
+        return responseSuccess(null, "Delete company successfully", 200);
     }
 
     public function uploadImage(Request $request)

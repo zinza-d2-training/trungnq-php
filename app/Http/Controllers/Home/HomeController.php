@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+use function App\Http\Helpers\responseSuccess;
+
 class HomeController extends Controller
 {
     public $dashboardService;
@@ -25,6 +27,7 @@ class HomeController extends Controller
     {
         $topusers = $this->dashboardService->getTopUser();
         $topics = $this->dashboardService->getTopicWithPost();
-        return view('pages.dashboard', compact('topics', 'topusers'));
+        $lastestPost = $this->dashboardService->getLastestPost();
+        return responseSuccess(compact('topusers', 'topics', 'lastestPost'), "true", 200);
     }
 }

@@ -23,7 +23,7 @@ class TagRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route()->tag;
+        $id = $this->id;
         return [
             'name' => 'required|max:40|unique:tags,name,' . $id
         ];

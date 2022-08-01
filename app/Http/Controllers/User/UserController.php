@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Models\User;
 
+use function App\Http\Helpers\responseError;
+use function App\Http\Helpers\responseSuccess;
+
 class UserController extends Controller
 {
     protected $userService;
@@ -22,14 +25,14 @@ class UserController extends Controller
     {
         $users = $this->userService->getAll($request->input());
 
-        return view('pages.user.index', ['users' => $users]);
+        return responseSuccess($users, "true", 200);
     }
 
     public function create()
     {
-        $companys = Company::all();
+        $companys = Company::select('name', 'id')->get();
 
-        return view('pages.user.create', compact('companys'));
+        return responseSuccess($companys, "", 200);
     }
 
     public function store(UserRequest $request)
@@ -37,9 +40,9 @@ class UserController extends Controller
         $res = $this->userService->create($request->input());
 
         if ($res) {
-            return back()->with('message', ['type' => 'success', 'content' => 'Tạo tài khoản thành công!!!']);
+            return responseSuccess($res, "Create company success", 201);
         } else {
-            return back()->with('message', ['warning' => 'success', 'content' => 'Có lỗi khi thực hiện vui long kiểm tra lại!!!']);
+            return responseError(null, 401);
         }
     }
     public function show($id)
@@ -48,29 +51,36 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        return view('pages.user.edit', ['user' => $this->userService->getById($id), 'companyList' => Company::all()]);
+        $companyList = Company::pluck('name', 'id')->toArray();
+        $user = $this->userService->getById($id);
+
+        return responseSuccess(compact('companyList', 'user'), "", 200);
     }
 
     public function update(UserRequest $request, $id)
     {
         $res = $this->userService->updateUser($id, $request->input());
+
         if ($res) {
-            return $this->message('info', 'Thay đổi thông tin tài khoản thành công!!!');
+            return responseSuccess($res, "Update conpany success", 200);
         } else {
-            return $this->message('danger', 'Thất bại. Công ty đã full thành viên!!! ');
+            return responseError(400, "Update error!!!");
         }
     }
 
     public function destroy($id)
     {
         $user = User::with('role')->find($id);
+
         if ($user->role->name != 'admin') {
             $user->comments()->delete();
             $user->post()->delete();
             $user->comment_like()->delete();
-            return $this->message('info', 'Xóa tài khoản thành công');
+            $user->delete();
+
+            return responseSuccess(null, "true", 204);
         } else {
-            return $this->message('danger', 'Không thể xóa admin');
+            return responseError(" Bạn không thể xóa admin", 400);
         }
     }
 
@@ -81,7 +91,7 @@ class UserController extends Controller
         $listUser = User::whereIn('id', $ids)->with('role')->get();
         foreach ($listUser as $user) {
             if ($user->role->name == "admin") {
-                return $this->message('danger', 'Không thể xóa admin');
+                return responseError("Bạn không thể xóa admin", 400);
             } else {
                 $user->comments()->delete();
                 $user->post()->delete();
@@ -89,16 +99,6 @@ class UserController extends Controller
                 $user->delete();
             }
         }
-        return $this->message('info', 'Xóa tài khoản thành công!!!');
-    }
-
-    public function message($type, $message)
-    {
-        return response()->json(['type' => $type, 'message' => $message]);
-    }
-
-    public function error()
-    {
-        return response()->json(['type' => 'danger', 'message' => 'Có lỗi trong quá trình thực hiện.Hãy thử lại']);
+        return responseSuccess(null, 'Xóa tài khoản thành công!!!', 200);
     }
 }

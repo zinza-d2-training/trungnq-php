@@ -8,13 +8,16 @@ use Illuminate\Http\Request;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Config;
 
+use function App\Http\Helpers\responseSuccess;
+
 class TagController extends Controller
 {
 
     public function index()
     {
         $tags = Tag::withCount('post')->paginate(Config::get('constants.paginate'));
-        return view('pages.tag.index', compact('tags'));
+
+        return responseSuccess($tags, "", 200);
     }
 
     public function create()
@@ -26,7 +29,7 @@ class TagController extends Controller
     {
         Tag::create($request->input());
 
-        return back()->with('message', ['type' => 'success', 'content' => 'Tạo tag thành công']);
+        return responseSuccess(true, 'Create tag success', 201);
     }
 
     public function show($id)
@@ -38,15 +41,15 @@ class TagController extends Controller
     {
         $tag = Tag::findOrFail($id);
 
-        return view('pages.tag.edit', compact('tag'));
+        return responseSuccess($tag, "", 200);
     }
 
-    public function update(TagRequest $request, $id)
+    public function update(TagRequest $request)
     {
-        $tag = Tag::findOrFail($id);
+        $tag = Tag::findOrFail($request->id);
         $tag->update($request->input());
 
-        return back()->with('message', ['type' => 'success', 'content' => 'Cập nhật thành công!!!']);
+        return responseSuccess($tag, "Update tag success", 200);
     }
 
     public function destroy($id)
@@ -54,7 +57,7 @@ class TagController extends Controller
         $tag = Tag::findOrFail($id);
         $tag->delete();
 
-        return response()->json(['type' => 'info', 'message' => 'Xóa tag thành công!!!']);
+        return responseSuccess(null, "Delete tag success", 200);
     }
 
     public function destroyAll(Request $request)
@@ -63,6 +66,6 @@ class TagController extends Controller
         $ids = explode(',', $ids);
         Tag::whereIn('id', $ids)->delete();
 
-        return response()->json(['type' => 'info', 'message' => 'Xóa tag thành công!!!']);
+        return responseSuccess(null, "Delete tag success", 200);
     }
 }

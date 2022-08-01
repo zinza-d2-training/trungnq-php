@@ -12,8 +12,7 @@
     <div class="">
         <h1> Email của bạn vừa được đăng ký:</h1>
         <p> Name:{{ $user['name'] }}</p>
-        <p> Date of birth:{{ $user['dob'] }}</p>
-        <p> Tài khoản:{{ $user['dob'] }}</p>
+        <p> Tài khoản:{{ $user['email'] }}</p>
         <p> Mật khẩu:{{ $user['password'] }}</p>
     </div>
 </body>

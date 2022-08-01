@@ -28,7 +28,7 @@ class CompanyService
                 ->paginate(Config::get('constants.paginate'));
         }
 
-        return Company::with('user')->paginate(Config::get('constants.paginate'));
+        return Company::with('user')->get();
     }
 
     public function create($data)
@@ -46,12 +46,12 @@ class CompanyService
 
     public function update($data)
     {
-        $company = Company::find($data['company']);
-        if (!empty($data['avatar'])) {
+        $company = Company::find($data['id']);
+        if (!empty($data['avatar'] && is_file($data['avatar']))) {
             $path = 'public/images/company';
             $data['avatar'] = $this->uploadImage->savefile($path, $data['avatar']);
             $company->avatar = $data['avatar'];
-        }
+        } else unset($data['avatar']);
         $company->update($data);
 
         return true;

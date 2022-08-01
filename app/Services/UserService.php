@@ -42,7 +42,7 @@ class UserService
 
     public function getById($id)
     {
-        return User::findOrFail($id);
+        return User::with(['company', 'role'])->findOrFail($id);
     }
 
     public function forgotPassword($email)
@@ -85,7 +85,7 @@ class UserService
             unset($data['password']);
             unset($data['password_confirmation']);
         }
-        if (!empty($data['avatar'])) {
+        if (!empty($data['avatar']) && is_file($data['avatar'])) {
             $path = 'public/images/avatars';
             $data['avatar'] = $this->uploadImage->savefile($path, $data['avatar']);
             $user->avatar = $data['avatar'];
@@ -121,7 +121,10 @@ class UserService
 
     public function updateUser($id, $data)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('role')->findOrFail($id);
+        if ($user->role->name == "admin" && Auth::user()->role->name != "admin") {
+            return false;
+        }
         $company = $user->company;
         $user->company()->detach();
 

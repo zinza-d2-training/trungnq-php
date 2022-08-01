@@ -82,15 +82,7 @@
                 <i class="px-3">Trống</i>
             @endif
             @foreach ($topusers as $member)
-                <div class="flex flex-rows gap-6 mt-4">
-                    <div class=""><img src="/storage/images/avatars/{{ $member->avatar }}" alt=""
-                            class="w-10 rounded-full"></div>
-                    <div class="">
-                        <p class="text-lg">{{ $member->name }}</p>
-                        <p class="text-md font-bold">{{ $member->totalLike }} <span class="text-red-500"><i
-                                    class="fa-solid fa-heart"></i></span></p>
-                    </div>
-                </div>
+                
             @endforeach
         </div>
     </div>
