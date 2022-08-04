@@ -10,6 +10,6 @@
     <h2>Bài đăng của bạn đã bị quản trị viên gỡ bỏ:</h2>
     <h4>Nhan đề: {{$post->title}}</h4>
     <h4>Nội dung:</h4>
-    {{$post->description}}
+    {!!$post->description!!}
 </body>
 </html>

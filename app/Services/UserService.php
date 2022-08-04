@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\CreateUser;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMail;
 use App\Models\Company;
@@ -29,14 +30,11 @@ class UserService
             $data['password'] = Str::random(6);
         }
         $email = $data['email'];
-        Mail::send('email.new-account', ['user' => $data], function ($message) use ($email) {
-            $message->to($email);
-            $message->subject('Reset Password');
-        });
         $user = User::create($data);
         if ($data['company'] != 0) {
             $user->company()->attach($data['company']);
         }
+        event(new CreateUser($user, $email));
         return $user;
     }
 
@@ -86,8 +84,7 @@ class UserService
             unset($data['password_confirmation']);
         }
         if (!empty($data['avatar']) && is_file($data['avatar'])) {
-            $path = 'public/images/avatars';
-            $data['avatar'] = $this->uploadImage->savefile($path, $data['avatar']);
+            $data['avatar'] = $this->uploadImage->savefile($data['avatar']);
             $user->avatar = $data['avatar'];
         }
         $user->update($data);

@@ -7,12 +7,13 @@ class UploadImage
     /**
      * 
      */
-    public function savefile($path, $file)
-    {
+    public function savefile($file)
+    {   
+        $path = "public/images";
         $file_name = time() . '-avatar.' . $file->extension();
         $res = $file->storeAs($path, $file_name);
 
-        return $file_name;
+        return '/storage/images/'.$file_name;
     }
 
     public function deletefile($path)

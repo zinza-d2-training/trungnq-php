@@ -7,7 +7,9 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use App\Events\DeletePost;
+use App\Events\CreateUser;
 use App\Listeners\SendEmailToPostAuthor;
+use App\Listeners\SendEmailCreateUser;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,9 @@ class EventServiceProvider extends ServiceProvider
         DeletePost::class => [
             SendEmailToPostAuthor::class,
         ],
+        CreateUser::class => [
+            SendEmailCreateUser::class
+        ]
     ];
 
     /**

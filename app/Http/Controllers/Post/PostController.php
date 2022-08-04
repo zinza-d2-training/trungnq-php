@@ -63,7 +63,7 @@ class PostController extends Controller
         $topics = Topic::pluck('title', 'id')->toArray() */;
         $post = $this->postService->getById($id);
         $tagSelected = $post->tag->pluck('id')->toArray();
-
+        
         return response()->json(["status" => true, "data" => compact('post'/* , 'tags', 'topics', 'tagSelected' */)]);
     }
 
