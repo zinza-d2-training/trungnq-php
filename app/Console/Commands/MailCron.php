@@ -47,7 +47,7 @@ class MailCron extends Command
                 $email = $item->email;
                 Mail::send('email.happy-birthday', [], function ($message) use ($email) {
                     $message->to($email);
-                    $message->subject('Reset Password');
+                    $message->subject('Happy birthday');
                 });
             }
         }

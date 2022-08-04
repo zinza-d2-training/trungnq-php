@@ -73,8 +73,8 @@
         ClassicEditor
             .create(document.querySelector('#editor'), {
                 ckfinder: {
-                    uploadUrl: '{{ route('post.uploadImage') . '?_token=' . csrf_token() }}'
-                }
+                    uploadUrl: '{{ route("post.uploadImage") . "?_token=" . csrf_token() }}'
+                },
             })
             .then(editor => {
                 console.log(editor);

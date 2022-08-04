@@ -36,8 +36,7 @@ class CompanyService
         if (empty($data['avatar'])) {
             $data['avatar'] = 'default-user.jpg';
         } else {
-            $path = 'public/images/company';
-            $data['avatar'] = $this->uploadImage->savefile($path, $data['avatar']);
+            $data['avatar'] = $this->uploadImage->savefile($data['avatar']);
         }
         Company::create($data);
 
@@ -48,8 +47,7 @@ class CompanyService
     {
         $company = Company::find($data['id']);
         if (!empty($data['avatar'] && is_file($data['avatar']))) {
-            $path = 'public/images/company';
-            $data['avatar'] = $this->uploadImage->savefile($path, $data['avatar']);
+            $data['avatar'] = $this->uploadImage->savefile($data['avatar']);
             $company->avatar = $data['avatar'];
         } else unset($data['avatar']);
         $company->update($data);

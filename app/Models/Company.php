@@ -18,6 +18,11 @@ class Company extends Model
         'active'
     ];
 
+    public function getAvatarAttribute($value)
+    {
+        return asset($value);
+    }
+
     public function User()
     {
         return $this->belongsToMany(User::class, 'company_accounts');

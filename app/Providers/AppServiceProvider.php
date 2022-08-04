@@ -29,9 +29,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $listTopic = Topic::pluck('title', 'slug')->toArray();
-        View::share('listTopic', $listTopic);
-
-        Paginator::defaultView('vendor.pagination.custom-paginate');
+        //
     }
 }

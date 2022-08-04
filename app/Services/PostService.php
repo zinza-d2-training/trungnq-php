@@ -67,8 +67,7 @@ class PostService
 
     public function uploadImage($file)
     {
-        $path = '/public/uploads';
-        $file_name = $this->imageUpload->savefile($path, $file);
+        $file_name = $this->imageUpload->savefile($file);
 
         return $file_name;
     }
